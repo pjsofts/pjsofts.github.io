@@ -1,5 +1,7 @@
+const route = '198.199.66.183:3000';
+
 document.getElementById('notify').onclick = () => {
-  fetch('/notify');
+  fetch(route + '/notify');
 }
 
 document.getElementById('getPermission').onclick = () => {
@@ -52,14 +54,14 @@ navigator.serviceWorker.ready.then(reg => {
     if (sub) {
       return sub;
     }
-    const response = await fetch('./vapidPublicKey');
+    const response = await fetch(route + './vapidPublicKey');
     const vapidPublicKey = await response.text();
 
     const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
 
     return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: convertedVapidKey });
   }).then(sub => {
-    fetch('./register', {
+    fetch(route + './register', {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({ subscription: sub })
@@ -71,7 +73,7 @@ navigator.serviceWorker.ready.then(reg => {
       const delay = document.getElementById('notification-delay').value;
       const ttl = document.getElementById('notification-ttl').value;
 
-      fetch('./sendNotification', {
+      fetch(route + './sendNotification', {
         method: 'post',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({
