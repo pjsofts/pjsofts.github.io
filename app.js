@@ -1,4 +1,4 @@
-const route = 'http://198.199.66.183:3000';
+const route = 'https://198.199.66.183:3000';
 
 document.getElementById('notify').onclick = () => {
   fetch(route + '/notify');
