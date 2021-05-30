@@ -1,4 +1,4 @@
-const route = '198.199.66.183:3000';
+const route = 'http://198.199.66.183:3000';
 
 document.getElementById('notify').onclick = () => {
   fetch(route + '/notify');
@@ -31,7 +31,7 @@ document.getElementById('sendSubscription').onclick = () => {
   console.log('sending subscription');
   navigator.serviceWorker.ready.then(reg => {
     reg.pushManager.getSubscription().then(sub => {
-      fetch('/sendSub', {
+      fetch(route + '/sendSub', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -54,14 +54,14 @@ navigator.serviceWorker.ready.then(reg => {
     if (sub) {
       return sub;
     }
-    const response = await fetch(route + './vapidPublicKey');
+    const response = await fetch(route + '/vapidPublicKey');
     const vapidPublicKey = await response.text();
 
     const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
 
     return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: convertedVapidKey });
   }).then(sub => {
-    fetch(route + './register', {
+    fetch(route + '/register', {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({ subscription: sub })
@@ -73,7 +73,7 @@ navigator.serviceWorker.ready.then(reg => {
       const delay = document.getElementById('notification-delay').value;
       const ttl = document.getElementById('notification-ttl').value;
 
-      fetch(route + './sendNotification', {
+      fetch(route + '/sendNotification', {
         method: 'post',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({

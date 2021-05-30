@@ -1,3 +1,5 @@
+const route = 'http://198.199.66.183:3000';
+
 function getEndPoint() {
   return self.registration.pushManager.getSubscription()
     .then((sub) => {
@@ -13,7 +15,7 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     getEndPoint()
       .then((endpoint) => {
-        return fetch('./getPayload?endpoint=' + endpoint);
+        return fetch(route + '/getPayload?endpoint=' + endpoint);
       })
       .then((response) => { return response.text() })
       .then((payload) => { self.registration.showNotification('Pouria Notif', { body: payload }) })
