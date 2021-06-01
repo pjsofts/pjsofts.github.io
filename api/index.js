@@ -2,7 +2,7 @@ const app = require('express')()
 const { v4 } = require('uuid')
 
 app.get('/api', (req, res) => {
-  return "Yest"
+  res.send("Yeee!")
 })
 
 
