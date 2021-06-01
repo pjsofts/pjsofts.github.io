@@ -1,0 +1,22 @@
+{
+  "name": "pjsofts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pjsofts/pjsofts.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pjsofts/pjsofts.github.io/issues"
+  },
+  "homepage": "https://github.com/pjsofts/pjsofts.github.io#readme",
+  "dependencies": {
+    "web-push": "^3.4.4"
+  }
+}
