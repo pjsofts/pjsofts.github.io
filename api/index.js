@@ -6,6 +6,9 @@ app.get('/api', (req, res) => {
 })
 
 
+app.get('/api2', (req, res) => {
+  res.send("Yeee!2")
+})
 
 app.get('/api/item/:slug', (req, res) => {
   const { slug } = req.params
