@@ -1,16 +1,14 @@
 
+const VAPID_PUBLIC_KEY = 'BJIh4x6z36QonVjSDgMHBJLG6gDJVGok0FRDFrAfGGw9QFHgBeo8W7ag9V81GVCR_hyJCxv9DKeldxSBGdHXKsM';
+const VAPID_PRIVATE_KEY = 'kI7ZFD-uqkfeG3FvHwfIxEugqCa0RgQAyHNyrsAhtZY';
 
 const webPush = require('web-push');
-if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
-  console.log("You must set the VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY");
-  console.log(webPush.generateVAPIDKeys());
-  return;
-}
+
 
 webPush.setVapidDetails(
   'http://localhost:8000',
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
+  VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY
 )
 
 const payloads = {};
