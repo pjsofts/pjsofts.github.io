@@ -13,6 +13,6 @@
   },
   "description": "A Complete and In-depth Javascript Course",
   "keywords": ["Javascript", "amanjacademy", "Pouria Jahandideh", "mentoring"],
-  "productionBaseUrl": "/amanj-course",
+  "productionBaseUrl": "/pjsofts.github.io",
   "csvPath": "./out/lessons.csv"
 }

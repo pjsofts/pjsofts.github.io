@@ -9,6 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - permissions:
+        contents: write
       - uses: actions/checkout@master
       - name: npm install, export
         run: |
