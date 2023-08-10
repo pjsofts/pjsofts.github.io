@@ -15,7 +15,7 @@ const DEFAULT_CONFIG = {
     github: "btholt",
     twitter: "holtbt",
   },
-  productionBaseUrl: "pjsofts.github.io",
+  productionBaseUrl: "/",
 };
 
 export default function getCourseConfig() {
