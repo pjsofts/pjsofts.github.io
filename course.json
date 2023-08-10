@@ -3,7 +3,7 @@
     "name": "Pouria Jahandideh",
     "company": "FullStack Developer"
   },
-  "title": "The Complete Javascript Course",
+  "title": "Complete Javascript Course",
   "subtitle": "for Amanj Academy",
   "frontendMastersLink": "https://amanjacademy.com/javascript/",
   "social": {
@@ -11,7 +11,7 @@
     "github": "pjsofts",
     "twitter": "pjsofts"
   },
-  "description": "A Complete and In-depth Javascript Course",
+  "description": "A complete and in-depth Javascript Course",
   "keywords": ["Javascript", "amanjacademy", "Pouria Jahandideh", "mentoring"],
   "productionBaseUrl": "/",
   "csvPath": "./out/lessons.csv"
