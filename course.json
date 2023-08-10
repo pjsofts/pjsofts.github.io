@@ -1,18 +1,18 @@
 {
   "author": {
-    "name": "Brian Holt",
-    "company": "Stripe"
+    "name": "Pouria Jahandideh",
+    "company": "FullStack Developer"
   },
-  "title": "Next.js Course Starter Kit",
-  "subtitle": "for Frontend Masters",
-  "frontendMastersLink": "https://frontendmasters.com/courses/complete-react-v6/",
+  "title": "The Complete Javascript Course",
+  "subtitle": "for Amanj Academy",
+  "frontendMastersLink": "https://amanjacademy.com/javascript/",
   "social": {
-    "linkedin": "btholt",
-    "github": "btholt",
-    "twitter": "holtbt"
+    "linkedin": "pouria-jahandideh-879040157",
+    "github": "pjsofts",
+    "twitter": "pjsofts"
   },
-  "description": "A starter kit for making really amazing courses, optimized for Frontend Masters",
-  "keywords": ["your", "Google", "keywords", "here"],
-  "productionBaseUrl": "/next-course-starter",
+  "description": "A complete and in-depth Javascript Course",
+  "keywords": ["Javascript", "amanjacademy", "Pouria Jahandideh", "mentoring"],
+  "productionBaseUrl": "/amanj-course",
   "csvPath": "./out/lessons.csv"
 }
