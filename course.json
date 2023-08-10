@@ -11,7 +11,7 @@
     "github": "pjsofts",
     "twitter": "pjsofts"
   },
-  "description": "A complete and In-depth Javascript Course",
+  "description": "A Complete and In-depth Javascript Course",
   "keywords": ["Javascript", "amanjacademy", "Pouria Jahandideh", "mentoring"],
   "productionBaseUrl": "/amanj-course",
   "csvPath": "./out/lessons.csv"
