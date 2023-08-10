@@ -1,0 +1,5 @@
+order,sectionTitle,lessonTitle,slug,sectionIcon,filePath,description
+01A,Introduction and Basics,Introduction,Introduction-and-basics/intro,info-circle,/lessons/Introduction-and-basics/intro,The introduction to this course.
+02A,DOM,Document Object Model,DOM/document-object-model,dumpster-fire,/lessons/DOM/document-object-model,""
+02B,DOM,DOM Exercises,DOM/DOM-exercises,dumpster-fire,/lessons/DOM/DOM-exercises,DOM exercises
+03A,Values and Data Types,Values and Data Types,values_and_data_types/Values_and_datatypes,file-code,/lessons/values_and_data_types/Values_and_datatypes,Javascript Basic Datatypes
