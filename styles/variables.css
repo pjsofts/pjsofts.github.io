@@ -1,12 +1,13 @@
 :root {
-  --primary: #dfa067;
-  --secondary: #93aca7;
+  --primary: #0052CC;
+  --secondary: #172B4D;
   --highlight: #224159;
 
   --text-header: var(--primary);
   --text-main-headers: var(--highlight);
   --text-links: #007bff;
   --text-footer: #333;
+  --text-white: #fff;
 
   --bg-main: white;
   --bg-dots: var(--highlight);

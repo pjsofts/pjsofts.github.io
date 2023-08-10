@@ -8,11 +8,10 @@ keywords:
   - Brian Holt
 ---
 
-Hello! And welcome to the Next.js course starter by [Brian Holt][twitter].
+Hello! And welcome to the Javascript course starter by [Pouria Jahandideh][linkedin].
 
-![Cat, dog, and rat logo for the course](./images/BRAND-WHearts.png)
 
-This is a course starter specifically made for making online courses and optimized for use with [Frontend Masters][fem].
+This is a javascript course with [Amanj Academy][amanj].
 
-[twitter]: https://twitter.com/holtbt
-[fem]: https://www.frontendmasters.com
+[linkedin]: https://www.linkedin.com/in/pouria-jahandideh-879040157/
+[amanj]: https://amanjacademy.com/javascript/

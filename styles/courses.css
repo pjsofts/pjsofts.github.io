@@ -160,7 +160,7 @@ header .cta-btn {
 
 .jumbotron h1,
 .jumbotron h2 {
-  color: var(--text-main-headers);
+  color: var(--text-white);
 }
 
 .jumbotron h1 {
@@ -187,11 +187,11 @@ header .cta-btn {
 .author .name {
   font-size: 18px;
   font-weight: bold;
-  color: var(--text-main-headers);
+  color: var(--text-white);
 }
 
 .author .company {
-  color: var(--text-main-headers);
+  color: var(--text-white);
   font-size: 16px;
 }
 
