@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import { WEEKS } from '../../data/weeks';
+
+export function getStaticPaths() {
+  return WEEKS.map((w) => ({ params: { slug: w.slug }, props: { week: w } }));
+}
+
+const { week } = Astro.props;
+const idx = WEEKS.findIndex((w) => w.n === week.n);
+const prev = WEEKS[idx - 1];
+const next = WEEKS[idx + 1];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: `Week ${week.n} — ${week.title}: ${week.subtitle}`,
+  description: week.summary,
+  url: `${SITE.url}/curriculum/${week.slug}`,
+  provider: { '@type': 'Person', name: SITE.instructor.name },
+  isPartOf: { '@type': 'Course', name: 'AI Engineering — 12-Week Mentorship', url: SITE.url },
+  teaches: week.topics,
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+    { '@type': 'ListItem', position: 2, name: 'Curriculum', item: `${SITE.url}/curriculum` },
+    { '@type': 'ListItem', position: 3, name: `Week ${week.n}`, item: `${SITE.url}/curriculum/${week.slug}` },
+  ],
+};
+---
+
+<BaseLayout
+  title={`Week ${week.n}: ${week.title} — ${week.subtitle} | AI Engineering Course`}
+  description={week.summary}
+  canonical={`/curriculum/${week.slug}`}
+  schema={[schema, breadcrumb]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span>
+        <a href="/curriculum">Curriculum</a> <span>/</span>
+        <span class="cur">Week {week.n}</span>
+      </nav>
+      <span class="pill pill-gold">Week {week.n} · {week.part}</span>
+      <h1>{week.title}</h1>
+      <p class="wsubtitle">{week.subtitle}</p>
+      <div class="meta">
+        <span>⏱ {week.hours}</span>
+        <span>🐍 Python / 🔷 TypeScript</span>
+        <span class="ship">🛠 You ship: {week.ship}</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cols">
+        <article class="main-col">
+          <div class="eyebrow">What this week is</div>
+          {week.intro.map((p) => <p class="intro-p">{p}</p>)}
+
+          <h2>The walkthrough</h2>
+          <p>Each part adds one capability to the same growing codebase, and each is a runnable checkpoint.</p>
+          <ol class="parts">
+            {week.parts.map((p, i) => (
+              <li>
+                <span class="pn">{String(i + 1).padStart(2, '0')}</span>
+                <span class="pbody">
+                  <b>{p.title}</b>
+                  <span>{p.detail}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+
+          <h2>After this week you can</h2>
+          <ul class="tick">
+            {week.outcomes.map((o) => <li>{o}</li>)}
+          </ul>
+        </article>
+
+        <aside class="side">
+          <div class="side-box">
+            <h3>Topics covered</h3>
+            <div class="tags">
+              {week.topics.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          </div>
+          <div class="side-box cta-box">
+            <h3>Join the mentorship</h3>
+            <p>Build this — and eleven other weeks — with direct review and unblocking.</p>
+            <a class="btn btn-primary full" href={SITE.cta.href} target="_blank" rel="noopener">
+              Message me on LinkedIn →
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      <nav class="pager" aria-label="Week navigation">
+        {prev ? (
+          <a class="pg prev" href={`/curriculum/${prev.slug}`}>
+            <span class="pl">← Previous</span>
+            <span class="pt">Week {prev.n} — {prev.title}</span>
+          </a>
+        ) : <span />}
+        {next ? (
+          <a class="pg next" href={`/curriculum/${next.slug}`}>
+            <span class="pl">Next →</span>
+            <span class="pt">Week {next.n} — {next.title}</span>
+          </a>
+        ) : <span />}
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 2.4rem 0 2.8rem;
+    background:
+      radial-gradient(900px 480px at 78% -25%, rgba(74, 46, 160, .5) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .crumbs { font-size: .82rem; color: var(--fg-dimmer); margin-bottom: 1.3rem; }
+  .crumbs a { color: var(--fg-dim); }
+  .crumbs span { margin: 0 .35rem; }
+  .crumbs .cur { color: var(--gold); }
+  .pg-hero h1 { margin: 1rem 0 .2rem; font-size: clamp(1.9rem, 4.6vw, 3rem); }
+  .wsubtitle { font-size: 1.2rem; color: var(--violet-lt); margin-bottom: 1.2rem; }
+  .meta { display: flex; flex-wrap: wrap; gap: 1.3rem; font-size: .87rem; color: var(--fg-dimmer); }
+  .meta .ship { color: var(--gold); }
+
+  .cols { display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; }
+  .intro-p { font-size: 1.04rem; }
+  .main-col h2 { margin-top: 2.6rem; }
+
+  ol.parts { list-style: none; padding: 0; counter-reset: p; margin: 1.4rem 0 0; }
+  ol.parts li {
+    display: flex; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pn {
+    flex: none; font-family: var(--mono); font-size: .82rem; font-weight: 700;
+    color: var(--gold); padding-top: .18rem; width: 26px;
+  }
+  .pbody { display: flex; flex-direction: column; gap: .2rem; }
+  .pbody b { color: #fff; font-size: 1rem; }
+  .pbody span { color: var(--fg-dim); font-size: .93rem; }
+
+  ul.tick { list-style: none; padding: 0; margin: 1rem 0 0; }
+  ul.tick li { position: relative; padding: .42rem 0 .42rem 1.6rem; color: var(--fg-dim); }
+  ul.tick li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+
+  .side { position: sticky; top: 86px; display: flex; flex-direction: column; gap: 1rem; }
+  .side-box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.3rem; }
+  .side-box h3 { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--violet-lt); margin-bottom: .9rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .tag {
+    font-size: .75rem; padding: .25rem .6rem; border-radius: 999px;
+    background: rgba(109, 75, 208, .16); border: 1px solid var(--line); color: var(--fg-dim);
+  }
+  .cta-box p { font-size: .89rem; margin-bottom: 1rem; }
+  .btn.full { width: 100%; justify-content: center; }
+
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3.5rem; }
+  .pg {
+    display: flex; flex-direction: column; gap: .25rem;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 1rem 1.2rem; text-decoration: none;
+  }
+  .pg:hover { border-color: var(--line-str); text-decoration: none; }
+  .pg.next { text-align: right; }
+  .pl { font-size: .76rem; color: var(--gold); font-weight: 700; letter-spacing: .08em; }
+  .pt { font-size: .93rem; color: var(--fg); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .cols { grid-template-columns: 1fr; gap: 2rem; }
+    .side { position: static; }
+  }
+  @media (max-width: 600px) {
+    .pager { grid-template-columns: 1fr; }
+    .pg.next { text-align: left; }
+  }
+</style>

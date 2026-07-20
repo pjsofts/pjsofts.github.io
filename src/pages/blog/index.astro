@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const featured = posts.filter((p) => p.data.featured);
+const rest = posts.filter((p) => !p.data.featured);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'AI Engineering — Articles',
+  url: `${SITE.url}/blog`,
+  author: { '@type': 'Person', name: SITE.instructor.name },
+  blogPost: posts.map((p) => ({
+    '@type': 'BlogPosting',
+    headline: p.data.title,
+    description: p.data.description,
+    datePublished: p.data.pubDate.toISOString(),
+    url: `${SITE.url}/blog/${p.id}`,
+  })),
+};
+---
+
+<BaseLayout
+  title="AI Engineering Blog — Agents, Evals, Tool Design & LLM Architecture"
+  description="In-depth articles on building AI agents: agent loops, tool design, evals, context engineering, RAG, and how production coding agents like Claude Code and the Grok CLI are actually built."
+  canonical="/blog"
+  schema={[schema]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <span class="pill pill-gold">Writing</span>
+      <h1>Articles on AI engineering</h1>
+      <p class="sub">
+        Deep dives on how AI agents actually work — the loop, the tools, the evals, and the
+        architecture decisions real production tools made. No hype, working code.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      {featured.length > 0 && (
+        <>
+          <div class="eyebrow">Featured</div>
+          <div class="grid g2 feat-grid">
+            {featured.map((p) => (
+              <a class="card post feat" href={`/blog/${p.id}`}>
+                <div class="ptags">
+                  {p.data.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}
+                </div>
+                <h2>{p.data.title}</h2>
+                <p class="pdesc">{p.data.description}</p>
+                <div class="pmeta">
+                  <time datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time>
+                  {p.data.readingTime && <span>· {p.data.readingTime} min read</span>}
+                </div>
+              </a>
+            ))}
+          </div>
+        </>
+      )}
+
+      {rest.length > 0 && (
+        <>
+          <div class="eyebrow more-hd">More articles</div>
+          <div class="list">
+            {rest.map((p) => (
+              <a class="row" href={`/blog/${p.id}`}>
+                <div class="row-main">
+                  <h3>{p.data.title}</h3>
+                  <p>{p.data.description}</p>
+                  <div class="ptags">
+                    {p.data.tags.slice(0, 4).map((t) => <span class="tag">{t}</span>)}
+                  </div>
+                </div>
+                <div class="row-meta">
+                  <time datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time>
+                  {p.data.readingTime && <span>{p.data.readingTime} min</span>}
+                </div>
+              </a>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap narrow ctr">
+      <h2>Want to build this, not just read about it?</h2>
+      <p>
+        The 12-week mentorship takes you from an empty file to a complete AI coding agent
+        you built yourself.
+      </p>
+      <div class="fbtns">
+        <a class="btn btn-primary" href={SITE.cta.href} target="_blank" rel="noopener">
+          {SITE.cta.label} →
+        </a>
+        <a class="btn btn-ghost" href="/curriculum">See the curriculum</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 4rem 0 3rem;
+    background:
+      radial-gradient(900px 500px at 78% -20%, rgba(74, 46, 160, .55) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .pg-hero h1 { margin: 1rem 0 0; }
+  .sub { font-size: 1.1rem; max-width: 62ch; margin-top: 1rem; }
+
+  .feat-grid { margin-bottom: 3.4rem; }
+  .post { text-decoration: none; display: flex; flex-direction: column; }
+  .post:hover { text-decoration: none; }
+  .post h2 { font-size: 1.35rem; color: #fff; margin: .6rem 0 .5rem; line-height: 1.25; }
+  .pdesc { font-size: .93rem; flex: 1; margin-bottom: 1rem; }
+  .pmeta { font-size: .8rem; color: var(--fg-dimmer); display: flex; gap: .4rem; }
+
+  .ptags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .tag {
+    font-size: .71rem; padding: .2rem .55rem; border-radius: 999px;
+    background: rgba(109, 75, 208, .16); border: 1px solid var(--line); color: var(--fg-dim);
+  }
+
+  .more-hd { margin-top: 1rem; }
+  .list { display: flex; flex-direction: column; }
+  .row {
+    display: flex; justify-content: space-between; gap: 2rem;
+    padding: 1.5rem 0; border-bottom: 1px solid var(--line); text-decoration: none;
+  }
+  .row:hover { text-decoration: none; }
+  .row:hover h3 { color: var(--gold); }
+  .row h3 { color: #fff; margin: 0 0 .35rem; font-size: 1.12rem; }
+  .row p { font-size: .92rem; margin: 0 0 .7rem; }
+  .row-meta {
+    flex: none; text-align: right; font-size: .8rem; color: var(--fg-dimmer);
+    display: flex; flex-direction: column; gap: .2rem;
+  }
+
+  .final {
+    background: radial-gradient(700px 340px at 50% 0%, rgba(109, 75, 208, .3) 0%, rgba(109, 75, 208, 0) 70%), var(--ink-800);
+    border-top: 1px solid var(--line);
+  }
+  .ctr { text-align: center; }
+  .final p { max-width: 50ch; margin: 0 auto 1.7rem; }
+  .fbtns { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+
+  @media (max-width: 640px) {
+    .row { flex-direction: column; gap: .6rem; }
+    .row-meta { flex-direction: row; text-align: left; gap: .7rem; }
+  }
+</style>

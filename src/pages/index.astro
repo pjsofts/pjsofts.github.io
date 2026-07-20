@@ -1,0 +1,448 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+import { WEEKS } from '../data/weeks';
+
+const foundations = WEEKS.filter((w) => w.part === 'Foundations');
+const clone = WEEKS.filter((w) => w.part === 'Build the Clone');
+
+const courseSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: 'AI Engineering — 12-Week Mentorship',
+  description: SITE.description,
+  url: SITE.url,
+  provider: { '@type': 'Person', name: SITE.instructor.name, url: SITE.instructor.linkedin },
+  instructor: { '@type': 'Person', name: SITE.instructor.name, url: SITE.instructor.linkedin },
+  educationalLevel: 'Intermediate to Advanced',
+  teaches: [
+    'AI agent architecture', 'LLM tool calling & function calling', 'Agent evaluation (evals)',
+    'Retrieval-augmented generation (RAG)', 'Vector databases', 'Context engineering',
+    'Secure code sandboxing', 'Multi-agent orchestration',
+  ],
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'online',
+    courseWorkload: 'P12W',
+  },
+};
+
+const faqs = [
+  {
+    q: 'Do I need machine learning experience?',
+    a: 'No. This is an engineering course, not a research course. You will not train models — you will build systems around them. If you can write Python or TypeScript comfortably and understand HTTP APIs, you are ready.',
+  },
+  {
+    q: 'Which language do I write in?',
+    a: 'Your choice — every code sample comes in both Python and TypeScript. Pick one track and stay on it. We use the raw official SDK, so both tracks read almost identically.',
+  },
+  {
+    q: 'Why no frameworks?',
+    a: 'Because frameworks hide exactly the parts you are here to learn. An agent loop is about forty lines of code. Once you have written it yourself, every framework becomes readable — and you can debug the ones you do adopt.',
+  },
+  {
+    q: 'How much time per week?',
+    a: 'Roughly 5–10 hours of hands-on building, depending on the week. Week 2 is the heaviest at around ten hours; most weeks land near six.',
+  },
+  {
+    q: 'What do I actually have at the end?',
+    a: 'A complete, working AI coding agent you built yourself — streaming chat, a full toolset, semantic codebase search, planning, memory, a secure sandbox, tracing and multi-agent orchestration. It goes in your portfolio, and you can explain every line of it.',
+  },
+  {
+    q: 'Is this cohort-based or self-paced?',
+    a: 'It is a mentorship — you get the handouts, the build, and direct access to me for review and unblocking. Message me on LinkedIn to talk about timing and fit.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout
+  title="AI Engineering — Build a Claude Code Clone From Scratch | 12-Week Mentorship"
+  description={SITE.description}
+  canonical="/"
+  schema={[courseSchema, faqSchema]}
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="wrap hero-in">
+      <span class="pill pill-gold">12-Week Mentorship · Python / TypeScript</span>
+      <h1>
+        Build the AI coding agent<br />
+        <span class="grad">everyone else just uses.</span>
+      </h1>
+      <p class="hero-sub">
+        A hands-on mentorship for engineers who are serious about AI. We start from the
+        fundamentals — the agent loop, evals, a production runtime — and finish with a real
+        AI coding tool you built yourself. Every subsystem, real code, no frameworks,
+        no hand-waving.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href={SITE.cta.href} target="_blank" rel="noopener">
+          {SITE.cta.label} →
+        </a>
+        <a class="btn btn-ghost" href="/curriculum">See the 12-week curriculum</a>
+      </div>
+
+      <div class="stats">
+        <div><b>12</b><span>Weeks</span></div>
+        <div><b>2</b><span>Tracks · PY / TS</span></div>
+        <div><b>1</b><span>Real product shipped</span></div>
+        <div><b>0</b><span>Frameworks</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROBLEM ===================== -->
+  <section id="course">
+    <div class="wrap narrow">
+      <div class="eyebrow">Why this course exists</div>
+      <h2>Most engineers use AI tools. Very few can build one.</h2>
+      <p>
+        There is a widening gap in this field. On one side, developers who call an API and
+        wire up a framework. On the other, engineers who understand what happens between the
+        prompt and the answer — who can debug a runaway agent loop, explain why a tool call
+        failed, cut a token bill in half, and prove a change made things better.
+      </p>
+      <p>
+        The second group is small, and it is what companies are actually hiring for. The fastest
+        way into it is not another tutorial. It is building the thing yourself, once, properly.
+      </p>
+      <div class="callout">
+        <div class="ct">The premise</div>
+        <p>
+          If you build a working clone of a professional AI coding agent — the kind you already
+          use every day — you will understand this field better than almost anyone who only
+          consumes it. That is the entire course.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHAT YOU BUILD ===================== -->
+  <section id="outcomes" class="alt">
+    <div class="wrap">
+      <div class="eyebrow">The capstone</div>
+      <h2>What you have by Week&nbsp;12</h2>
+      <p class="lead-p">
+        Not notes. A tool — a complete AI coding agent, built one subsystem per week.
+      </p>
+      <div class="grid g3 cap-grid">
+        {[
+          ['⌨️', 'Streaming chat REPL', 'A terminal interface with slash commands, safe interrupts and a live cost meter.'],
+          ['🔧', 'A real toolset', 'Read, write, edit, bash, glob and grep — behind a permission system you trust.'],
+          ['🗺️', 'Semantic code search', 'A vector database you wrote yourself: chunking, embeddings, incremental indexing.'],
+          ['🧠', 'Context engineering', 'Assembled system prompts, project rules from AGENTS.md, and compaction that survives long sessions.'],
+          ['📋', 'Planning & restraint', 'Plan mode, a maintained todo list, and a harness that decides what "done" means.'],
+          ['💾', 'Durable memory', 'Resumable sessions, cross-project memory, and clean handoffs between days.'],
+          ['🔒', 'A secure sandbox', 'OS-enforced limits and a directory jail, so model-written code cannot hurt you.'],
+          ['🔍', 'Tracing & evals', 'Full request tracing, cost and latency observability, and a regression suite you own.'],
+          ['🤝', 'Multi-agent orchestration', 'Sub-agents with narrow toolsets, running in parallel and merging cleanly.'],
+        ].map(([icon, title, body]) => (
+          <div class="card">
+            <div class="ficon">{icon}</div>
+            <h3 class="fh">{title}</h3>
+            <p class="fb">{body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CURRICULUM ===================== -->
+  <section id="curriculum">
+    <div class="wrap">
+      <div class="eyebrow">The roadmap</div>
+      <h2>Twelve weeks, one real product</h2>
+      <p class="lead-p">
+        The first three weeks build the fundamentals every AI engineer needs. The next nine
+        assemble them into a working clone of a professional AI coding agent.
+      </p>
+
+      <div class="part-hd">
+        <span class="pill pill-violet">Part I</span>
+        <div>
+          <h3>Foundations</h3>
+          <p>The primitives of modern AI engineering — three weeks most courses never reach.</p>
+        </div>
+      </div>
+      <div class="wk-list">
+        {foundations.map((w) => (
+          <a class="wk" href={`/curriculum/${w.slug}`}>
+            <span class="wk-n">{w.n}</span>
+            <span class="wk-body">
+              <span class="wk-t">{w.title} <em>· {w.subtitle}</em></span>
+              <span class="wk-topics">{w.topics.slice(0, 4).join(' · ')}</span>
+              <span class="wk-ship">🛠 You ship: {w.ship}</span>
+            </span>
+            <span class="wk-arrow">→</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="part-hd">
+        <span class="pill pill-violet">Part II</span>
+        <div>
+          <h3>Build the Clone</h3>
+          <p>One subsystem per week. Each week your tool gains a real capability.</p>
+        </div>
+      </div>
+      <div class="wk-list">
+        {clone.map((w) => (
+          <a class="wk" href={`/curriculum/${w.slug}`}>
+            <span class="wk-n">{w.n}</span>
+            <span class="wk-body">
+              <span class="wk-t">{w.title} <em>· {w.subtitle}</em></span>
+              <span class="wk-topics">{w.topics.slice(0, 4).join(' · ')}</span>
+              <span class="wk-ship">🛠 You ship: {w.ship}</span>
+            </span>
+            <span class="wk-arrow">→</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="ctr">
+        <a class="btn btn-ghost" href="/curriculum">Open the full curriculum →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="alt">
+    <div class="wrap">
+      <div class="eyebrow">How it works</div>
+      <h2>The rhythm of every week</h2>
+      <div class="grid g4">
+        {[
+          ['01', 'Read the handout', 'A designed, self-contained handout for the week — concepts, code, and the reasoning behind each decision.'],
+          ['02', 'Build it yourself', 'Every part is a runnable checkpoint. You type the code; nothing is copy-paste theatre.'],
+          ['03', 'Study the real thing', 'We open the actual Claude Code source and compare your subsystem to the production one.'],
+          ['04', 'Prove it works', 'Evals, tracing and measurement — so improvements are demonstrated, not claimed.'],
+        ].map(([n, t, b]) => (
+          <div class="step">
+            <div class="step-n">{n}</div>
+            <h3 class="fh">{t}</h3>
+            <p class="fb">{b}</p>
+          </div>
+        ))}
+      </div>
+      <div class="callout">
+        <div class="ct">🔍 Inside Claude Code</div>
+        <p>
+          A recurring feature of the handouts. After you build a subsystem, we open the real
+          Claude Code implementation and study the decisions a production team made — the
+          constants they picked, the edge cases they hit, the comments they left behind.
+          Building a demo is easy; the gap between a demo and a product is exactly what
+          those sections are about.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHO IT'S FOR ===================== -->
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Fit</div>
+      <h2>Who this is for</h2>
+      <div class="grid g2">
+        <div class="card">
+          <h3 class="fh ok">✅ A good fit if you…</h3>
+          <ul class="tick">
+            <li>Write Python or TypeScript comfortably</li>
+            <li>Have used an AI coding tool and wondered how it works</li>
+            <li>Want depth, not another API tutorial</li>
+            <li>Are moving into AI engineering and need a portfolio project</li>
+            <li>Prefer building the primitive over configuring the framework</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="fh no">✋ Not a fit if you…</h3>
+          <ul class="tick no-tick">
+            <li>Want to train or fine-tune models (this is systems, not research)</li>
+            <li>Are looking for no-code or prompt-only workflows</li>
+            <li>Want a finished template to ship this weekend</li>
+            <li>Cannot commit ~6 hours a week to building</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INSTRUCTOR ===================== -->
+  <section class="alt">
+    <div class="wrap">
+      <div class="eyebrow">Instructor</div>
+      <div class="inst">
+        <img src="/logo.jpg" alt={SITE.instructor.name} class="inst-img" width="120" height="120" />
+        <div>
+          <h2>Pouria Jahandideh</h2>
+          <p class="inst-role">AI Engineer · Engineering Team Lead · 10 years building production systems</p>
+          <p>
+            I build AI agents professionally — voice agents, an AI tax-preparation product, and
+            ML tooling for medical imaging — and before that I spent a decade as a full-stack
+            engineer and team lead across fintech, ride-hailing at 40M-user scale, and telecom
+            e-commerce used in 10,000 stores.
+          </p>
+          <p>
+            I have also been teaching that whole time: I designed a full-stack curriculum and
+            mentored hundreds of students through JavaScript, React, Python, Linux, DevOps and
+            Kubernetes. This course is what I wish had existed when I started building agents.
+          </p>
+          <div class="inst-cta">
+            <a class="btn btn-ghost" href="/resume">Full résumé &amp; experience</a>
+            <a class="btn btn-ghost" href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section id="faq">
+    <div class="wrap narrow">
+      <div class="eyebrow">Questions</div>
+      <h2>Frequently asked</h2>
+      {faqs.map((f) => (
+        <details class="faq">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section class="final">
+    <div class="wrap narrow ctr">
+      <h2>Ready to build the thing everyone else just uses?</h2>
+      <p class="final-p">
+        By Friday of Week 12 you do not have notes. You have a tool — and the deep
+        understanding to explain every line of it.
+      </p>
+      <a class="btn btn-primary big" href={SITE.cta.href} target="_blank" rel="noopener">
+        {SITE.cta.label} →
+      </a>
+      <p class="final-note">
+        Message me to talk about timing, fit and pricing. I reply to everyone.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .alt { background: var(--ink-800); }
+  .lead-p { font-size: 1.1rem; max-width: 64ch; }
+  .ctr { text-align: center; }
+
+  /* hero */
+  .hero {
+    position: relative;
+    padding: 5.5rem 0 4.5rem;
+    background:
+      radial-gradient(1100px 620px at 74% -12%, rgba(74, 46, 160, .62) 0%, rgba(74, 46, 160, 0) 58%),
+      linear-gradient(158deg, #211a3e 0%, #171233 52%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-in { max-width: 900px; }
+  .hero h1 { margin: 1.1rem 0 0; }
+  .grad {
+    background: linear-gradient(90deg, var(--gold), #f3e2a8 55%, var(--violet-lt));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-sub { font-size: 1.16rem; max-width: 62ch; margin-top: 1.3rem; color: var(--fg-dim); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.9rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: 2.6rem; margin-top: 3.2rem; padding-top: 1.9rem; border-top: 1px solid var(--line); }
+  .stats div { display: flex; flex-direction: column; }
+  .stats b { font-size: 2rem; color: var(--gold); line-height: 1; font-weight: 800; }
+  .stats span { font-size: .74rem; letter-spacing: .13em; text-transform: uppercase; color: var(--fg-dimmer); margin-top: .4rem; }
+
+  /* feature cards */
+  /* 9 capabilities -> a clean 3x3 on desktop, no orphan row */
+  .cap-grid { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 900px) { .cap-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .cap-grid { grid-template-columns: 1fr; } }
+  .ficon { font-size: 1.6rem; margin-bottom: .5rem; }
+  .fh { font-size: 1.06rem; margin-bottom: .35rem; color: #fff; }
+  .fb { font-size: .92rem; margin: 0; color: var(--fg-dim); }
+  .fh.ok { color: var(--green); }
+  .fh.no { color: var(--pink); }
+
+  /* week list */
+  .part-hd { display: flex; align-items: flex-start; gap: 1rem; margin: 2.6rem 0 1.2rem; }
+  .part-hd h3 { margin: .3rem 0 .15rem; }
+  .part-hd p { margin: 0; font-size: .92rem; }
+  .wk-list { display: flex; flex-direction: column; gap: .6rem; }
+  .wk {
+    display: flex; align-items: center; gap: 1.05rem;
+    background: linear-gradient(165deg, var(--panel), var(--ink-800));
+    border: 1px solid var(--line); border-radius: 12px;
+    padding: 1rem 1.2rem; text-decoration: none;
+    transition: border-color .16s ease, transform .16s ease;
+  }
+  .wk:hover { border-color: var(--line-str); transform: translateX(4px); text-decoration: none; }
+  .wk-n {
+    flex: none; width: 38px; height: 38px; border-radius: 10px;
+    display: grid; place-items: center; font-weight: 800; font-size: 1rem;
+    background: rgba(109, 75, 208, .22); color: #c9b6ff; border: 1px solid var(--line-str);
+  }
+  .wk-body { display: flex; flex-direction: column; gap: .18rem; flex: 1; min-width: 0; }
+  .wk-t { font-weight: 700; color: #fff; font-size: 1rem; }
+  .wk-t em { color: var(--violet-lt); font-style: normal; font-weight: 500; }
+  .wk-topics { font-size: .84rem; color: var(--fg-dimmer); }
+  .wk-ship { font-size: .82rem; color: var(--gold); }
+  .wk-arrow { color: var(--fg-dimmer); font-size: 1.1rem; flex: none; }
+  .wk:hover .wk-arrow { color: var(--gold); }
+
+  /* steps */
+  .step { padding: 1.2rem 0; }
+  .step-n { font-size: .8rem; font-weight: 800; letter-spacing: .16em; color: var(--gold); margin-bottom: .5rem; }
+
+  /* lists */
+  ul.tick { list-style: none; padding: 0; margin: .6rem 0 0; }
+  ul.tick li { position: relative; padding: .38rem 0 .38rem 1.5rem; font-size: .93rem; color: var(--fg-dim); }
+  ul.tick li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+  ul.no-tick li::before { content: '·'; color: var(--pink); font-size: 1.5rem; line-height: 1; top: .3rem; }
+
+  /* instructor */
+  .inst { display: flex; gap: 2rem; align-items: flex-start; }
+  .inst-img { border-radius: 18px; object-fit: cover; flex: none; border: 1px solid var(--line-str); }
+  .inst-role { color: var(--gold); font-weight: 600; font-size: .95rem; margin-bottom: 1rem; }
+  .inst-cta { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.2rem; }
+
+  /* faq */
+  .faq { border-bottom: 1px solid var(--line); padding: .3rem 0; }
+  .faq summary {
+    cursor: pointer; padding: 1rem 0; font-weight: 700; color: #fff;
+    font-size: 1.02rem; list-style: none; display: flex; justify-content: space-between; gap: 1rem;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; color: var(--gold); font-size: 1.3rem; line-height: 1; flex: none; }
+  .faq[open] summary::after { content: '−'; }
+  .faq p { margin: 0 0 1.1rem; font-size: .96rem; }
+
+  /* final */
+  .final {
+    background:
+      radial-gradient(760px 380px at 50% 0%, rgba(109, 75, 208, .34) 0%, rgba(109, 75, 208, 0) 70%),
+      var(--ink-800);
+    border-top: 1px solid var(--line);
+  }
+  .final-p { font-size: 1.1rem; max-width: 54ch; margin: 0 auto 1.9rem; }
+  .btn.big { padding: 1rem 2.1rem; font-size: 1.02rem; }
+  .final-note { margin-top: 1.2rem; font-size: .87rem; color: var(--fg-dimmer); }
+
+  @media (max-width: 720px) {
+    .inst { flex-direction: column; gap: 1.3rem; }
+    .stats { gap: 1.8rem; }
+    .stats b { font-size: 1.6rem; }
+    .wk { align-items: flex-start; }
+  }
+</style>

@@ -1,0 +1,313 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+
+const experience = [
+  {
+    company: 'Agentonic',
+    place: 'Remote',
+    role: 'AI Engineer',
+    dates: 'Jan 2026 – Present',
+    note: 'AI agents and applied ML products, working remotely from Yerevan with a US-based team',
+    points: [
+      'Build AI agents for clients, including a voice agent product.',
+      'Serve as industry advisor and capstone coach for a sleep-tracking app developed with UC Irvine students.',
+      'Develop an AI-powered tax preparation application.',
+      'Build an application for labeling X-ray and dental images, and for training and running inference on machine learning models.',
+    ],
+  },
+  {
+    company: 'Prima Luxury',
+    place: 'Remote',
+    role: 'Full Stack Developer, Engineering Team Lead',
+    dates: 'Jan 2024 – Jan 2026',
+    note: 'AI-driven CRM for the real estate industry in Dubai',
+    points: [
+      'Led a cross-functional team of 10, including designers, developers and product managers.',
+      'Built the frontend using React, Redux Toolkit, TypeScript and Tailwind CSS.',
+      'Developed backend microservices with Golang and Nest.js, backed by PostgreSQL, Redis and Prisma ORM.',
+      'Built public-facing websites with Next.js.',
+    ],
+  },
+  {
+    company: 'Amanj Academy',
+    place: 'Tehran',
+    role: 'Frontend Programming Coach',
+    dates: 'Oct 2022 – Present',
+    note: 'Course design and mentoring',
+    points: [
+      'Designed a Full Stack JavaScript course and mentored hundreds of students.',
+      'Taught JavaScript, React, Next.js, Tailwind and TypeScript.',
+      'Taught Linux, DevOps, CI/CD and Kubernetes.',
+      'Taught Python, Flask, Django, FastAPI, machine learning and PostgreSQL.',
+    ],
+  },
+  {
+    company: 'Kian Digital',
+    place: 'Tehran',
+    role: 'Full Stack Developer',
+    dates: 'Feb 2022 – Jan 2024',
+    note: 'Fintech platform',
+    points: [
+      'Built a push notification system delivering one million notifications daily.',
+      'Developed the backend with Golang, Node.js, NestJS and PostgreSQL; frontend with Next.js and React.',
+      'Implemented unit and end-to-end testing with Jest.',
+      'Managed deployments using GitLab CI/CD pipelines, Docker, Helm and Kubernetes.',
+    ],
+  },
+  {
+    company: 'Snapp',
+    place: 'Tehran',
+    role: 'Full Stack Developer',
+    dates: 'Feb 2020 – Jan 2022',
+    note: 'Ride-hailing platform with 40M users and 3M daily rides',
+    points: [
+      'Rebuilt the Corporate Panel (used by companies to book rides for employees) from scratch using React and MobX.',
+      'Configured Nginx to route traffic between the legacy and new panel during a large-scale migration.',
+      'As part of the retention team, built dashboard APIs and backend microservices using Golang, gRPC, NATS and PostgreSQL.',
+      'Deployed services on OpenShift Kubernetes and managed CI/CD with GitLab.',
+    ],
+  },
+  {
+    company: 'ZarinPal',
+    place: 'Tehran',
+    role: 'Full Stack Developer',
+    dates: 'Sep 2019 – Jan 2020',
+    note: 'Large-scale internet payment gateway',
+    points: [
+      'Led the team building a blockchain payment gateway using Golang, Node.js, PostgreSQL, Socket.io, Next.js, React, MobX and TypeScript.',
+      'Implemented backend testing with node-tap and frontend testing with Jest.',
+      'Maintained merchant-facing API documentation using Swagger.',
+    ],
+  },
+  {
+    company: 'ParsTasmim — MTN Irancell',
+    place: 'Tehran',
+    role: 'Full Stack Developer',
+    dates: 'Dec 2015 – Aug 2019',
+    note: 'Telecom e-commerce and retail systems',
+    points: [
+      "Contributed to the solution design and development of an online shop for SIM cards, top-ups and bolt-ons, which became MTN Irancell's leading sales channel, using Python, Flask, PostgreSQL and Celery.",
+      'Served as technical lead and solution architect for Digital POS, a central system now used in 10,000 Irancell stores nationwide, built with Node.js, React, PostgreSQL and MongoDB.',
+      'Partnered with finance and fraud detection teams to design transaction data models and build financial reports for revenue assurance.',
+    ],
+  },
+];
+
+const skills = [
+  { name: 'Python', level: 5 }, { name: 'Node.js', level: 5 },
+  { name: 'React', level: 5 }, { name: 'Linux', level: 5 },
+  { name: 'Next.js', level: 5 }, { name: 'TypeScript', level: 5 },
+  { name: 'PostgreSQL', level: 5 }, { name: 'Docker', level: 5 },
+  { name: 'Golang', level: 5 }, { name: 'gRPC', level: 5 },
+  { name: 'AWS', level: 5 }, { name: 'GitLab CI/CD', level: 5 },
+  { name: 'Team Leadership', level: 5 }, { name: 'SCRUM', level: 5 },
+  { name: 'MongoDB', level: 4 }, { name: 'Kubernetes', level: 3 },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.instructor.name,
+  url: `${SITE.url}/resume`,
+  sameAs: [SITE.instructor.linkedin],
+  jobTitle: 'AI Engineer & Engineering Team Lead',
+  email: `mailto:${SITE.instructor.email}`,
+  description:
+    'AI Engineer and Engineering Team Lead with 10 years of experience building scalable web platforms, fintech systems and distributed microservices.',
+  knowsAbout: ['AI Agents', 'Python', 'TypeScript', 'Node.js', 'React', 'Golang', 'Kubernetes', 'PostgreSQL', 'Machine Learning'],
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: 'Tehran University' },
+    { '@type': 'CollegeOrUniversity', name: 'Iran University of Science and Technology' },
+  ],
+};
+---
+
+<BaseLayout
+  title="Pouria Jahandideh — AI Engineer & Engineering Team Lead | Résumé"
+  description="AI Engineer and Engineering Team Lead with 10 years building scalable web platforms, fintech systems and distributed microservices. Instructor of the 12-week AI Engineering mentorship."
+  canonical="/resume"
+  schema={[schema]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <div class="rhead">
+        <img src="/logo.jpg" alt="Pouria Jahandideh" width="104" height="104" />
+        <div>
+          <span class="pill pill-gold">Instructor</span>
+          <h1>Pouria Jahandideh</h1>
+          <p class="role">AI Engineer · Engineering Team Lead · Full Stack Developer</p>
+          <div class="contact">
+            <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+            <a href={`mailto:${SITE.instructor.email}`}>{SITE.instructor.email}</a>
+            <span>{SITE.instructor.location}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cols">
+        <div class="main-col">
+          <h2>Professional summary</h2>
+          <p class="summary">
+            Engineering Team Lead and Full Stack Developer with <b>10 years of experience</b>{' '}
+            building scalable web platforms, fintech systems and distributed microservices.
+            Proven track record leading cross-functional teams of designers, developers and
+            product managers, with deep expertise across Python, Node.js, React/Next.js,
+            PostgreSQL, Docker, Kubernetes and CI/CD pipelines. Currently building AI agents
+            and applied ML products.
+          </p>
+
+          <h2>Experience</h2>
+          <div class="timeline">
+            {experience.map((e) => (
+              <div class="job">
+                <div class="job-hd">
+                  <div>
+                    <h3>{e.role}</h3>
+                    <div class="job-co">{e.company} <span>· {e.place}</span></div>
+                  </div>
+                  <div class="job-date">{e.dates}</div>
+                </div>
+                {e.note && <p class="job-note">{e.note}</p>}
+                <ul>
+                  {e.points.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <aside class="side">
+          <div class="side-box">
+            <h3>Skills</h3>
+            <div class="skills">
+              {skills.map((s) => (
+                <div class="skill">
+                  <span class="sk-name">{s.name}</span>
+                  <span class="dots" aria-label={`${s.level} out of 5`}>
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <i class={i <= s.level ? 'on' : ''}></i>
+                    ))}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="side-box">
+            <h3>Education</h3>
+            <div class="edu">
+              <b>M.A. Business Administration (MBA)</b>
+              <span>Tehran University</span>
+              <span class="d">Apr 2024 – Jun 2025</span>
+            </div>
+            <div class="edu">
+              <b>B.S. Software Engineering</b>
+              <span>Iran University of Science and Technology</span>
+              <span class="d">Sep 2009 – Aug 2014</span>
+            </div>
+          </div>
+
+          <div class="side-box">
+            <h3>Awards &amp; certifications</h3>
+            <ul class="awards">
+              <li>LPIC-1, LPIC-2, LPIC-301, LPIC-303, LPIC-304 certifications — Fanavaran Anisa</li>
+              <li>Snapp Hackathon Winner, Best Feature Award — for the “suggested destination” feature</li>
+              <li>Honorable Member of the Science Association — recognized for teaching, workshops and mastermind sessions</li>
+            </ul>
+          </div>
+
+          <div class="side-box">
+            <h3>Languages</h3>
+            <ul class="awards">
+              <li>English — Advanced</li>
+              <li>Persian — Native</li>
+              <li>French — Beginner</li>
+            </ul>
+          </div>
+
+          <div class="side-box cta-box">
+            <h3>Work with me</h3>
+            <p>I mentor engineers through a 12-week AI engineering build.</p>
+            <a class="btn btn-primary full" href={SITE.cta.href} target="_blank" rel="noopener">
+              Message me on LinkedIn →
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 3rem 0;
+    background:
+      radial-gradient(900px 480px at 78% -25%, rgba(74, 46, 160, .5) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .rhead { display: flex; gap: 1.8rem; align-items: center; }
+  .rhead img { border-radius: 20px; object-fit: cover; flex: none; border: 1px solid var(--line-str); }
+  .rhead h1 { margin: .7rem 0 .2rem; font-size: clamp(1.9rem, 4.4vw, 2.7rem); }
+  .role { color: var(--gold); font-weight: 600; margin-bottom: .8rem; }
+  .contact { display: flex; flex-wrap: wrap; gap: 1.1rem; font-size: .89rem; color: var(--fg-dimmer); }
+
+  .cols { display: grid; grid-template-columns: 1fr 290px; gap: 3rem; align-items: start; }
+  .summary { font-size: 1.02rem; }
+  .main-col h2 { margin-top: 2.4rem; }
+  .main-col h2:first-child { margin-top: 0; }
+
+  .timeline { display: flex; flex-direction: column; gap: 2rem; margin-top: 1.4rem; }
+  .job { border-left: 2px solid var(--line-str); padding-left: 1.3rem; position: relative; }
+  .job::before {
+    content: ''; position: absolute; left: -6px; top: .45rem;
+    width: 10px; height: 10px; border-radius: 50%; background: var(--violet);
+    border: 2px solid var(--ink-900);
+  }
+  .job-hd { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .job h3 { margin: 0 0 .15rem; font-size: 1.08rem; color: #fff; }
+  .job-co { font-weight: 600; color: var(--violet-lt); font-size: .95rem; }
+  .job-co span { color: var(--fg-dimmer); font-weight: 400; }
+  .job-date { font-size: .82rem; color: var(--fg-dimmer); white-space: nowrap; padding-top: .15rem; }
+  .job-note { font-size: .88rem; color: var(--fg-dimmer); font-style: italic; margin: .5rem 0 .6rem; }
+  .job ul { margin: 0; padding-left: 1.1rem; }
+  .job li { font-size: .92rem; color: var(--fg-dim); margin-bottom: .38rem; }
+  .job li::marker { color: var(--violet-lt); }
+
+  .side { position: sticky; top: 86px; display: flex; flex-direction: column; gap: 1rem; }
+  .side-box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.3rem; }
+  .side-box h3 { font-size: .74rem; letter-spacing: .15em; text-transform: uppercase; color: var(--violet-lt); margin-bottom: .9rem; }
+
+  .skills { display: flex; flex-direction: column; gap: .5rem; }
+  .skill { display: flex; justify-content: space-between; align-items: center; gap: .8rem; }
+  .sk-name { font-size: .87rem; color: var(--fg-dim); }
+  .dots { display: flex; gap: 3px; flex: none; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(140, 122, 220, .25); display: block; }
+  .dots i.on { background: var(--gold); }
+
+  .edu { margin-bottom: 1rem; display: flex; flex-direction: column; gap: .12rem; }
+  .edu:last-child { margin-bottom: 0; }
+  .edu b { font-size: .9rem; color: #fff; }
+  .edu span { font-size: .84rem; color: var(--fg-dim); }
+  .edu .d { font-size: .78rem; color: var(--fg-dimmer); }
+
+  ul.awards { margin: 0; padding-left: 1.05rem; }
+  ul.awards li { font-size: .85rem; color: var(--fg-dim); margin-bottom: .5rem; }
+  ul.awards li::marker { color: var(--gold); }
+
+  .cta-box p { font-size: .88rem; margin-bottom: 1rem; }
+  .btn.full { width: 100%; justify-content: center; }
+
+  @media (max-width: 900px) {
+    .cols { grid-template-columns: 1fr; gap: 2rem; }
+    .side { position: static; }
+  }
+  @media (max-width: 620px) {
+    .rhead { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+  }
+</style>

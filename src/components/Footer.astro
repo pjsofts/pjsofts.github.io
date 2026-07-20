@@ -1,0 +1,76 @@
+---
+import { SITE } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-grid">
+      <div>
+        <div class="fbrand">
+          <img src="/logo.jpg" alt="" width="38" height="38" />
+          <div>
+            <div class="fb-name">AI ENGINEERING</div>
+            <div class="fb-sub">Build a Claude Code clone from scratch</div>
+          </div>
+        </div>
+        <p class="fdesc">
+          A 12-week hands-on mentorship for engineers who are serious about AI.
+          Real code, no frameworks, a portfolio project at the end.
+        </p>
+      </div>
+
+      <div>
+        <h4>Course</h4>
+        <a href="/curriculum">Full curriculum</a>
+        <a href="/curriculum/week-1-your-first-agent">Week 1 — Your first agent</a>
+        <a href="/#outcomes">What you build</a>
+        <a href="/#faq">FAQ</a>
+      </div>
+
+      <div>
+        <h4>Writing</h4>
+        <a href="/blog">All articles</a>
+        <a href="/blog/chat-completions-vs-responses-api">Completions vs Responses API</a>
+        <a href="/blog/designing-tools-for-ai-agents">Designing tools for agents</a>
+        <a href="/rss.xml">RSS feed</a>
+      </div>
+
+      <div>
+        <h4>Instructor</h4>
+        <a href="/resume">Résumé &amp; experience</a>
+        <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href={`mailto:${SITE.instructor.email}`}>{SITE.instructor.email}</a>
+      </div>
+    </div>
+
+    <div class="ftr-bot">
+      <span>© {year} {SITE.instructor.name}. All rights reserved.</span>
+      <span class="fnote">Built from scratch — like everything else in this course.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr { border-top: 1px solid var(--line); background: var(--ink-800); padding: 3.2rem 0 1.8rem; margin-top: 3rem; }
+  .ftr-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 2.2rem; }
+  .fbrand { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; }
+  .fbrand img { border-radius: 9px; object-fit: cover; }
+  .fb-name { font-weight: 800; font-size: .8rem; letter-spacing: .17em; }
+  .fb-sub { font-size: .78rem; color: var(--fg-dimmer); }
+  .fdesc { font-size: .88rem; color: var(--fg-dimmer); max-width: 34ch; margin: 0; }
+  .ftr h4 { font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--violet-lt); margin-bottom: .8rem; }
+  .ftr-grid a { display: block; font-size: .88rem; color: var(--fg-dim); margin-bottom: .5rem; text-decoration: none; }
+  .ftr-grid a:hover { color: var(--gold); }
+  .ftr-bot {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
+    border-top: 1px solid var(--line); margin-top: 2.4rem; padding-top: 1.3rem;
+    font-size: .8rem; color: var(--fg-dimmer);
+  }
+  @media (max-width: 780px) {
+    .ftr-grid { grid-template-columns: 1fr 1fr; gap: 1.8rem; }
+  }
+  @media (max-width: 460px) {
+    .ftr-grid { grid-template-columns: 1fr; }
+  }
+</style>

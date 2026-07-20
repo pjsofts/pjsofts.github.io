@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import { WEEKS } from '../../data/weeks';
+
+const foundations = WEEKS.filter((w) => w.part === 'Foundations');
+const clone = WEEKS.filter((w) => w.part === 'Build the Clone');
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'AI Engineering — 12-Week Curriculum',
+  itemListElement: WEEKS.map((w) => ({
+    '@type': 'ListItem',
+    position: w.n,
+    name: `Week ${w.n} — ${w.title}`,
+    url: `${SITE.url}/curriculum/${w.slug}`,
+  })),
+};
+---
+
+<BaseLayout
+  title="12-Week AI Engineering Curriculum — Full Week-by-Week Walkthrough"
+  description="The complete 12-week AI engineering curriculum: agent loops, tool calling, evals, a production runtime, RAG and vector databases, context engineering, planning, memory, sandboxing, tracing and multi-agent orchestration."
+  canonical="/curriculum"
+  schema={[schema]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <span class="pill pill-gold">The Roadmap</span>
+      <h1>Twelve weeks,<br />one real product</h1>
+      <p class="sub">
+        Every week is implemented hands-on in real code, in your choice of Python or
+        TypeScript. The first three weeks build the fundamentals every AI engineer needs;
+        the next nine assemble them into a working clone of a professional AI coding agent.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="part-intro">
+        <span class="pill pill-violet">Part I · Weeks 1–3</span>
+        <h2>Foundations</h2>
+        <p>
+          The primitives of modern AI engineering: the agent loop, evaluation, and a
+          production-grade runtime. Three weeks that most courses never reach.
+        </p>
+      </div>
+      <div class="grid g2">
+        {foundations.map((w) => (
+          <a class="card wcard" href={`/curriculum/${w.slug}`}>
+            <div class="wtop">
+              <span class="wnum">Week {w.n}</span>
+              <span class="whrs">{w.hours}</span>
+            </div>
+            <h3>{w.title}</h3>
+            <div class="wsub">{w.subtitle}</div>
+            <p class="wsum">{w.summary}</p>
+            <div class="wtopics">
+              {w.topics.slice(0, 5).map((t) => <span class="tag">{t}</span>)}
+            </div>
+            <div class="wship">🛠 You ship: <b>{w.ship}</b></div>
+          </a>
+        ))}
+      </div>
+
+      <div class="part-intro second">
+        <span class="pill pill-violet">Part II · Weeks 4–12</span>
+        <h2>Build the Clone</h2>
+        <p>
+          One subsystem per week. Each week your tool — <code>mycode</code> — gains a real
+          capability, and by Week 12 it reads codebases, edits files, plans, remembers,
+          previews its work, traces itself, and orchestrates a team of sub-agents.
+        </p>
+      </div>
+      <div class="grid g2">
+        {clone.map((w) => (
+          <a class="card wcard" href={`/curriculum/${w.slug}`}>
+            <div class="wtop">
+              <span class="wnum">Week {w.n}</span>
+              <span class="whrs">{w.hours}</span>
+            </div>
+            <h3>{w.title}</h3>
+            <div class="wsub">{w.subtitle}</div>
+            <p class="wsum">{w.summary}</p>
+            <div class="wtopics">
+              {w.topics.slice(0, 5).map((t) => <span class="tag">{t}</span>)}
+            </div>
+            <div class="wship">🛠 You ship: <b>{w.ship}</b></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap narrow ctr">
+      <h2>By Friday of Week 12, you don't have notes. You have a tool.</h2>
+      <p>
+        A complete, working AI coding agent you built from scratch — and the deep
+        understanding to explain every line of it.
+      </p>
+      <a class="btn btn-primary" href={SITE.cta.href} target="_blank" rel="noopener">
+        {SITE.cta.label} →
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 4rem 0 3rem;
+    background:
+      radial-gradient(900px 500px at 78% -20%, rgba(74, 46, 160, .55) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .pg-hero h1 { margin: 1rem 0 0; }
+  .sub { font-size: 1.1rem; max-width: 64ch; margin-top: 1.1rem; }
+
+  .part-intro { margin: 1rem 0 1.6rem; max-width: 68ch; }
+  .part-intro.second { margin-top: 3.6rem; }
+  .part-intro h2 { margin: .8rem 0 .4rem; }
+  .part-intro p { margin: 0; }
+
+  .wcard { display: flex; flex-direction: column; text-decoration: none; }
+  .wcard:hover { text-decoration: none; }
+  .wtop { display: flex; justify-content: space-between; align-items: center; margin-bottom: .7rem; }
+  .wnum { font-size: .72rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); }
+  .whrs { font-size: .74rem; color: var(--fg-dimmer); }
+  .wcard h3 { margin: 0 0 .15rem; color: #fff; font-size: 1.2rem; }
+  .wsub { color: var(--violet-lt); font-size: .9rem; margin-bottom: .7rem; }
+  .wsum { font-size: .9rem; margin-bottom: .9rem; flex: 1; }
+  .wtopics { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .9rem; }
+  .tag {
+    font-size: .72rem; padding: .2rem .55rem; border-radius: 999px;
+    background: rgba(109, 75, 208, .16); border: 1px solid var(--line);
+    color: var(--fg-dim);
+  }
+  .wship { font-size: .84rem; color: var(--fg-dim); border-top: 1px solid var(--line); padding-top: .75rem; }
+  .wship b { color: var(--gold); font-weight: 700; }
+
+  .final {
+    background: radial-gradient(700px 340px at 50% 0%, rgba(109, 75, 208, .3) 0%, rgba(109, 75, 208, 0) 70%), var(--ink-800);
+    border-top: 1px solid var(--line);
+  }
+  .ctr { text-align: center; }
+  .final p { max-width: 52ch; margin: 0 auto 1.7rem; }
+</style>

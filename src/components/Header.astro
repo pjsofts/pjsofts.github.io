@@ -1,0 +1,70 @@
+---
+import { SITE, NAV } from '../data/site';
+const path = Astro.url.pathname;
+const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="wrap hdr">
+    <a href="/" class="brand" aria-label={`${SITE.name} — home`}>
+      <img src="/logo.jpg" alt="" width="34" height="34" />
+      <span class="brand-txt">AI&nbsp;ENGINEERING</span>
+    </a>
+
+    <input type="checkbox" id="nav-toggle" hidden />
+    <label for="nav-toggle" class="burger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="nav" aria-label="Main">
+      {NAV.map((n) => (
+        <a href={n.href} class={isActive(n.href) ? 'on' : ''}>{n.label}</a>
+      ))}
+      <a class="btn btn-primary nav-cta" href={SITE.cta.href} target="_blank" rel="noopener">
+        Join the course
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 11, 28, 0.86);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .hdr { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 66px; }
+  .brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; }
+  .brand img { border-radius: 8px; object-fit: cover; }
+  .brand-txt { font-weight: 800; font-size: .82rem; letter-spacing: .19em; color: var(--fg); }
+  .brand:hover { text-decoration: none; }
+  .brand:hover .brand-txt { color: var(--gold); }
+
+  .nav { display: flex; align-items: center; gap: 1.5rem; }
+  .nav a { font-size: .92rem; font-weight: 600; color: var(--fg-dim); text-decoration: none; }
+  .nav a:hover, .nav a.on { color: var(--fg); }
+  .nav a.on { color: var(--gold); }
+  .nav-cta { font-size: .85rem !important; padding: .55rem 1.15rem !important; color: #33270a !important; }
+
+  .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .4rem; }
+  .burger span { display: block; width: 22px; height: 2px; background: var(--fg); border-radius: 2px; }
+
+  @media (max-width: 780px) {
+    .burger { display: flex; }
+    .nav {
+      position: absolute; top: 66px; left: 0; right: 0;
+      flex-direction: column; align-items: flex-start; gap: 0;
+      background: var(--ink-800);
+      border-bottom: 1px solid var(--line);
+      padding: 0 1.35rem;
+      max-height: 0; overflow: hidden;
+      transition: max-height .25s ease, padding .25s ease;
+    }
+    #nav-toggle:checked ~ .nav { max-height: 420px; padding: .8rem 1.35rem 1.3rem; }
+    .nav a { padding: .7rem 0; width: 100%; }
+    .nav-cta { margin-top: .6rem; }
+  }
+</style>

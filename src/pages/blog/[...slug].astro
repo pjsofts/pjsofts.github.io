@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const all = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const related = all.filter((p) => p.id !== post.id).slice(0, 3);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  author: { '@type': 'Person', name: SITE.instructor.name, url: SITE.instructor.linkedin },
+  publisher: { '@type': 'Person', name: SITE.instructor.name },
+  keywords: post.data.tags.join(', '),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE.url}/blog/${post.id}` },
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE.url}/blog` },
+    { '@type': 'ListItem', position: 3, name: post.data.title, item: `${SITE.url}/blog/${post.id}` },
+  ],
+};
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  canonical={`/blog/${post.id}`}
+  ogType="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  schema={[schema, breadcrumb]}
+>
+  <article>
+    <section class="pg-hero">
+      <div class="wrap narrow">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span>/</span> <a href="/blog">Blog</a>
+        </nav>
+        <div class="ptags">
+          {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+        </div>
+        <h1>{post.data.title}</h1>
+        <p class="lede">{post.data.description}</p>
+        <div class="pmeta">
+          <span>{SITE.instructor.name}</span>
+          <span>·</span>
+          <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+          {post.data.readingTime && <><span>·</span><span>{post.data.readingTime} min read</span></>}
+        </div>
+      </div>
+    </section>
+
+    <section class="body-sec">
+      <div class="wrap narrow">
+        {headings.filter((h) => h.depth === 2).length > 2 && (
+          <nav class="toc" aria-label="Table of contents">
+            <div class="toc-h">On this page</div>
+            <ul>
+              {headings.filter((h) => h.depth === 2).map((h) => (
+                <li><a href={`#${h.slug}`}>{h.text}</a></li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        <div class="prose">
+          <Content />
+        </div>
+
+        <div class="post-cta">
+          <h3>Build it, don't just read about it</h3>
+          <p>
+            The 12-week AI Engineering mentorship takes you from an empty file to a complete
+            AI coding agent — every subsystem, real code, no frameworks.
+          </p>
+          <div class="pc-btns">
+            <a class="btn btn-primary" href={SITE.cta.href} target="_blank" rel="noopener">
+              {SITE.cta.label} →
+            </a>
+            <a class="btn btn-ghost" href="/curriculum">See the curriculum</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="rel">
+        <div class="wrap">
+          <div class="eyebrow">Keep reading</div>
+          <div class="grid g3">
+            {related.map((p) => (
+              <a class="card rcard" href={`/blog/${p.id}`}>
+                <h3>{p.data.title}</h3>
+                <p>{p.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 2.4rem 0 2.6rem;
+    background:
+      radial-gradient(900px 480px at 78% -25%, rgba(74, 46, 160, .5) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .crumbs { font-size: .82rem; color: var(--fg-dimmer); margin-bottom: 1.2rem; }
+  .crumbs span { margin: 0 .35rem; }
+  .pg-hero h1 { margin: .9rem 0 .6rem; font-size: clamp(1.8rem, 4.4vw, 2.7rem); }
+  .lede { font-size: 1.08rem; color: var(--fg-dim); margin-bottom: 1.1rem; }
+  .pmeta { display: flex; flex-wrap: wrap; gap: .45rem; font-size: .86rem; color: var(--fg-dimmer); }
+
+  .ptags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .tag {
+    font-size: .71rem; padding: .2rem .55rem; border-radius: 999px;
+    background: rgba(109, 75, 208, .18); border: 1px solid var(--line); color: var(--fg-dim);
+  }
+
+  .body-sec { padding-top: 2.6rem; }
+
+  .toc {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 1.1rem 1.3rem; margin-bottom: 2.4rem;
+  }
+  .toc-h { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--violet-lt); margin-bottom: .6rem; }
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc li { margin-bottom: .35rem; }
+  .toc a { font-size: .9rem; color: var(--fg-dim); }
+  .toc a:hover { color: var(--gold); }
+
+  .post-cta {
+    margin-top: 3.4rem; padding: 1.8rem;
+    background: linear-gradient(150deg, rgba(109, 75, 208, .22), rgba(109, 75, 208, .06));
+    border: 1px solid var(--line-str); border-radius: var(--radius);
+  }
+  .post-cta h3 { color: #fff; margin-bottom: .4rem; }
+  .post-cta p { font-size: .95rem; margin-bottom: 1.2rem; }
+  .pc-btns { display: flex; gap: .7rem; flex-wrap: wrap; }
+
+  .rel { background: var(--ink-800); border-top: 1px solid var(--line); }
+  .rcard { text-decoration: none; }
+  .rcard:hover { text-decoration: none; }
+  .rcard h3 { font-size: 1.02rem; color: #fff; margin-bottom: .4rem; }
+  .rcard p { font-size: .88rem; margin: 0; }
+</style>

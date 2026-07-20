@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../data/site';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Path-only canonical override, e.g. "/blog/foo". Defaults to current URL. */
+  canonical?: string;
+  /** Extra JSON-LD objects to embed. */
+  schema?: Record<string, any>[];
+  ogType?: 'website' | 'article';
+  publishedTime?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  schema = [],
+  ogType = 'website',
+  publishedTime,
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og-default.png', Astro.site);
+const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
+
+// Site-wide structured data
+const baseSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+    publisher: { '@type': 'Person', name: SITE.instructor.name },
+  },
+  ...schema,
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="author" content={SITE.instructor.name} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:image" content={ogImage} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {ogType === 'article' && <meta property="article:author" content={SITE.instructor.name} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="apple-touch-icon" href="/logo.jpg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Blog`} href="/rss.xml" />
+
+    <meta name="theme-color" content="#12142e" />
+    <meta name="generator" content={Astro.generator} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} is:inline />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
