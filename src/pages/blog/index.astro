@@ -54,6 +54,17 @@ const schema = {
           <div class="grid g2 feat-grid">
             {featured.map((p) => (
               <a class="card post feat" href={`/blog/${p.id}`}>
+                {p.data.image && (
+                  <div class="thumb">
+                    <img
+                      src={p.data.image}
+                      alt={p.data.imageAlt ?? p.data.title}
+                      width="1200"
+                      height="627"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
                 <div class="ptags">
                   {p.data.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}
                 </div>
@@ -126,6 +137,15 @@ const schema = {
   .post { text-decoration: none; display: flex; flex-direction: column; }
   .post:hover { text-decoration: none; }
   .post h2 { font-size: 1.35rem; color: #fff; margin: .6rem 0 .5rem; line-height: 1.25; }
+  .thumb {
+    margin: -.35rem 0 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    line-height: 0;
+    background: var(--panel);
+  }
+  .thumb img { width: 100%; height: auto; display: block; }
   .pdesc { font-size: .93rem; flex: 1; margin-bottom: 1rem; }
   .pmeta { font-size: .8rem; color: var(--fg-dimmer); display: flex; gap: .4rem; }
 

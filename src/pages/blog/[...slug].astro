@@ -30,6 +30,7 @@ const schema = {
   publisher: { '@type': 'Person', name: SITE.instructor.name },
   keywords: post.data.tags.join(', '),
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE.url}/blog/${post.id}` },
+  ...(post.data.image && { image: `${SITE.url}${post.data.image}` }),
 };
 
 const breadcrumb = {
@@ -49,6 +50,7 @@ const breadcrumb = {
   canonical={`/blog/${post.id}`}
   ogType="article"
   publishedTime={post.data.pubDate.toISOString()}
+  image={post.data.image}
   schema={[schema, breadcrumb]}
 >
   <article>
@@ -70,6 +72,20 @@ const breadcrumb = {
         </div>
       </div>
     </section>
+
+    {post.data.image && (
+      <div class="wrap narrow">
+        <figure class="hero-img">
+          <img
+            src={post.data.image}
+            alt={post.data.imageAlt ?? post.data.title}
+            width="1200"
+            height="627"
+            loading="eager"
+          />
+        </figure>
+      </div>
+    )}
 
     <section class="body-sec">
       <div class="wrap narrow">
@@ -141,6 +157,16 @@ const breadcrumb = {
     font-size: .71rem; padding: .2rem .55rem; border-radius: 999px;
     background: rgba(109, 75, 208, .18); border: 1px solid var(--line); color: var(--fg-dim);
   }
+
+  .hero-img {
+    margin: 2.4rem 0 0;
+    border: 1px solid var(--line-str);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--panel);
+    line-height: 0;
+  }
+  .hero-img img { width: 100%; height: auto; display: block; }
 
   .body-sec { padding-top: 2.6rem; }
 

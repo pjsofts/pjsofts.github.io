@@ -11,6 +11,9 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     /** Reading time in minutes, hand-set for accuracy. */
     readingTime: z.number().optional(),
+    /** Hero image, root-relative from /public — e.g. "/articles/prompt-caching.png". */
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
