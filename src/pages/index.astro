@@ -13,7 +13,12 @@ const courseSchema = {
   description: SITE.description,
   url: SITE.url,
   provider: { '@type': 'Person', name: SITE.instructor.name, url: SITE.instructor.linkedin },
-  instructor: { '@type': 'Person', name: SITE.instructor.name, url: SITE.instructor.linkedin },
+  instructor: {
+    '@type': 'Person',
+    name: SITE.instructor.name,
+    url: SITE.instructor.linkedin,
+    image: `${SITE.url}/headshot.jpg`,
+  },
   educationalLevel: 'Intermediate to Advanced',
   teaches: [
     'AI agent architecture', 'LLM tool calling & function calling', 'Agent evaluation (evals)',
@@ -281,7 +286,14 @@ const faqSchema = {
     <div class="wrap">
       <div class="eyebrow">Instructor</div>
       <div class="inst">
-        <img src="/logo.jpg" alt={SITE.instructor.name} class="inst-img" width="120" height="120" />
+        <img
+          src="/headshot.jpg"
+          alt={`${SITE.instructor.name}, instructor`}
+          class="inst-img"
+          width="140"
+          height="140"
+          loading="lazy"
+        />
         <div>
           <h2>Pouria Jahandideh</h2>
           <p class="inst-role">AI Engineer · Engineering Team Lead · 10 years building production systems</p>
