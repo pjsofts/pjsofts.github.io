@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+import { JOBS } from '../data/jobs';
+
+const sorted = [...JOBS].sort((a, b) => b.posted.localeCompare(a.posted));
+const open = sorted.filter((j) => j.status === 'open');
+const closed = sorted.filter((j) => j.status === 'closed');
+
+const fmt = (d: string) =>
+  new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<BaseLayout
+  title="Engineering Job Board — Roles Worth Sharing | AI Engineering"
+  description="A running archive of software and AI engineering roles worth a look, collected from LinkedIn and kept here with the details intact so they stay readable after the original post disappears."
+  canonical="/jobs"
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <span class="pill pill-gold">Hiring</span>
+      <h1>Job board</h1>
+      <p class="sub">
+        Roles I come across and think are worth sharing. LinkedIn posts get deleted and
+        positions get filled, so each one is written out in full here — the archive stays
+        readable even after the original link dies.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      {open.length === 0 && closed.length === 0 && (
+        <p class="empty">Nothing listed right now. Check back soon.</p>
+      )}
+
+      {open.length > 0 && (
+        <>
+          <div class="eyebrow">Open roles</div>
+          <div class="job-list">
+            {open.map((j) => (
+              <article class="job" id={j.slug}>
+                <div class="job-hd">
+                  {j.logo
+                    ? <img class="job-logo" src={j.logo} alt={`${j.company} logo`} width="52" height="52" loading="lazy" />
+                    : <div class="job-logo ph" aria-hidden="true">{j.company.charAt(0)}</div>}
+                  <div class="job-id">
+                    <h2>{j.title}</h2>
+                    <p class="job-co">{j.company}</p>
+                  </div>
+                  <time class="job-date" datetime={j.posted}>{fmt(j.posted)}</time>
+                </div>
+
+                <p class="job-sum">{j.summary}</p>
+
+                <ul class="job-meta">
+                  <li><span>Location</span>{j.location}</li>
+                  <li><span>Arrangement</span>{j.arrangement}</li>
+                  {j.contact && <li><span>Apply to</span><a href={`mailto:${j.contact}`}>{j.contact}</a></li>}
+                </ul>
+
+                {j.stack.length > 0 && (
+                  <div class="job-stack">
+                    {j.stack.map((s) => <span class="pill pill-violet">{s}</span>)}
+                  </div>
+                )}
+
+                <a class="btn btn-ghost" href={j.url} target="_blank" rel="noopener nofollow">
+                  View original post ↗
+                </a>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+
+      {closed.length > 0 && (
+        <>
+          <div class="eyebrow arch-hd">Archive</div>
+          <p class="arch-note">Filled, expired, or the original post is gone. Kept for reference.</p>
+          <div class="job-list">
+            {closed.map((j) => (
+              <article class="job is-closed" id={j.slug}>
+                <div class="job-hd">
+                  <div class="job-logo ph" aria-hidden="true">{j.company.charAt(0)}</div>
+                  <div class="job-id">
+                    <h2>{j.title} <span class="closed-tag">Closed</span></h2>
+                    <p class="job-co">{j.company}</p>
+                  </div>
+                  <time class="job-date" datetime={j.posted}>{fmt(j.posted)}</time>
+                </div>
+                <p class="job-sum">{j.summary}</p>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+
+      <p class="disclaim">
+        These are roles posted publicly by other companies. I am not the employer and have no
+        involvement in their hiring — apply through the original post. Details are copied from
+        the post as written and may have changed since.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .empty { color: var(--fg-dim); }
+  .job-list { display: flex; flex-direction: column; gap: 1.15rem; }
+
+  .job {
+    background: linear-gradient(165deg, var(--panel), var(--ink-800));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.5rem 1.6rem;
+    scroll-margin-top: 90px;
+  }
+
+  .job-hd { display: flex; align-items: center; gap: 1rem; }
+  .job-logo {
+    flex: none; width: 52px; height: 52px; border-radius: 12px;
+    object-fit: cover; border: 1px solid var(--line-str); background: var(--panel);
+  }
+  .job-logo.ph {
+    display: grid; place-items: center; font-weight: 800; font-size: 1.3rem;
+    color: #c9b6ff; background: rgba(109, 75, 208, .22);
+  }
+  .job-id { flex: 1; min-width: 0; }
+  .job-id h2 { font-size: 1.16rem; margin: 0; color: #fff; }
+  .job-co { margin: .2rem 0 0; font-size: .93rem; color: var(--gold); font-weight: 600; }
+  .job-date { flex: none; font-size: .8rem; color: var(--fg-dimmer); white-space: nowrap; }
+
+  .job-sum { margin: 1.1rem 0 0; font-size: .95rem; color: var(--fg-dim); max-width: 70ch; }
+
+  .job-meta { list-style: none; padding: 0; margin: 1.1rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem 2.2rem; }
+  .job-meta li { font-size: .9rem; color: var(--fg-dim); }
+  .job-meta span {
+    display: block; font-size: .7rem; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--fg-dimmer); margin-bottom: .15rem;
+  }
+
+  .job-stack { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.2rem; }
+  .job-stack .pill { font-size: .74rem; }
+
+  .job .btn { margin-top: 1.4rem; }
+
+  .arch-hd { margin-top: 3.4rem; }
+  .arch-note { margin: 0 0 1.15rem; font-size: .9rem; color: var(--fg-dimmer); }
+  .job.is-closed { opacity: .62; }
+  .closed-tag {
+    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--pink); border: 1px solid var(--line-str); border-radius: 999px;
+    padding: .16rem .5rem; vertical-align: middle; margin-left: .5rem; font-weight: 700;
+  }
+
+  .disclaim {
+    margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--line);
+    font-size: .84rem; color: var(--fg-dimmer); max-width: 72ch;
+  }
+
+  @media (max-width: 560px) {
+    .job { padding: 1.2rem 1.1rem; }
+    .job-hd { flex-wrap: wrap; }
+    .job-date { width: 100%; }
+  }
+</style>

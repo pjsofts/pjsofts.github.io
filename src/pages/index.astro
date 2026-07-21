@@ -2,6 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../data/site';
 import { WEEKS } from '../data/weeks';
+import { JOBS } from '../data/jobs';
+
+// Landing page shows only the newest few open roles; /jobs has the full archive.
+const latestJobs = JOBS.filter((j) => j.status === 'open')
+  .sort((a, b) => b.posted.localeCompare(a.posted))
+  .slice(0, 3);
+
+const jobDate = (d: string) =>
+  new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
 
 const foundations = WEEKS.filter((w) => w.part === 'Foundations');
 const clone = WEEKS.filter((w) => w.part === 'Build the Clone');
@@ -317,6 +330,39 @@ const faqSchema = {
     </div>
   </section>
 
+  <!-- ===================== JOBS ===================== -->
+  {latestJobs.length > 0 && (
+    <section id="jobs">
+      <div class="wrap">
+        <div class="eyebrow">Hiring</div>
+        <h2>Roles worth a look</h2>
+        <p class="lead-p">
+          Engineering positions I come across and think are worth sharing. Each one is written
+          out in full on the job board, so it stays readable even after the original post is
+          taken down.
+        </p>
+        <div class="job-strip">
+          {latestJobs.map((j) => (
+            <a class="jcard" href={`/jobs#${j.slug}`}>
+              <div class="jcard-hd">
+                {j.logo
+                  ? <img class="jlogo" src={j.logo} alt={`${j.company} logo`} width="40" height="40" loading="lazy" />
+                  : <div class="jlogo ph" aria-hidden="true">{j.company.charAt(0)}</div>}
+                <time class="jdate" datetime={j.posted}>{jobDate(j.posted)}</time>
+              </div>
+              <h3 class="jtitle">{j.title}</h3>
+              <p class="jco">{j.company}</p>
+              <p class="jmeta">{j.arrangement}</p>
+            </a>
+          ))}
+        </div>
+        <div class="jobs-cta">
+          <a class="btn btn-ghost" href="/jobs">See the full job board →</a>
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- ===================== FAQ ===================== -->
   <section id="faq">
     <div class="wrap narrow">
@@ -428,6 +474,33 @@ const faqSchema = {
   .inst-img { border-radius: 18px; object-fit: cover; flex: none; border: 1px solid var(--line-str); }
   .inst-role { color: var(--gold); font-weight: 600; font-size: .95rem; margin-bottom: 1rem; }
   .inst-cta { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.2rem; }
+
+  /* jobs */
+  .job-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; margin-top: 1.8rem; }
+  .jcard {
+    display: flex; flex-direction: column;
+    background: linear-gradient(165deg, var(--panel), var(--ink-800));
+    border: 1px solid var(--line); border-radius: 12px;
+    padding: 1.25rem 1.3rem; text-decoration: none;
+    transition: border-color .16s ease, transform .16s ease;
+  }
+  .jcard:hover { border-color: var(--line-str); transform: translateY(-3px); text-decoration: none; }
+  .jcard-hd { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
+  .jlogo {
+    flex: none; width: 40px; height: 40px; border-radius: 10px;
+    object-fit: cover; border: 1px solid var(--line-str); background: var(--panel);
+  }
+  .jlogo.ph {
+    display: grid; place-items: center; font-weight: 800; font-size: 1.05rem;
+    color: #c9b6ff; background: rgba(109, 75, 208, .22);
+  }
+  .jdate { font-size: .76rem; color: var(--fg-dimmer); }
+  .jtitle { font-size: 1.02rem; color: #fff; margin: .9rem 0 0; }
+  .jco { margin: .25rem 0 0; font-size: .88rem; color: var(--gold); font-weight: 600; }
+  .jmeta { margin: .5rem 0 0; font-size: .84rem; color: var(--fg-dimmer); }
+  .jobs-cta { margin-top: 1.7rem; }
+  @media (max-width: 900px) { .job-strip { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .job-strip { grid-template-columns: 1fr; } }
 
   /* faq */
   .faq { border-bottom: 1px solid var(--line); padding: .3rem 0; }
