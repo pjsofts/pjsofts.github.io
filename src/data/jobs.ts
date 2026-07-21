@@ -61,6 +61,25 @@ export interface Job {
 export const JOBS: Job[] = [
   // ---------- 2026-07-21 ----------
   {
+    slug: 'mofid-senior-applied-ai-engineer',
+    title: 'Senior Applied AI Engineer',
+    company: 'Mofid Securities',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/posts/hosein-toosi-1b6a71271_%D9%85%D8%A7-%D8%AF%D8%B1-%DA%A9%D8%A7%D8%B1%DA%AF%D8%B2%D8%A7%D8%B1%DB%8C-%D9%85%D9%81%DB%8C%D8%AF-%D8%A8%D9%87-%D8%AF%D9%86%D8%A8%D8%A7%D9%84-%DB%8C%DA%A9-senior-applied-share-7485250476301594624-ZqJN/',
+    status: 'open',
+    summary:
+      'Mofid Securities is building an AI financial intelligence platform that lets investors and analysts query complex financial data in natural language. The role is designing and shipping production AI systems against real financial problems — the closest thing on this board to the work this course covers.',
+    stack: [
+      'LLMs', 'RAG', 'AI agents', 'Vector databases', 'Semantic search',
+      'LangGraph', 'Python', 'SQL', 'Production AI system design',
+    ],
+    contact: 'Hoseintoosi9898@gmail.com',
+    applyNote: 'Applications also accepted by LinkedIn DM to the poster, Hosein Toosi.',
+  },
+  {
     slug: 'algorithm-pouya-frontend',
     title: 'Front-End Developer',
     company: 'Algorithm Pouya',
