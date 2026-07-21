@@ -61,6 +61,23 @@ export interface Job {
 export const JOBS: Job[] = [
   // ---------- 2026-07-21 ----------
   {
+    slug: 'saraf-multi-role',
+    title: 'Senior Frontend Developer · Senior DevOps Engineer · Senior Data Analyst · Project Coordinator · HR Talent Development Specialist',
+    company: 'Saraf',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/posts/%D9%81%D8%B1%D8%B5%D8%AA%D9%87%D8%A7%DB%8C-%D8%B4%D8%BA%D9%84%DB%8C-%D8%AC%D8%AF%DB%8C%D8%AF-%D8%AF%D8%B1-%D8%B5%D8%B1%D8%A7%D9%81-%D8%B5%D8%B1%D8%A7%D9%81-%D8%A8%D8%B1%D8%A7%DB%8C-%D8%AA%D9%88%D8%B3%D8%B9%D9%87-share-7485292601970049024-2HQO/',
+    status: 'open',
+    summary:
+      'Saraf is hiring across five roles at once, spanning its technical, data, project and HR teams: senior frontend, senior DevOps, senior data analyst, project coordinator, and an HR talent development specialist. The post lists the titles only — every requirement sits behind the application link.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/eJ4bh8zt',
+    applyNote:
+      'One post covering five roles across different teams; say which you are applying for. No requirements, location or arrangement appear in the post itself.',
+  },
+  {
     slug: 'mofid-senior-applied-ai-engineer',
     title: 'Senior Applied AI Engineer',
     company: 'Mofid Securities',
