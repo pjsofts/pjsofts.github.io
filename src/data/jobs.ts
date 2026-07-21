@@ -22,16 +22,42 @@ export interface Job {
   status: 'open' | 'closed';
   /** One or two sentences on the role. */
   summary: string;
-  /** Technical requirements, as listed by the employer. */
+  /** Skills or requirements, as listed by the employer. Not always a tech stack. */
   stack: string[];
   /** Optional logo, root-relative from /public — e.g. '/jobs/algorithm-pouya.png'. */
   logo?: string;
   /** Optional application contact, if the post gave one publicly. */
   contact?: string;
+  /** Optional instruction from the employer, e.g. a required email subject line. */
+  applyNote?: string;
 }
 
 /** Newest first. */
 export const JOBS: Job[] = [
+  {
+    slug: 'fadak-trains-product-designer',
+    title: 'Product Designer',
+    company: 'Fadak Trains',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-20',
+    url: 'https://www.linkedin.com/posts/hrm-fadak-trains_aepaexagp-aeqaefaepaezabraepaexagp-fadakabrtrains-share-7484956433676124160-0bAc/',
+    status: 'open',
+    summary:
+      'Fadak Trains is hiring a product designer to own research through delivery — user interviews and surveys, user flows and journey maps, UI for web and mobile, and the design system behind them. The role works closely with product, engineering and branding, and includes usability testing and competitor analysis.',
+    stack: [
+      'User research',
+      'Information architecture',
+      'User flows & journey mapping',
+      'Prototyping',
+      'UI design (web & mobile)',
+      'Design systems',
+      'Usability testing',
+      'Competitor analysis',
+    ],
+    contact: 'hr@fadaktrains.com',
+    applyNote: 'Use the subject line "Product Designer - [Your Name]".',
+  },
   {
     slug: 'algorithm-pouya-frontend',
     title: 'Front-End Developer',

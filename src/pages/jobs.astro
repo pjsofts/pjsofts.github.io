@@ -17,8 +17,8 @@ const fmt = (d: string) =>
 ---
 
 <BaseLayout
-  title="Engineering Job Board — Roles Worth Sharing | AI Engineering"
-  description="A running archive of software and AI engineering roles worth a look, collected from LinkedIn and kept here with the details intact so they stay readable after the original post disappears."
+  title="Job Board — Engineering & Design Roles Worth Sharing | AI Engineering"
+  description="A running archive of software, AI and product design roles worth a look, collected from LinkedIn and kept here with the details intact so they stay readable after the original post disappears."
   canonical="/jobs"
 >
   <section class="pg-hero">
@@ -63,6 +63,8 @@ const fmt = (d: string) =>
                   <li><span>Arrangement</span>{j.arrangement}</li>
                   {j.contact && <li><span>Apply to</span><a href={`mailto:${j.contact}`}>{j.contact}</a></li>}
                 </ul>
+
+                {j.applyNote && <p class="job-note">{j.applyNote}</p>}
 
                 {j.stack.length > 0 && (
                   <div class="job-stack">
@@ -145,6 +147,7 @@ const fmt = (d: string) =>
     color: var(--fg-dimmer); margin-bottom: .15rem;
   }
 
+  .job-note { margin: .8rem 0 0; font-size: .87rem; color: var(--violet-lt); }
   .job-stack { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.2rem; }
   .job-stack .pill { font-size: .74rem; }
 
