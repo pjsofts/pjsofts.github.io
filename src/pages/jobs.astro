@@ -1,11 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE } from '../data/site';
-import { JOBS } from '../data/jobs';
+import { JOBS, CATEGORIES } from '../data/jobs';
 
 const sorted = [...JOBS].sort((a, b) => b.posted.localeCompare(a.posted));
 const open = sorted.filter((j) => j.status === 'open');
 const closed = sorted.filter((j) => j.status === 'closed');
+
+// Only render category sections that actually have something in them.
+const groups = CATEGORIES.map((c) => ({
+  name: c,
+  jobs: open.filter((j) => j.category === c),
+})).filter((g) => g.jobs.length > 0);
+
+const anchor = (c: string) => c.toLowerCase().replace(/[^a-z]+/g, '-');
 
 const fmt = (d: string) =>
   new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', {
@@ -17,8 +24,8 @@ const fmt = (d: string) =>
 ---
 
 <BaseLayout
-  title="Job Board — Engineering & Design Roles Worth Sharing | AI Engineering"
-  description="A running archive of software, AI and product design roles worth a look, collected from LinkedIn and kept here with the details intact so they stay readable after the original post disappears."
+  title="Job Board — Engineering, AI & Design Roles Worth Sharing | AI Engineering"
+  description="A running archive of software, AI, data and design roles worth a look, collected from LinkedIn and written out in full here so they stay readable after the original post disappears."
   canonical="/jobs"
 >
   <section class="pg-hero">
@@ -30,6 +37,18 @@ const fmt = (d: string) =>
         positions get filled, so each one is written out in full here — the archive stays
         readable even after the original link dies.
       </p>
+      {sorted.length > 0 && (
+        <p class="count">
+          <b>{open.length}</b> open · <b>{closed.length}</b> archived · newest {fmt(sorted[0].posted)}
+        </p>
+      )}
+      {groups.length > 1 && (
+        <nav class="jump" aria-label="Job categories">
+          {groups.map((g) => (
+            <a href={`#${anchor(g.name)}`}>{g.name} <span>{g.jobs.length}</span></a>
+          ))}
+        </nav>
+      )}
     </div>
   </section>
 
@@ -39,18 +58,21 @@ const fmt = (d: string) =>
         <p class="empty">Nothing listed right now. Check back soon.</p>
       )}
 
-      {open.length > 0 && (
+      {groups.map((g) => (
         <>
-          <div class="eyebrow">Open roles</div>
+          <h2 class="cat" id={anchor(g.name)}>{g.name}</h2>
           <div class="job-list">
-            {open.map((j) => (
+            {g.jobs.map((j) => (
               <article class="job" id={j.slug}>
                 <div class="job-hd">
                   {j.logo
                     ? <img class="job-logo" src={j.logo} alt={`${j.company} logo`} width="52" height="52" loading="lazy" />
                     : <div class="job-logo ph" aria-hidden="true">{j.company.charAt(0)}</div>}
                   <div class="job-id">
-                    <h2>{j.title}</h2>
+                    <h3>
+                      {j.title}
+                      {j.unpaid && <span class="tag warn">Unpaid / equity</span>}
+                    </h3>
                     <p class="job-co">{j.company}</p>
                   </div>
                   <time class="job-date" datetime={j.posted}>{fmt(j.posted)}</time>
@@ -72,18 +94,25 @@ const fmt = (d: string) =>
                   </div>
                 )}
 
-                <a class="btn btn-ghost" href={j.url} target="_blank" rel="noopener nofollow">
-                  View original post ↗
-                </a>
+                <div class="job-cta">
+                  {j.applyUrl && (
+                    <a class="btn btn-ghost" href={j.applyUrl} target="_blank" rel="noopener nofollow">
+                      Apply ↗
+                    </a>
+                  )}
+                  <a class="btn btn-ghost" href={j.url} target="_blank" rel="noopener nofollow">
+                    Original post ↗
+                  </a>
+                </div>
               </article>
             ))}
           </div>
         </>
-      )}
+      ))}
 
       {closed.length > 0 && (
         <>
-          <div class="eyebrow arch-hd">Archive</div>
+          <h2 class="cat" id="archive">Archive</h2>
           <p class="arch-note">Filled, expired, or the original post is gone. Kept for reference.</p>
           <div class="job-list">
             {closed.map((j) => (
@@ -91,7 +120,7 @@ const fmt = (d: string) =>
                 <div class="job-hd">
                   <div class="job-logo ph" aria-hidden="true">{j.company.charAt(0)}</div>
                   <div class="job-id">
-                    <h2>{j.title} <span class="closed-tag">Closed</span></h2>
+                    <h3>{j.title} <span class="tag">Closed</span></h3>
                     <p class="job-co">{j.company}</p>
                   </div>
                   <time class="job-date" datetime={j.posted}>{fmt(j.posted)}</time>
@@ -104,9 +133,10 @@ const fmt = (d: string) =>
       )}
 
       <p class="disclaim">
-        These are roles posted publicly by other companies. I am not the employer and have no
-        involvement in their hiring — apply through the original post. Details are copied from
-        the post as written and may have changed since.
+        These are roles posted publicly by other companies. I am not the employer, I am not a
+        recruiter, and I have no involvement in their hiring — apply through the original post.
+        Details are transcribed from each post as written and may have changed since. Where a
+        post left something out, it says "Not specified" rather than a guess.
       </p>
     </div>
   </section>
@@ -114,6 +144,25 @@ const fmt = (d: string) =>
 
 <style>
   .empty { color: var(--fg-dim); }
+  .count { margin-top: 1.2rem; font-size: .88rem; color: var(--fg-dimmer); }
+  .count b { color: var(--gold); }
+
+  .jump { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem; }
+  .jump a {
+    font-size: .82rem; text-decoration: none; color: var(--fg-dim);
+    border: 1px solid var(--line-str); border-radius: 999px; padding: .32rem .8rem;
+    transition: border-color .16s ease, color .16s ease;
+  }
+  .jump a:hover { color: #fff; border-color: var(--gold); text-decoration: none; }
+  .jump span { color: var(--gold); font-weight: 700; }
+
+  .cat {
+    font-size: 1.3rem; margin: 3.2rem 0 1.2rem;
+    padding-bottom: .6rem; border-bottom: 1px solid var(--line);
+    scroll-margin-top: 80px;
+  }
+  .cat:first-of-type { margin-top: 0; }
+
   .job-list { display: flex; flex-direction: column; gap: 1.15rem; }
 
   .job {
@@ -134,9 +183,16 @@ const fmt = (d: string) =>
     color: #c9b6ff; background: rgba(109, 75, 208, .22);
   }
   .job-id { flex: 1; min-width: 0; }
-  .job-id h2 { font-size: 1.16rem; margin: 0; color: #fff; }
+  .job-id h3 { font-size: 1.12rem; margin: 0; color: #fff; line-height: 1.35; }
   .job-co { margin: .2rem 0 0; font-size: .93rem; color: var(--gold); font-weight: 600; }
   .job-date { flex: none; font-size: .8rem; color: var(--fg-dimmer); white-space: nowrap; }
+
+  .tag {
+    display: inline-block; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--fg-dimmer); border: 1px solid var(--line-str); border-radius: 999px;
+    padding: .16rem .5rem; vertical-align: middle; margin-left: .5rem; font-weight: 700;
+  }
+  .tag.warn { color: var(--pink); border-color: var(--pink); }
 
   .job-sum { margin: 1.1rem 0 0; font-size: .95rem; color: var(--fg-dim); max-width: 70ch; }
 
@@ -147,23 +203,18 @@ const fmt = (d: string) =>
     color: var(--fg-dimmer); margin-bottom: .15rem;
   }
 
-  .job-note { margin: .8rem 0 0; font-size: .87rem; color: var(--violet-lt); }
+  .job-note { margin: .9rem 0 0; font-size: .87rem; color: var(--violet-lt); max-width: 70ch; }
+
   .job-stack { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.2rem; }
   .job-stack .pill { font-size: .74rem; }
 
-  .job .btn { margin-top: 1.4rem; }
+  .job-cta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.4rem; }
 
-  .arch-hd { margin-top: 3.4rem; }
   .arch-note { margin: 0 0 1.15rem; font-size: .9rem; color: var(--fg-dimmer); }
   .job.is-closed { opacity: .62; }
-  .closed-tag {
-    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--pink); border: 1px solid var(--line-str); border-radius: 999px;
-    padding: .16rem .5rem; vertical-align: middle; margin-left: .5rem; font-weight: 700;
-  }
 
   .disclaim {
-    margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--line);
+    margin-top: 3.4rem; padding-top: 1.4rem; border-top: 1px solid var(--line);
     font-size: .84rem; color: var(--fg-dimmer); max-width: 72ch;
   }
 
