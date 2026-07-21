@@ -35,6 +35,21 @@ export interface Job {
 /** Newest first. */
 export const JOBS: Job[] = [
   {
+    slug: 'ecommerce-devops-sre',
+    title: 'Senior DevOps Engineer / Senior SRE',
+    company: 'Undisclosed — e-commerce',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-08',
+    url: 'https://www.linkedin.com/posts/nahid-abdollahi-33530a1a0_aexaehaewaesabraeqaevabraevaetagpaepaezahy-share-7480539579851399170-oWdP/',
+    status: 'open',
+    summary:
+      'A recruiter post for an e-commerce company hiring two senior infrastructure roles — DevOps and SRE. The company is not named and the post lists no specific requirements beyond professional experience in the relevant area, so treat this as a lead to follow up on rather than a full listing.',
+    stack: [],
+    contact: 'Hauntertalent@gmail.com',
+    applyNote: 'Posted by a recruiter, not the employer. Ask which company it is before investing time.',
+  },
+  {
     slug: 'fadak-trains-product-designer',
     title: 'Product Designer',
     company: 'Fadak Trains',
