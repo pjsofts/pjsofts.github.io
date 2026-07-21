@@ -540,6 +540,26 @@ export const JOBS: Job[] = [
     applyNote: 'A comment mentions Mashhad, but the post itself states no location.',
   },
 
+  {
+    slug: 'zeevision-kotlin-android',
+    title: 'Kotlin Android Developer',
+    company: 'Zeevision',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Project-based / hourly contract',
+    posted: '2026-07-14',
+    url: 'https://www.linkedin.com/posts/%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D8%A7%D9%86%D8%AF%D8%B1%D9%88%DB%8C%D8%AF-%DA%A9%D8%A7%D8%AA%D9%84%DB%8C%D9%86-kotlin-android-share-7482700475746680833-FwwH/',
+    status: 'open',
+    summary:
+      'Zeevision is hiring an Android developer working in Kotlin, with an emphasis on shipping to the Iranian Android marketplaces. The engagement is project-based or hourly rather than a salaried position.',
+    stack: [
+      'Kotlin', 'Jetpack Compose', 'Navigation', 'DataStore', 'MVVM', 'MVI',
+      'Git', 'Jira', 'TWA & PWA', 'Testing', 'Java Native (advantage)',
+    ],
+    applyNote:
+      'Contract work, not a salaried role. Resumes go to Telegram @zeevision_contact — the post publishes no email or application form.',
+  },
+
   // ---------- 2026-07-13 ----------
   {
     slug: 'faash-java-backend',
