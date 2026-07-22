@@ -59,7 +59,267 @@ export interface Job {
 
 /** Sorted newest first by the page itself; order here is only for readability. */
 export const JOBS: Job[] = [
+  // ---------- 2026-07-22 ----------
+  {
+    slug: 'snapptrip-senior-software-engineer',
+    title: 'Senior Software Engineer',
+    company: 'SnappTrip',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485617386000220160',
+    status: 'open',
+    summary:
+      'A senior role on a microservices platform — taking on the harder technical problems, mentoring junior engineers, and helping shape both technical direction and product strategy.',
+    stack: [
+      'Go, Java, Scala or Python', 'Microservice design', 'REST / gRPC',
+      'Design patterns', 'Kafka', 'RDBMS', 'Docker', 'CI/CD',
+      'Kubernetes, ELK, Redis, MongoDB, Akka (advantage)',
+    ],
+    applyUrl: 'https://lnkd.in/e_EMqmGT',
+  },
+  {
+    slug: 'tejarat-data-senior-data-engineer',
+    title: 'Senior Data Engineer',
+    company: 'Data (Tejarat Bank subsidiary)',
+    category: 'AI & Data',
+    location: 'Tehran',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485582035902869506',
+    status: 'open',
+    summary:
+      'Designing, building and maintaining ETL pipelines that pull data out of banking sources — batch and near-real-time ingestion, cleaning and normalisation, feature engineering, and the monitoring that keeps the jobs honest. Works closely with the modelling and analytics teams.',
+    stack: [
+      'ETL pipeline design', 'Batch & near-real-time ingestion', 'SQL',
+      'Data cleaning & normalisation', 'Feature engineering',
+      'Data quality validation', 'Pipeline documentation & automation',
+    ],
+    contact: 'hr@datatejarat.ir',
+    applyNote: 'Put the job title in the email subject line — the post asks for it explicitly.',
+  },
+  {
+    slug: 'exir-pouya-power-bi-developer',
+    title: 'Power BI Developer (mid-level)',
+    company: 'Exir Pouya System',
+    category: 'AI & Data',
+    location: 'Tehran',
+    arrangement: 'On-site',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485579797864308736',
+    status: 'open',
+    summary:
+      'Designing and building management dashboards on Power BI Report Server for large national holdings and corporations. Full-time under labour law, on-site at various Tehran locations depending on the project.',
+    stack: [
+      '3–6 years relevant experience', 'Power BI Report Server', 'DAX',
+      'Data visualisation & dashboard design', 'ETL in Power Query',
+      'DAX Query Editor', 'SSAS Tabular (familiarity)',
+    ],
+    applyNote:
+      'Applications go to a personal Telegram account (@MohammadRezaVafaeie), and the post asks for your expected salary plus a lot of personal detail up front — age, marital status, children, address. Worth knowing before you send it.',
+  },
+  {
+    slug: 'zarrino-senior-data-scientist',
+    title: 'Senior Data Scientist',
+    company: 'Zarrino',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485590293791186944',
+    status: 'open',
+    summary:
+      'Day-to-day ownership of pricing and monetisation analytics, supporting the rest of the team against unit objectives. The post itself lists no requirements — they are behind the application link.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/ejzgT56q',
+    applyNote: 'The post gives the role only in outline. Requirements are on the linked page.',
+  },
+  {
+    slug: 'melligold-senior-qa-engineer',
+    title: 'Senior QA Test Engineer',
+    company: 'Melli Gold',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485599027158417408',
+    status: 'open',
+    summary:
+      'Owning QA strategy across web and mobile products — designing both manual and automated test scenarios, and working with product and engineering through the whole product lifecycle.',
+    stack: [
+      'Minimum 4 years in QA', 'Manual & automated testing',
+      'Selenium, Cypress, Playwright or Appium', 'Postman / REST Assured',
+      'Jenkins or GitLab CI', 'JavaScript, HTML, CSS', 'Android / iOS',
+      'Performance, load & security testing', 'Agile / Scrum',
+    ],
+    applyNote: 'The post asks for resumes but names no email, form or link — you will need to message the poster.',
+  },
+  {
+    slug: 'tapsi-art-director',
+    title: 'Art Director',
+    company: 'TAPSI',
+    category: 'Media & Creative',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485609588319494145',
+    status: 'open',
+    summary:
+      'Developing and directing the creative idea behind brand campaigns, and owning visual identity and design across media. Works closely with the creative, content and marketing teams.',
+    stack: [
+      'Art direction, graphic design or advertising experience',
+      'Campaign & brand creative direction', 'Visual identity principles',
+      'Composition & typography', 'Cross-media design',
+      'Giving professional design feedback',
+    ],
+    applyUrl: 'https://lnkd.in/eeb79Ey5',
+  },
+  {
+    slug: 'unnamed-senior-product-manager-intl',
+    title: 'Senior Product Manager',
+    company: 'Not named in the post',
+    category: 'Product',
+    location: 'Tehran / Iran',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485633416630087680',
+    status: 'open',
+    summary:
+      'Leading digital product strategy, development and delivery for international markets — the full lifecycle from discovery through launch, with international clients and cross-functional teams.',
+    stack: [
+      '5+ years in product management', 'Fluent written & spoken English',
+      'International clients & cross-functional teams', 'Agile / Scrum',
+      'SaaS, AI or digital products', 'Stakeholder management',
+      'Data-driven mindset',
+    ],
+    contact: 'anahitazm90@gmail.com',
+    applyNote: 'The hiring company is not named and applications go to a personal Gmail address. Ask who it is before investing time.',
+  },
+
   // ---------- 2026-07-21 ----------
+  {
+    slug: 'snapp-group-senior-backend-go',
+    title: 'Senior Backend Software Engineer (Go)',
+    company: 'Snapp Group',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485255538067308544',
+    status: 'open',
+    summary:
+      'A senior Go backend position at Snapp Group. The post is written as a short creative teaser and carries no requirements or responsibilities — everything concrete is behind the application link.',
+    stack: ['Go'],
+    applyUrl: 'https://lnkd.in/eC-gd-Us',
+    applyNote: 'Snapp Group\'s wider openings are listed at https://lnkd.in/dZNEAhQ5',
+  },
+  {
+    slug: 'farazpardazan-senior-java-backend',
+    title: 'Senior Back-End Developer (Java)',
+    company: 'Farazpardazan',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485354146267725825',
+    status: 'open',
+    summary:
+      'Building clean, reliable, scalable services for banking and financial projects on Java and Spring Boot.',
+    stack: ['Java', 'Spring Boot', 'Scalable service design', 'Banking / fintech domain experience'],
+    applyUrl: 'https://lnkd.in/dE_VWRcJ',
+  },
+  {
+    slug: 'talasea-backend-developer',
+    title: 'Backend Developer',
+    company: 'Talasea',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485274088681316352',
+    status: 'open',
+    summary:
+      'Developing, optimising and maintaining backend services — designing APIs that scale and improving performance at both the application and database layer.',
+    stack: [
+      'JavaScript', 'Node.js', 'Express.js', 'MongoDB & query optimisation',
+      'Redis', 'Git', 'Docker', 'Linux', 'REST APIs', 'Async programming',
+      'Nginx, CI/CD, queues (advantage)', 'High-traffic systems (advantage)',
+    ],
+    contact: 'hr.talasea@gmail.com',
+  },
+  {
+    slug: 'daneshkar-ai-teaching-assistant',
+    title: 'Teaching Assistant — Artificial Intelligence',
+    company: 'Daneshkar Academy',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Remote, part-time',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485238122750971904',
+    status: 'open',
+    summary:
+      'Supporting AI and machine learning courses — setting and marking exercises, running problem-solving sessions, and mentoring students. Roughly 25–30 hours a month per student group.',
+    stack: [
+      'Python', 'AI with Python', 'Introductory & advanced machine learning',
+      'Deep learning', 'Linear algebra', 'Signal processing', 'Time series',
+      'NLP', 'Generative AI fundamentals', 'Git', 'Teaching experience (preferred)',
+    ],
+    contact: 'hr.daneshkar@gmail.com',
+  },
+  {
+    slug: 'routinesaaz-ui-ux-designer',
+    title: 'UI/UX Designer',
+    company: 'Routinesaaz',
+    category: 'Design',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485382442271444992',
+    status: 'open',
+    summary:
+      'Designing the user experience for a specialised skincare application — simplifying complex user journeys into something practical and engaging.',
+    stack: [
+      'Digital product design experience', 'Simplifying complex user journeys',
+      'Attention to detail', 'Problem-solving orientation',
+    ],
+    applyNote: 'The post names no email, form or link, and commenters asking how to apply got no reply. Expect to message the poster directly.',
+  },
+  {
+    slug: 'unnamed-fintech-senior-product-designer',
+    title: 'Senior Product Designer (2 positions)',
+    company: 'Not named in the post',
+    category: 'Design',
+    location: 'Not specified',
+    arrangement: 'On-site, full-time',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485288538943692800',
+    status: 'open',
+    summary:
+      'Two senior product designers for a fintech team, owning the whole design process from research through to execution.',
+    stack: ['5–6+ years of real product design experience', 'Full design process, research to execution'],
+    applyNote: 'The company is not named and there is no application address — the post asks you to comment or send a direct message.',
+  },
+  {
+    slug: 'taline-pr-events-specialist',
+    title: 'PR Events Specialist',
+    company: 'TALINE',
+    category: 'Business & Ops',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485319032657645568',
+    status: 'open',
+    summary:
+      'Designing and running media, specialist, internal and B2B events end to end — scheduling, budget, suppliers, guests, internal coordination, and finding sponsorship opportunities.',
+    stack: [
+      'Minimum 5 years running organisational events', 'Managing several projects at once',
+      'Organised and detail-oriented', 'Network of organisers, venues & suppliers (advantage)',
+      'Press conferences, exhibitions & conferences (advantage)',
+    ],
+    applyUrl: 'https://careers.taline.ir',
+  },
+
   {
     slug: 'saraf-multi-role',
     title: 'Senior Frontend Developer · Senior DevOps Engineer · Senior Data Analyst · Project Coordinator · HR Talent Development Specialist',
@@ -131,6 +391,63 @@ export const JOBS: Job[] = [
   },
 
   // ---------- 2026-07-20 ----------
+  {
+    slug: 'haji-freelance-laravel-developer',
+    title: 'Laravel Developer (mid / senior)',
+    company: 'Haji Freelance',
+    category: 'Engineering',
+    location: 'Applicant must live in Tehran or Karaj',
+    arrangement: 'Remote, with at least one in-person meeting a week',
+    posted: '2026-07-20',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485070828708134912',
+    status: 'open',
+    summary:
+      'Developing and maintaining a PHP/Laravel project as a backend-focused engineer.',
+    stack: [
+      'PHP', 'Laravel', 'REST API design', 'MySQL, PostgreSQL, MongoDB',
+      'Git', 'Design patterns & SOLID', 'Queues, cache, Redis',
+      'Debugging & optimisation',
+    ],
+    applyNote: 'Resumes go to @dvtwi on Telegram. The post sets a deadline of 1405/05/03 (late July 2026).',
+  },
+  {
+    slug: 'tod-game-studio-full-stack',
+    title: 'Full Stack Developer',
+    company: 'TOD Game Studio',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-20',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7484963054804369409',
+    status: 'open',
+    summary:
+      'Building and maintaining software products across client and server, inside an agile, product-focused team.',
+    stack: [
+      'Client-side and server-side development', 'Databases',
+      'Building stable, scalable applications', 'Technical problem-solving',
+    ],
+    contact: 'atiyeh@tod.ir',
+  },
+  {
+    slug: 'unnamed-startup-junior-dotnet',
+    title: 'Junior .NET Developer',
+    company: 'Not named in the post',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-20',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485013950053462016',
+    status: 'open',
+    summary:
+      'A junior position at a startup — C#/.NET development against SQL Server, applying object-oriented principles inside a team. One of the few genuinely entry-level posts on this board.',
+    stack: [
+      'C# and .NET', 'Basic SQL Server', 'OOP concepts',
+      'Willingness to learn, responsibility, teamwork',
+      'Portfolio or personal projects (advantage)',
+    ],
+    applyNote: 'Send your resume and a GitHub or portfolio link by direct message. If you already applied earlier, the poster says not to resend.',
+  },
+
   {
     slug: 'fadak-trains-product-designer',
     title: 'Product Designer',
@@ -376,6 +693,37 @@ export const JOBS: Job[] = [
 
   // ---------- 2026-07-18 ----------
   {
+    slug: 'fertility-centre-technical-team-lead',
+    title: 'Technical Team Lead',
+    company: 'Not named in the post (a fertility clinic)',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-18',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7484179240901406720',
+    status: 'open',
+    summary:
+      'Building out an agile, scalable technical team at a fertility clinic — a hands-on development background combined with team leadership and scalable system architecture.',
+    stack: ['Strong software development ability', 'Technical team leadership', 'Scalable system architecture'],
+    applyNote: 'The organisation is not named and the only contact route is a phone number. Ask who it is before investing time.',
+  },
+  {
+    slug: 'unnamed-ui-ux-wordpress-audit',
+    title: 'UI/UX Specialist (project-based)',
+    company: 'Not named in the post',
+    category: 'Design',
+    location: 'Not specified',
+    arrangement: 'Remote',
+    posted: '2026-07-18',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7484169814052179968',
+    status: 'closed',
+    summary:
+      'A project-based UX audit and optimisation of an existing WordPress site — reviewing user journeys, analysing navigation, and improving page structure and conversion paths.',
+    stack: ['Proven UI/UX experience', 'UX audit', 'Figma', 'Portfolio of live sites', 'CRO (strong advantage)'],
+    applyNote: 'Kept for the archive — the hiring manager posted two days later that the role was filled.',
+  },
+
+  {
     slug: 'sanaap-assistant-product-manager',
     title: 'Assistant Product Manager',
     company: 'Sanaap',
@@ -618,6 +966,28 @@ export const JOBS: Job[] = [
     applyUrl: 'https://lnkd.in/ebEAcTru',
   },
 
+  // ---------- 2026-07-10 ----------
+  {
+    slug: 'karaj-team-lead-software-engineering',
+    title: 'Team Lead, Software Engineering',
+    company: 'Not named in the post',
+    category: 'Engineering',
+    location: 'Karaj',
+    arrangement: 'On-site, full-time',
+    posted: '2026-07-10',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7481243218270048257',
+    status: 'open',
+    summary:
+      'Leading a software team — system architecture, code review, mentoring, and coordination with the analysis team.',
+    stack: [
+      'C# and .NET', 'Next.js & front-end concepts', 'Software architecture',
+      'Prior team lead or senior developer experience', 'Git', 'REST API design',
+      'SQL Server', 'Team management & technical decision-making',
+    ],
+    contact: 'kaveh.norozi@gmail.com',
+    applyNote: 'The company is not named and applications go to a personal Gmail address.',
+  },
+
   // ---------- 2026-07-08 ----------
   {
     slug: 'ecommerce-devops-sre',
@@ -634,6 +1004,82 @@ export const JOBS: Job[] = [
     stack: [],
     contact: 'Hauntertalent@gmail.com',
     applyNote: 'Posted by a recruiter, not the employer. Ask which company it is before investing time.',
+  },
+
+  // ---------- 2026-07-05 ----------
+  {
+    slug: 'danacloud-product-designer',
+    title: 'Product Designer (mid-level)',
+    company: 'DanaCloud',
+    category: 'Design',
+    location: 'Not specified',
+    arrangement: 'Remote, full-time',
+    posted: '2026-07-05',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7479554167829839872',
+    status: 'open',
+    summary:
+      'Turning complex cloud infrastructure concepts into a usable product — balancing a deep technical stack against the user experience. The team says it weighs how you think and approach problems above ticking every box.',
+    stack: [
+      'Analytical mindset', 'Translating technical concepts into design',
+      'Defending design decisions with logic and data',
+      'Effective use of AI tools in the design process',
+      'Collaboration with product and engineering',
+    ],
+    contact: 'm.haq@danacloud.com',
+  },
+
+  // ---------- 2026-06-30 ----------
+  {
+    slug: 'taline-senior-talent-acquisition',
+    title: 'Senior Talent Acquisition Specialist',
+    company: 'TALINE',
+    category: 'Business & Ops',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-06-30',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7477655999345139712',
+    status: 'open',
+    summary:
+      'Recruitment treated as team-building rather than paperwork — finding talent that brings a different perspective and experience into the product team.',
+    stack: ['Recruitment / talent acquisition experience', 'Team-building perspective on hiring'],
+    applyUrl: 'https://careers.taline.ir',
+  },
+
+  // ---------- 2026-06-29 ----------
+  {
+    slug: 'taline-product-engineering-marketing',
+    title: 'Senior Product Manager, Senior Software Engineer & Marketing Automation Specialist',
+    company: 'TALINE',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-06-29',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7477249668243070976',
+    status: 'open',
+    summary:
+      'Three openings in one post — product, engineering and marketing automation. The post itself stays high-level; each role\'s description sits on the careers page.',
+    stack: ['Analytical and creative perspective', 'Problem-solving in complex products', 'Focus on user behaviour'],
+    applyUrl: 'https://careers.taline.ir',
+    applyNote: 'Three separate roles behind one link — open each position on the careers page.',
+  },
+  {
+    slug: 'unnamed-ai-ml-engineer-international',
+    title: 'AI/ML Engineer',
+    company: 'Not named in the post',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Remote',
+    posted: '2026-06-29',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7477262147245248512',
+    status: 'open',
+    summary:
+      'Full-time remote AI/ML work with international companies. English at B2 or above is required, including interviews and meetings conducted in English.',
+    stack: [
+      '5+ years professional AI/ML experience', 'Python', 'PyTorch or TensorFlow',
+      'LLMs, generative AI, RAG or AI agents (advantage)', 'English at B2 or above',
+    ],
+    applyUrl: 'https://lnkd.in/gV7z8E3f',
+    applyNote: 'The company is not named and applications run through Telegram. Ask who the employer is before going far.',
   },
 
   // ---------- 2026-06-23 ----------
