@@ -358,6 +358,9 @@ const faqSchema = {
         </div>
         <div class="jobs-cta">
           <a class="btn btn-ghost" href="/jobs">See the full job board →</a>
+          <a class="btn btn-ghost" href={SITE.telegram.href} target="_blank" rel="noopener">
+            Job alerts on Telegram ↗
+          </a>
         </div>
       </div>
     </section>
@@ -498,7 +501,7 @@ const faqSchema = {
   .jtitle { font-size: 1.02rem; color: #fff; margin: .9rem 0 0; }
   .jco { margin: .25rem 0 0; font-size: .88rem; color: var(--gold); font-weight: 600; }
   .jmeta { margin: .5rem 0 0; font-size: .84rem; color: var(--fg-dimmer); }
-  .jobs-cta { margin-top: 1.7rem; }
+  .jobs-cta { margin-top: 1.7rem; display: flex; flex-wrap: wrap; gap: .7rem; }
   @media (max-width: 900px) { .job-strip { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .job-strip { grid-template-columns: 1fr; } }
 

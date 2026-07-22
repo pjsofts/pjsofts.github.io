@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { JOBS, CATEGORIES } from '../data/jobs';
+import { SITE } from '../data/site';
 
 const sorted = [...JOBS].sort((a, b) => b.posted.localeCompare(a.posted));
 const open = sorted.filter((j) => j.status === 'open');
@@ -42,6 +43,16 @@ const fmt = (d: string) =>
           <b>{open.length}</b> open · <b>{closed.length}</b> archived · newest {fmt(sorted[0].posted)}
         </p>
       )}
+      <div class="tg">
+        <p>
+          New roles go out on Telegram as I find them —
+          <a href={SITE.telegram.href} target="_blank" rel="noopener">{SITE.telegram.handle}</a>.
+        </p>
+        <a class="btn btn-primary" href={SITE.telegram.href} target="_blank" rel="noopener">
+          Join on Telegram ↗
+        </a>
+      </div>
+
       {groups.length > 1 && (
         <nav class="jump" aria-label="Job categories">
           {groups.map((g) => (
@@ -147,6 +158,15 @@ const fmt = (d: string) =>
   .empty { color: var(--fg-dim); }
   .count { margin-top: 1.2rem; font-size: .88rem; color: var(--fg-dimmer); }
   .count b { color: var(--gold); }
+
+  .tg {
+    display: flex; align-items: center; flex-wrap: wrap; gap: .9rem 1.4rem;
+    margin-top: 1.8rem; padding: 1.05rem 1.3rem;
+    background: rgba(109, 75, 208, .12);
+    border: 1px solid var(--line-str); border-radius: 12px;
+  }
+  .tg p { margin: 0; flex: 1; min-width: 220px; font-size: .92rem; color: var(--fg-dim); }
+  .tg a:not(.btn) { color: var(--gold); font-weight: 600; }
 
   .jump { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem; }
   .jump a {

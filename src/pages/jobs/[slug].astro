@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { JOBS } from '../../data/jobs';
 import type { Job } from '../../data/jobs';
+import { SITE } from '../../data/site';
 
 export function getStaticPaths() {
   return JOBS.map((job) => ({ params: { slug: job.slug }, props: { job } }));
@@ -145,6 +146,16 @@ const related = JOBS.filter(
         </>
       )}
 
+      <div class="tg">
+        <p>
+          New roles go out on Telegram as I find them —
+          <a href={SITE.telegram.href} target="_blank" rel="noopener">{SITE.telegram.handle}</a>.
+        </p>
+        <a class="btn btn-ghost" href={SITE.telegram.href} target="_blank" rel="noopener">
+          Join on Telegram ↗
+        </a>
+      </div>
+
       <p class="all"><a href="/jobs">See all open roles →</a></p>
     </div>
   </section>
@@ -223,6 +234,15 @@ const related = JOBS.filter(
   .more a:hover { border-color: var(--gold); }
   .more b { display: block; color: #fff; font-size: .95rem; font-weight: 600; }
   .more span { font-size: .85rem; color: var(--gold); }
+
+  .tg {
+    display: flex; align-items: center; flex-wrap: wrap; gap: .9rem 1.4rem;
+    margin-top: 2.6rem; padding: 1.05rem 1.3rem;
+    background: rgba(109, 75, 208, .12);
+    border: 1px solid var(--line-str); border-radius: 12px;
+  }
+  .tg p { margin: 0; flex: 1; min-width: 220px; font-size: .92rem; color: var(--fg-dim); }
+  .tg a:not(.btn) { color: var(--gold); font-weight: 600; }
 
   .all { margin-top: 2.4rem; font-size: .9rem; }
 

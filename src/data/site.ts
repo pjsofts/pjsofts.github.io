@@ -11,6 +11,11 @@ export const SITE = {
     email: 'pjsofts@gmail.com',
     location: 'Yerevan, Armenia · Remote',
   },
+  /** Telegram channel where the job board is posted. */
+  telegram: {
+    handle: '@pjmentoring',
+    href: 'https://t.me/pjmentoring',
+  },
   // The single call-to-action used across the site.
   cta: {
     label: 'Message me on LinkedIn',
