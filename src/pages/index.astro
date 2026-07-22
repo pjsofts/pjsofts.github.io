@@ -343,7 +343,7 @@ const faqSchema = {
         </p>
         <div class="job-strip">
           {latestJobs.map((j) => (
-            <a class="jcard" href={`/jobs#${j.slug}`}>
+            <a class="jcard" href={`/jobs/${j.slug}`}>
               <div class="jcard-hd">
                 {j.logo
                   ? <img class="jlogo" src={j.logo} alt={`${j.company} logo`} width="40" height="40" loading="lazy" />

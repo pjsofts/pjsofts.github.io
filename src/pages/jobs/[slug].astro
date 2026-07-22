@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { JOBS } from '../../data/jobs';
+import type { Job } from '../../data/jobs';
+
+export function getStaticPaths() {
+  return JOBS.map((job) => ({ params: { slug: job.slug }, props: { job } }));
+}
+
+interface Props {
+  job: Job;
+}
+
+const { job } = Astro.props;
+
+const fmt = (d: string) =>
+  new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
+const anchor = (c: string) => c.toLowerCase().replace(/[^a-z]+/g, '-');
+
+// Social/meta description: the summary is already one to three sentences, so
+// trim on a word boundary rather than mid-word.
+const clip = (s: string, n = 155) =>
+  s.length <= n ? s : `${s.slice(0, s.lastIndexOf(' ', n))}…`;
+
+// Other open roles in the same category, for the footer of the page.
+const related = JOBS.filter(
+  (j) => j.category === job.category && j.slug !== job.slug && j.status === 'open',
+)
+  .sort((a, b) => b.posted.localeCompare(a.posted))
+  .slice(0, 4);
+---
+
+<BaseLayout
+  title={`${job.title} — ${job.company}`}
+  description={clip(job.summary)}
+  canonical={`/jobs/${job.slug}`}
+  noindex={job.status === 'closed'}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <a class="back" href="/jobs">← Job board</a>
+
+      <div class="hd">
+        {job.logo
+          ? <img class="logo" src={job.logo} alt={`${job.company} logo`} width="64" height="64" />
+          : <div class="logo ph" aria-hidden="true">{job.company.charAt(0)}</div>}
+        <div>
+          <h1>{job.title}</h1>
+          <p class="co">{job.company}</p>
+        </div>
+      </div>
+
+      <div class="badges">
+        <a class="pill pill-gold" href={`/jobs#${anchor(job.category)}`}>{job.category}</a>
+        {job.unpaid && <span class="pill pill-pink">Unpaid / equity</span>}
+        {job.status === 'closed' && <span class="pill pill-plain">Closed</span>}
+      </div>
+
+      {job.status === 'closed' && (
+        <p class="closed-note">
+          This role is no longer open. It is kept here so the details stay readable
+          after the original post disappears.
+        </p>
+      )}
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap narrow">
+      <p class="summary">{job.summary}</p>
+
+      <ul class="meta">
+        <li><span>Posted</span><time datetime={job.posted}>{fmt(job.posted)}</time></li>
+        <li><span>Location</span>{job.location}</li>
+        <li><span>Arrangement</span>{job.arrangement}</li>
+        {job.contact && (
+          <li><span>Apply to</span><a href={`mailto:${job.contact}`}>{job.contact}</a></li>
+        )}
+      </ul>
+
+      {job.applyNote && (
+        <p class="note"><b>Before you apply —</b> {job.applyNote}</p>
+      )}
+
+      {job.stack.length > 0 && (
+        <>
+          <h2>What they ask for</h2>
+          <p class="stack-note">Listed as written in the original post.</p>
+          <div class="stack">
+            {job.stack.map((s) => <span class="pill pill-violet">{s}</span>)}
+          </div>
+        </>
+      )}
+
+      {job.status === 'open' && (
+        <div class="cta">
+          {job.applyUrl && (
+            <a class="btn btn-primary" href={job.applyUrl} target="_blank" rel="noopener nofollow">
+              Apply ↗
+            </a>
+          )}
+          {job.contact && !job.applyUrl && (
+            <a class="btn btn-primary" href={`mailto:${job.contact}`}>Email your CV</a>
+          )}
+          <a class="btn btn-ghost" href={job.url} target="_blank" rel="noopener nofollow">
+            Original LinkedIn post ↗
+          </a>
+        </div>
+      )}
+
+      {job.status === 'closed' && (
+        <div class="cta">
+          <a class="btn btn-ghost" href={job.url} target="_blank" rel="noopener nofollow">
+            Original LinkedIn post ↗
+          </a>
+        </div>
+      )}
+
+      <p class="disclaim">
+        This role was posted publicly by another company. I am not the employer, I am not a
+        recruiter, and I have no involvement in their hiring — apply through the original post.
+        Details are transcribed as written and may have changed since. Where the post left
+        something out, it says "Not specified" rather than a guess.
+      </p>
+
+      {related.length > 0 && (
+        <>
+          <h2 class="more-hd">More in {job.category}</h2>
+          <ul class="more">
+            {related.map((r) => (
+              <li>
+                <a href={`/jobs/${r.slug}`}>
+                  <b>{r.title}</b>
+                  <span>{r.company}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <p class="all"><a href="/jobs">See all open roles →</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .back {
+    display: inline-block; margin-bottom: 1.6rem; font-size: .85rem;
+    color: var(--fg-dim); text-decoration: none;
+  }
+  .back:hover { color: var(--gold); }
+
+  .hd { display: flex; align-items: center; gap: 1.1rem; }
+  .logo {
+    flex: none; width: 64px; height: 64px; border-radius: 14px;
+    object-fit: cover; border: 1px solid var(--line-str); background: var(--panel);
+  }
+  .logo.ph {
+    display: grid; place-items: center; font-weight: 800; font-size: 1.6rem;
+    color: #c9b6ff; background: rgba(109, 75, 208, .22);
+  }
+  .hd h1 { margin: 0; font-size: clamp(1.5rem, 3.4vw, 2.15rem); line-height: 1.25; }
+  .co { margin: .3rem 0 0; color: var(--gold); font-weight: 600; }
+
+  .badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.4rem; }
+  .badges a { text-decoration: none; }
+  .pill-pink { color: var(--pink); border: 1px solid var(--pink); background: rgba(242, 169, 201, .1); }
+  .pill-plain { color: var(--fg-dimmer); border: 1px solid var(--line-str); }
+
+  .closed-note {
+    margin-top: 1.4rem; font-size: .9rem; color: var(--fg-dimmer);
+    border-left: 2px solid var(--line-str); padding-left: .9rem; max-width: 62ch;
+  }
+
+  .narrow { max-width: 760px; }
+
+  .summary { font-size: 1.05rem; color: var(--fg); line-height: 1.75; margin: 0; }
+
+  .meta {
+    list-style: none; padding: 1.5rem 0 0; margin: 1.5rem 0 0;
+    border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem;
+  }
+  .meta li { font-size: .95rem; color: var(--fg-dim); }
+  .meta span {
+    display: block; font-size: .7rem; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--fg-dimmer); margin-bottom: .25rem;
+  }
+
+  .note {
+    margin: 1.8rem 0 0; padding: 1rem 1.2rem; font-size: .92rem;
+    color: var(--violet-lt); background: rgba(109, 75, 208, .12);
+    border: 1px solid var(--line-str); border-radius: 12px; max-width: 68ch;
+  }
+  .note b { color: #fff; }
+
+  h2 { font-size: 1.15rem; margin: 2.8rem 0 .4rem; }
+  .stack-note { margin: 0 0 1rem; font-size: .84rem; color: var(--fg-dimmer); }
+  .stack { display: flex; flex-wrap: wrap; gap: .45rem; }
+  .stack .pill { font-size: .78rem; }
+
+  .cta { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2.6rem; }
+
+  .disclaim {
+    margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--line);
+    font-size: .84rem; color: var(--fg-dimmer); max-width: 70ch;
+  }
+
+  .more-hd { margin-top: 3rem; }
+  .more { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: .6rem; }
+  .more a {
+    display: block; padding: .85rem 1rem; text-decoration: none;
+    border: 1px solid var(--line); border-radius: 11px; background: var(--panel);
+    transition: border-color .16s ease;
+  }
+  .more a:hover { border-color: var(--gold); }
+  .more b { display: block; color: #fff; font-size: .95rem; font-weight: 600; }
+  .more span { font-size: .85rem; color: var(--gold); }
+
+  .all { margin-top: 2.4rem; font-size: .9rem; }
+
+  @media (max-width: 560px) {
+    .hd { flex-wrap: wrap; }
+  }
+</style>
