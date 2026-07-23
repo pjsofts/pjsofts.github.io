@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "triage": "node scripts/triage-links.ts",
+    "tg:build": "node scripts/telegram-post.ts > ../jobs-telegram-fa.txt",
+    "tg:send": "node scripts/telegram-send.ts ../jobs-telegram-fa.txt"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.3",
