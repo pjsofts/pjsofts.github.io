@@ -61,6 +61,386 @@ export interface Job {
 export const JOBS: Job[] = [
   // ---------- 2026-07-22 ----------
   {
+    slug: 'digikala-quick-commerce-senior-engineer',
+    title: 'Senior Software Engineer',
+    company: 'Digikala (Quick Commerce)',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485659059417710593',
+    status: 'open',
+    summary:
+      'A senior engineering opening on Digikala\'s Quick Commerce team. The post itself carries no detail beyond the title — requirements and conditions are behind the application link.',
+    stack: [],
+    applyUrl: 'https://B2n.ir/mn8986',
+  },
+  {
+    slug: 'nobitex-senior-software-engineer',
+    title: 'Senior Software Engineer',
+    company: 'Nobitex',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485678731672457216',
+    status: 'open',
+    summary:
+      'Nobitex, a cryptocurrency exchange, is hiring a senior software engineer. The post gives the title only; the full description sits behind the application link.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/eHJpthES',
+  },
+  {
+    slug: 'aras-senior-backend',
+    title: 'Senior Backend Engineer (PHP / Python)',
+    company: 'Aras Sustainable Financial Information Processing',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485658970318110720',
+    status: 'open',
+    summary:
+      'Building and maintaining modules of an enterprise system, designing scalable APIs, and working with the team on technical solutions and new features. At least five years of professional backend experience is required.',
+    stack: [
+      '5+ years backend experience', 'PHP', 'Python', 'Laravel', 'FastAPI',
+      'RESTful API design', 'MySQL, PostgreSQL, MariaDB', 'Git', 'Linux', 'Docker',
+      'OOP, Clean Code, SOLID, design patterns',
+      'Redis, RabbitMQ, queues (advantage)', 'CI/CD and OpenAPI (advantage)',
+      'ERP or workflow systems (advantage)',
+    ],
+    contact: 'hr@arasdp.ir',
+  },
+  {
+    slug: 'loopex-frontend-react',
+    title: 'Frontend Developer (React / Next.js)',
+    company: 'Loopex',
+    category: 'Engineering',
+    location: 'Tehran',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485779674409791488',
+    status: 'open',
+    summary:
+      'Frontend work at a cryptocurrency exchange, building responsive interfaces alongside an existing team. At least three years of hands-on frontend experience is required.',
+    stack: [
+      '3+ years frontend experience', 'React.js', 'Next.js',
+      'JavaScript / TypeScript', 'HTML5', 'CSS3', 'Responsive UI',
+      'REST APIs', 'CI/CD', 'State management', 'Agile experience (a plus)',
+    ],
+    contact: 'hiring@loopex.ir',
+    applyUrl: 'https://loopex.ir',
+    applyNote:
+      'The post states a salary of 75–95 million per month depending on experience and a technical assessment. A second address, loopex.ir@gmail.com, is also given.',
+  },
+  {
+    slug: 'tapsishop-devops-engineer',
+    title: 'DevOps Engineer',
+    company: 'TapsiShop',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485664068549312512',
+    status: 'open',
+    summary:
+      'TapsiShop\'s product team is looking for an experienced DevOps engineer. The post carries no requirements — the full description is behind the link.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/eJf5Jewf',
+  },
+  {
+    slug: 'snapp-group-senior-qa-automation',
+    title: 'Senior QA Automation Engineer',
+    company: 'Snapp Group',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485652794566230016',
+    status: 'open',
+    summary:
+      'A senior QA automation opening across the Snapp Group companies. The post is written as an invitation rather than a specification and lists no requirements.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/ewzZsdcm',
+    applyNote: 'A second link, https://lnkd.in/dZNEAhQ5, lists the group\'s other openings.',
+  },
+  {
+    slug: 'snapp-box-engineering-roles',
+    title: 'Senior Java Developer · AI Platform Engineer · Senior DBA · Senior DevOps Engineer',
+    company: 'Snapp! Box',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485663227494891520',
+    status: 'open',
+    summary:
+      'Four senior openings advertised together — Java, AI platform, database administration and DevOps. The post names the roles and links each one separately, without listing requirements.',
+    stack: [],
+    contact: 'Jobs@snapp-box.com',
+    applyNote:
+      'One link per role: Java https://lnkd.in/eZmW-BUC · AI Platform https://lnkd.in/ee2MKHsm · DBA https://lnkd.in/etUfa9CC · DevOps https://lnkd.in/eq4PVFin',
+  },
+  {
+    slug: 'ayan-database-specialist',
+    title: 'Database Specialist',
+    company: 'Ayan',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485712565075853314',
+    status: 'open',
+    summary:
+      'A place on a database team that works separately from backend development — the two sides talk only through stored procedures the database team writes. Worth knowing before you apply, because it shapes the job.',
+    stack: ['Microsoft SQL Server', 'Teamwork', 'Comfortable across several projects'],
+    applyUrl: 'https://lnkd.in/gpe_v5qd',
+  },
+  {
+    slug: 'avaye-etminan-network-infrastructure',
+    title: 'Network & Infrastructure Specialist',
+    company: 'Avaye Etminan Capital Management Group',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485694231274000384',
+    status: 'open',
+    summary:
+      'Maintaining and troubleshooting servers, network equipment and infrastructure at a group building software for capital markets, the commodity exchange, energy and banking.',
+    stack: [
+      '2+ years in network and infrastructure', 'Windows Server', 'Active Directory',
+      'VMware', 'TCP/IP', 'Routing & switching', 'DNS', 'DHCP',
+    ],
+    applyUrl: 'https://lnkd.in/dwt5vuBH',
+  },
+  {
+    slug: 'takhfifan-qa-specialist',
+    title: 'QA Specialist',
+    company: 'Takhfifan',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485732609218613248',
+    status: 'open',
+    summary:
+      'A manual testing role with room to grow into automation alongside the team. The post frames it as a place to develop rather than a fixed specification.',
+    stack: ['Manual testing', 'Willingness to learn automation testing'],
+    applyUrl: 'https://B2n.ir/df3197',
+  },
+  {
+    slug: 'tod-game-studio-backend',
+    title: 'Backend Developer',
+    company: 'TOD Game Studio',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485700135713234945',
+    status: 'open',
+    summary:
+      'Designing APIs and backend services for mobile games with thousands of players. At least two years of backend experience is required, plus a willingness to pick up Unity-related technology.',
+    stack: [
+      '2+ years backend experience', 'C#, PHP or TypeScript', 'OOP',
+      'Git and code review', 'Willingness to learn Unity technologies',
+    ],
+    contact: 'atiyeh@tod.ir',
+  },
+  {
+    slug: 'unnamed-senior-frontend-react',
+    title: 'Senior Front-End Developer',
+    company: 'Not named in the post',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485557217295900672',
+    status: 'open',
+    summary:
+      'Designing and building web applications in React, Next.js and TypeScript, owning frontend architecture, leading technical work and mentoring other engineers.',
+    stack: ['React', 'Next.js', 'TypeScript'],
+    applyUrl: 'https://lnkd.in/gk75khgd',
+    applyNote:
+      'The employer is not named. The post quotes a monthly salary range of 65,000–90,000 without saying which currency, so confirm both before going far.',
+  },
+  {
+    slug: 'unnamed-site-reliability-engineer',
+    title: 'Site Reliability Engineer',
+    company: 'Not named in the post',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485593047565647873',
+    status: 'open',
+    summary:
+      'An SRE opening described only in terms of the person wanted — result-oriented, always learning. No requirements, location or employer name appear in the post.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/eqgkCxtW',
+    applyNote: 'The employer is not named in the post. The job description is behind the link.',
+  },
+  {
+    slug: 'unnamed-fullstack-munich',
+    title: 'Full Stack Developer',
+    company: 'Not named in the post',
+    category: 'Engineering',
+    location: 'Munich, Germany',
+    arrangement: 'On-site',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485620303725953027',
+    status: 'open',
+    summary:
+      'An on-site full stack role in Munich working in Python, React and TypeScript. The post is short and names neither the employer nor the conditions.',
+    stack: ['Python', 'React', 'TypeScript'],
+    applyNote:
+      'No email or form — the poster asks you to message them on LinkedIn. The employer is not named.',
+  },
+  {
+    slug: 'modalal-hr-data-analyst',
+    title: 'HR Data Analyst',
+    company: 'Modalal',
+    category: 'AI & Data',
+    location: 'Tehran',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485627690658541568',
+    status: 'open',
+    summary:
+      'Collecting and analysing HR data to support management decisions — designing KPIs, building reports in Excel and Power BI, and improving the HR information system.',
+    stack: [
+      '2+ years in data analysis, HRIS or HR analytics',
+      'Degree in industrial engineering, statistics, management or computer engineering',
+      'Advanced Excel', 'Power BI', 'SQL and reporting tools (preferred)',
+      'KPI design', 'Management reporting', 'HRIS concepts',
+    ],
+    applyNote:
+      'The post gives no email, form or link. Nothing in it says how to apply.',
+  },
+  {
+    slug: 'snapp-box-product-manager',
+    title: 'Product Manager',
+    company: 'Snapp! Box',
+    category: 'Product',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485670228287320064',
+    status: 'open',
+    summary:
+      'A product manager to build a new business from the ground up, ideally with experience in e-commerce, logistics, marketplace or B2B products.',
+    stack: [
+      'Experience in e-commerce, logistics, marketplace or B2B (preferred)',
+      'Interest in building a business from scratch',
+    ],
+    contact: 'Jobs@snapp-box.com',
+    applyUrl: 'https://lnkd.in/eGCC_enC',
+    applyNote:
+      'Two people at Snapp! Box posted a product manager role the same day pointing at different application pages — the second is https://lnkd.in/eEP-ZX_B. It is not clear whether these are one opening or two.',
+  },
+  {
+    slug: 'eversports-product-designers',
+    title: 'Product Designer (Vienna & Gothenburg)',
+    company: 'Eversports',
+    category: 'Design',
+    location: 'Vienna, Austria and Gothenburg, Sweden',
+    arrangement: 'Hybrid',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485733679546298370',
+    status: 'open',
+    summary:
+      'Two mid-level product design positions, one in Vienna and one in Gothenburg, in a setup where designers own their projects. The team works in Figma, Claude and Miro.',
+    stack: [
+      'Mid-level, 4+ years experience', 'English', 'Figma', 'Claude', 'Miro',
+      'Additional languages a plus depending on location',
+    ],
+    applyNote:
+      'No email or form — the post asks you to comment or message the poster for more information.',
+  },
+  {
+    slug: 'unnamed-junior-ux-ui-remote',
+    title: 'UX/UI Designer (junior)',
+    company: 'Not named in the post',
+    category: 'Design',
+    location: 'Not specified',
+    arrangement: 'Fully remote',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485702793501229056',
+    status: 'open',
+    summary:
+      'The first designer at a startup building an online marketplace for groceries, hygiene, cosmetics and perfume — shaping user flows, the interface, and the beginnings of a design system.',
+    stack: [
+      '1+ year practical UI/UX experience', 'Figma', 'Responsive design',
+      'Colour, typography and layout', 'Interaction design', 'Accessibility and usability',
+      'Design systems and UI kits', 'Portfolio required',
+    ],
+    applyNote:
+      'The employer is not named. To apply you must comment "همکاری" under the post and wait to be sent instructions by email or Telegram.',
+  },
+  {
+    slug: 'behsazan-mellat-process-design',
+    title: 'Process Design & Development Specialist',
+    company: 'Behsazan Mellat',
+    category: 'Business & Ops',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485604141340393472',
+    status: 'open',
+    summary:
+      'Designing, improving and implementing organisational processes together with the management tools around them, to raise productivity and coordination.',
+    stack: [
+      '5+ years related experience',
+      'Degree in industrial engineering or a management field',
+      'BPM / BPMN modelling', 'As-Is and To-Be analysis',
+      'Process documentation', 'KPI definition', 'Process modelling tools',
+    ],
+    contact: 'hr-talent@behsazanmellat.ir',
+    applyUrl: 'https://lnkd.in/eZwgDgzE',
+    applyNote: 'Their other openings are listed at https://lnkd.in/e6vkcWew.',
+  },
+  {
+    slug: 'zarpay24-finance-specialist',
+    title: 'Accounting & Finance Specialist',
+    company: 'ZarPay24',
+    category: 'Business & Ops',
+    location: 'Tehran',
+    arrangement: 'Full-time',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485586638455279616',
+    status: 'open',
+    summary:
+      'Recording accounting documents, reconciling accounts, monitoring financial transactions and following up on tax and insurance matters at a fintech.',
+    stack: [
+      '3+ years specialised accounting experience', 'Bachelor\'s degree in a related field',
+      'Office software', 'Financial and tax processes',
+      'Experience at an online company or fintech (a plus)',
+    ],
+    applyUrl: 'https://lnkd.in/e9srFAPG',
+    applyNote: 'The post says the salary is negotiable.',
+  },
+  {
+    slug: 'lsi-performance-marketing',
+    title: 'Performance Marketing Specialist',
+    company: 'London School of Innovation',
+    category: 'Media & Creative',
+    location: 'Not specified',
+    arrangement: 'Remote, full-time',
+    posted: '2026-07-22',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485709083472207875',
+    status: 'open',
+    summary:
+      'Running and optimising paid campaigns across Google, Meta and LinkedIn Ads, with decisions driven by CPA, ROAS and conversion rate. The post lists a full master\'s scholarship among the benefits.',
+    stack: [
+      '3+ years in performance marketing or PPC',
+      'Google Ads, Meta Ads, LinkedIn Ads', 'GA4', 'Conversion tracking',
+      'Attribution models', 'Funnel optimisation',
+    ],
+    applyUrl: 'https://shorturl.at/W5KqT',
+    applyNote:
+      'The post says explicitly that it is not suitable for social media managers, SEO specialists, copywriters or general marketers — it wants a paid-advertising background.',
+  },
+  {
     slug: 'snapptrip-senior-software-engineer',
     title: 'Senior Software Engineer',
     company: 'SnappTrip',
@@ -198,6 +578,22 @@ export const JOBS: Job[] = [
   },
 
   // ---------- 2026-07-21 ----------
+  {
+    slug: 'farazpardazan-ui-ux-designer',
+    title: 'UI/UX Designer',
+    company: 'Farazpardazan',
+    category: 'Design',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-21',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7485355557755879426',
+    status: 'closed',
+    summary:
+      'A growing design team looking for someone to turn experience concepts into wireframes, prototypes and clean, buildable designs, working closely with product and frontend.',
+    stack: ['Figma', 'Design systems', 'Interaction detail', 'Microcopy'],
+    applyUrl: 'https://lnkd.in/dkSCtw44',
+    applyNote: 'A comment on the post from the company says the opening is now closed.',
+  },
   {
     slug: 'snapp-group-senior-backend-go',
     title: 'Senior Backend Software Engineer (Go)',
@@ -391,6 +787,22 @@ export const JOBS: Job[] = [
   },
 
   // ---------- 2026-07-20 ----------
+  {
+    slug: 'pishgam-rayan-frontend-ai',
+    title: 'Front-End Developer (Angular) & AI / Data Mining Specialist',
+    company: 'Pishgam Rayan',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-20',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7484864531605700608',
+    status: 'open',
+    summary:
+      'Two openings at a company building communication and cloud products for businesses — one on the Angular frontend, one in artificial intelligence and data mining.',
+    stack: ['Angular', 'Artificial intelligence', 'Data mining'],
+    contact: 'hr@pishgamrayan.com',
+    applyNote: 'The post welcomes referrals as well as direct applications.',
+  },
   {
     slug: 'haji-freelance-laravel-developer',
     title: 'Laravel Developer (mid / senior)',
@@ -927,6 +1339,30 @@ export const JOBS: Job[] = [
 
   // ---------- 2026-07-13 ----------
   {
+    slug: 'datin-kidzi-frontend',
+    title: 'Frontend Developer',
+    company: 'Datin (Kidzi team)',
+    category: 'Engineering',
+    location: 'Pardis Technology Park, Tehran',
+    arrangement: 'Full-time, on-site',
+    posted: '2026-07-13',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7482381983822626818',
+    status: 'open',
+    summary:
+      'Completing the technical team on the Kidzi product, with at least five years of experience. The post is unusually specific about what it wants — performance, security and modern state management in React and Next.js.',
+    stack: [
+      '5+ years experience', 'JavaScript', 'TypeScript', 'React', 'Next.js',
+      'SSR / CSR', 'Async programming', 'REST API', 'TanStack Query',
+      'Authentication and authorisation', 'JWT, cookies, sessions',
+      'State management', 'Responsive UI', 'Git',
+      'App Router, Server Components, Server Actions (advantage)',
+      'WebSocket (advantage)', 'AI tools (advantage)', 'Tailwind CSS (advantage)',
+      'zustand (advantage)', 'Design systems (advantage)', 'Testing (advantage)',
+    ],
+    contact: 'sajedi.dav@gmail.com',
+    applyNote: 'Send a portfolio with the CV. The address given is a personal Gmail rather than a company domain.',
+  },
+  {
     slug: 'faash-java-backend',
     title: 'Back-End Developer (Java)',
     company: 'Faash Corporation',
@@ -964,6 +1400,26 @@ export const JOBS: Job[] = [
       'Python', 'Prometheus', 'Grafana', 'Cloud infrastructure',
     ],
     applyUrl: 'https://lnkd.in/ebEAcTru',
+  },
+
+  // ---------- 2026-07-11 ----------
+  {
+    slug: 'iraneit-csharp-analyst-dba',
+    title: 'C# Developer · Systems Analyst · Senior DBA',
+    company: 'Fanavaran Ettelaat Khebreh',
+    category: 'Engineering',
+    location: 'Jordan, Tehran',
+    arrangement: 'Hybrid — two remote days a week',
+    posted: '2026-07-11',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7481619849761234945',
+    status: 'open',
+    summary:
+      'Three openings advertised together: a C# developer, a systems analyst, and a senior DBA with a focus on SQL Server performance tuning and troubleshooting.',
+    stack: [
+      'C#', 'Systems analysis', 'Analytical thinking',
+      'SQL Server performance tuning & troubleshooting',
+    ],
+    contact: 'Talent@iraneit.com',
   },
 
   // ---------- 2026-07-10 ----------
@@ -1028,6 +1484,46 @@ export const JOBS: Job[] = [
     contact: 'm.haq@danacloud.com',
   },
 
+  // ---------- 2026-07-04 ----------
+  {
+    slug: 'karazma-senior-php-laravel',
+    title: 'Senior Developer (PHP / Laravel)',
+    company: 'Karazma',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Remote',
+    posted: '2026-07-04',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7479122600187797504',
+    status: 'open',
+    summary:
+      'A senior role for someone who can make technical decisions independently, design architecture, and understand what the business needs from both a user and a product angle.',
+    stack: [
+      'PHP', 'Laravel', 'SOLID, DRY, OOP', 'Scalable API design',
+      'Performance optimisation', 'Testing', 'Git',
+      'Using AI to improve code quality', 'Remote working discipline',
+    ],
+    applyUrl: 'https://karazma.co',
+  },
+
+  // ---------- 2026-07-01 ----------
+  {
+    slug: 'barook-senior-java',
+    title: 'Senior Java Developer',
+    company: 'Barook',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-07-01',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7477991430133743616',
+    status: 'open',
+    summary:
+      'Java work on real products at a company that puts the emphasis on clean, high-quality code and problem solving.',
+    stack: [
+      'Java', 'Spring Boot', 'RESTful API design', 'Microservices', 'Git', 'SQL',
+    ],
+    applyUrl: 'https://B2n.ir/jk2085',
+  },
+
   // ---------- 2026-06-30 ----------
   {
     slug: 'taline-senior-talent-acquisition',
@@ -1080,6 +1576,45 @@ export const JOBS: Job[] = [
     ],
     applyUrl: 'https://lnkd.in/gV7z8E3f',
     applyNote: 'The company is not named and applications run through Telegram. Ask who the employer is before going far.',
+  },
+
+  // ---------- 2026-06-28 ----------
+  {
+    slug: 'snappshop-junior-data-analyst',
+    title: 'Junior Data Analyst',
+    company: 'SnappShop',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-06-28',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7476951136864829440',
+    status: 'open',
+    summary:
+      'A junior data analyst opening — one of the few on the board aimed at people early in their career. The post gives no requirements; they are behind the link.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/e7XwUSh2',
+  },
+
+  // ---------- 2026-06-25 ----------
+  {
+    slug: 'heart-of-europe-fullstack',
+    title: 'Full Stack Developer',
+    company: 'Heart of Europe (Kleindienst Group)',
+    category: 'Engineering',
+    location: 'Dubai, UAE',
+    arrangement: 'Not specified',
+    posted: '2026-06-25',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7475812197491998720',
+    status: 'open',
+    summary:
+      'Building and maintaining web applications and platforms — responsive interfaces, back-end systems, and the APIs and databases behind them.',
+    stack: [
+      'Proven full stack experience', 'JavaScript', 'HTML5', 'CSS3',
+      'React.js, Angular or Vue.js', 'Node.js, .NET, PHP, Python or Java',
+      'SQL and NoSQL', 'REST APIs', 'Cloud services', 'Software architecture',
+    ],
+    contact: 'careers@thoe.com',
+    applyNote: 'The post says an employment visa and medical insurance are provided.',
   },
 
   // ---------- 2026-06-23 ----------
