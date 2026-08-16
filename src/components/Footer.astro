@@ -1,11 +1,5 @@
 ---
 import { SITE } from '../data/site';
-
-interface Props {
-  lang?: 'en' | 'fa';
-}
-const { lang = 'en' } = Astro.props;
-const fa = lang === 'fa';
 const year = new Date().getFullYear();
 ---
 
@@ -17,54 +11,43 @@ const year = new Date().getFullYear();
           <img src="/logo.jpg" alt="" width="38" height="38" />
           <div>
             <div class="fb-name">AI ENGINEERING</div>
-            <div class="fb-sub">{fa ? 'ساخت کلون Claude Code از صفر' : 'Build a Claude Code clone from scratch'}</div>
+            <div class="fb-sub">Build a Claude Code clone from scratch</div>
           </div>
         </div>
         <p class="fdesc">
-          {fa
-            ? 'یک منتورشیپ عملی ۱۲ هفته‌ای برای مهندسانی که هوش مصنوعی را جدی گرفته‌اند. کد واقعی، بدون فریمورک، و یک پروژهٔ نمونه‌کار در پایان.'
-            : 'A 12-week hands-on mentorship for engineers who are serious about AI. Real code, no frameworks, a portfolio project at the end.'}
+          A 12-week hands-on mentorship for engineers who are serious about AI.
+          Real code, no frameworks, a portfolio project at the end.
         </p>
       </div>
 
       <div>
-        <h4>{fa ? 'دوره' : 'Course'}</h4>
-        <a href={fa ? '/fa/curriculum' : '/curriculum'}>{fa ? 'سرفصل کامل دوره' : 'Full curriculum'}</a>
-        <a href={fa ? '/fa/curriculum/week-1-your-first-agent' : '/curriculum/week-1-your-first-agent'}>
-          {fa ? 'هفتهٔ ۱ — اولین ایجنت شما' : 'Week 1 — Your first agent'}
-        </a>
-        <a href={fa ? '/fa/#outcomes' : '/#outcomes'}>{fa ? 'چه چیزی می‌سازید' : 'What you build'}</a>
-        <a href={fa ? '/fa/#faq' : '/#faq'}>{fa ? 'پرسش‌های پرتکرار' : 'FAQ'}</a>
+        <h4>Course</h4>
+        <a href="/curriculum">Full curriculum</a>
+        <a href="/curriculum/week-1-your-first-agent">Week 1 — Your first agent</a>
+        <a href="/#outcomes">What you build</a>
+        <a href="/#faq">FAQ</a>
       </div>
 
       <div>
-        <h4>{fa ? 'نوشته‌ها' : 'Writing'}</h4>
-        <a href={fa ? '/fa/blog' : '/blog'}>{fa ? 'همهٔ مقاله‌ها' : 'All articles'}</a>
-        <a href={fa ? '/fa/blog/chat-completions-vs-responses-api' : '/blog/chat-completions-vs-responses-api'}>Completions vs Responses API</a>
-        <a href={fa ? '/fa/blog/designing-tools-for-ai-agents' : '/blog/designing-tools-for-ai-agents'}>{fa ? 'طراحی ابزار برای ایجنت‌ها' : 'Designing tools for agents'}</a>
-        <a href="/rss.xml">{fa ? 'خوراک RSS' : 'RSS feed'}</a>
+        <h4>Writing</h4>
+        <a href="/blog">All articles</a>
+        <a href="/blog/chat-completions-vs-responses-api">Completions vs Responses API</a>
+        <a href="/blog/designing-tools-for-ai-agents">Designing tools for agents</a>
+        <a href="/rss.xml">RSS feed</a>
       </div>
 
       <div>
-        <h4>{fa ? 'مدرس' : 'Instructor'}</h4>
-        <a href={fa ? '/fa/resume' : '/resume'}>{fa ? 'رزومه و سوابق' : 'Résumé & experience'}</a>
-        <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">{fa ? 'لینکدین ↗' : 'LinkedIn ↗'}</a>
-        <a href={SITE.telegram.href} target="_blank" rel="noopener">
-          {fa ? 'تلگرام — آگهی‌های شغلی ↗' : 'Telegram — job alerts ↗'}
-        </a>
+        <h4>Instructor</h4>
+        <a href="/resume">Résumé &amp; experience</a>
+        <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href={SITE.telegram.href} target="_blank" rel="noopener">Telegram — job alerts ↗</a>
         <a href={`mailto:${SITE.instructor.email}`}>{SITE.instructor.email}</a>
       </div>
     </div>
 
     <div class="ftr-bot">
-      <span>
-        {fa
-          ? `© ${year} پوریا جهاندیده. همهٔ حقوق محفوظ است.`
-          : `© ${year} ${SITE.instructor.name}. All rights reserved.`}
-      </span>
-      <span class="fnote">
-        {fa ? 'از صفر ساخته شده — مثل هر چیز دیگری در این دوره.' : 'Built from scratch — like everything else in this course.'}
-      </span>
+      <span>© {year} {SITE.instructor.name}. All rights reserved.</span>
+      <span class="fnote">Built from scratch — like everything else in this course.</span>
     </div>
   </div>
 </footer>
