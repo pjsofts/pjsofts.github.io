@@ -209,6 +209,22 @@ section { padding: 4.5rem 0; }
 
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
 
+/* ---------- RTL (Persian mirror at /fa) ---------- */
+[dir="rtl"] body {
+  font-family: ui-sans-serif, -apple-system, "Segoe UI", Tahoma, Roboto, Arial, sans-serif;
+}
+/* Letter-spacing designed for Latin caps breaks Perso-Arabic joining. */
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4 { letter-spacing: 0; }
+[dir="rtl"] .pill,
+[dir="rtl"] .eyebrow { letter-spacing: 0 !important; }
+[dir="rtl"] blockquote { padding: .2rem 1.15rem .2rem 0; border-left: 0; border-right: 3px solid var(--violet); }
+[dir="rtl"] th { text-align: right; }
+[dir="rtl"] .prose ul, [dir="rtl"] .prose ol { padding-left: 0; padding-right: 1.3rem; }
+[dir="rtl"] .skip { left: auto; right: -9999px; border-radius: 0 0 0 8px; }
+[dir="rtl"] .skip:focus { right: 0; }
+/* Keep inherently-Latin fragments readable inside RTL text. */
+[dir="rtl"] code, [dir="rtl"] pre { direction: ltr; unicode-bidi: isolate; text-align: left; }
+
 @media (max-width: 640px) {
   body { font-size: 16px; }
   section { padding: 3.2rem 0; }

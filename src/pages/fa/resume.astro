@@ -1,0 +1,309 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+
+const experience = [
+  {
+    company: 'Agentonic',
+    place: 'دورکاری',
+    role: 'مهندس هوش مصنوعی',
+    dates: 'ژانویهٔ ۲۰۲۶ – اکنون',
+    note: 'ایجنت‌های هوش مصنوعی و محصولات یادگیری ماشین کاربردی، همکاری از راه دور با تیمی در آمریکا',
+    points: [
+      'ساخت ایجنت‌های هوش مصنوعی برای کارفرماها، از جمله یک محصول ایجنت صوتی.',
+      'مشاور صنعتی و مربی پروژهٔ نهایی برای یک اپ پایش خواب که با دانشجویان UC Irvine توسعه یافت.',
+      'توسعهٔ یک اپلیکیشن هوشمند تهیهٔ اظهارنامهٔ مالیاتی.',
+      'ساخت اپلیکیشنی برای برچسب‌گذاری تصاویر رادیولوژی و دندان‌پزشکی و آموزش و اجرای مدل‌های یادگیری ماشین.',
+    ],
+  },
+  {
+    company: 'Prima Luxury',
+    place: 'دورکاری',
+    role: 'توسعه‌دهندهٔ فول‌استک، سرپرست تیم مهندسی',
+    dates: 'ژانویهٔ ۲۰۲۴ – ژانویهٔ ۲۰۲۶',
+    note: 'CRM مبتنی بر هوش مصنوعی برای صنعت املاک دُبی',
+    points: [
+      'رهبری تیمی ۱۰ نفره شامل طراح، توسعه‌دهنده و مدیر محصول.',
+      'ساخت فرانت‌اند با React، Redux Toolkit، TypeScript و Tailwind CSS.',
+      'توسعهٔ میکروسرویس‌های بک‌اند با Golang و Nest.js روی PostgreSQL، Redis و Prisma ORM.',
+      'ساخت وب‌سایت‌های عمومی با Next.js.',
+    ],
+  },
+  {
+    company: 'آموزشگاه امنج',
+    place: 'تهران',
+    role: 'مربی برنامه‌نویسی فرانت‌اند',
+    dates: 'اکتبر ۲۰۲۲ – اکنون',
+    note: 'طراحی دوره و منتورینگ',
+    points: [
+      'طراحی دورهٔ فول‌استک جاوااسکریپت و منتورینگ صدها دانشجو.',
+      'تدریس JavaScript، React، Next.js، Tailwind و TypeScript.',
+      'تدریس لینوکس، DevOps، CI/CD و Kubernetes.',
+      'تدریس Python، Flask، Django، FastAPI، یادگیری ماشین و PostgreSQL.',
+    ],
+  },
+  {
+    company: 'کیان دیجیتال',
+    place: 'تهران',
+    role: 'توسعه‌دهندهٔ فول‌استک',
+    dates: 'فوریهٔ ۲۰۲۲ – ژانویهٔ ۲۰۲۴',
+    note: 'پلتفرم فین‌تک',
+    points: [
+      'ساخت سیستم پوش‌نوتیفیکیشن با ارسال روزانه یک میلیون نوتیفیکیشن.',
+      'توسعهٔ بک‌اند با Golang، Node.js، NestJS و PostgreSQL؛ فرانت‌اند با Next.js و React.',
+      'پیاده‌سازی تست واحد و تست سرتاسری با Jest.',
+      'مدیریت استقرار با پایپ‌لاین‌های GitLab CI/CD، Docker، Helm و Kubernetes.',
+    ],
+  },
+  {
+    company: 'اسنپ',
+    place: 'تهران',
+    role: 'توسعه‌دهندهٔ فول‌استک',
+    dates: 'فوریهٔ ۲۰۲۰ – ژانویهٔ ۲۰۲۲',
+    note: 'پلتفرم تاکسی اینترنتی با ۴۰ میلیون کاربر و ۳ میلیون سفر روزانه',
+    points: [
+      'بازسازی کامل پنل سازمانی (رزرو سفر شرکت‌ها برای کارمندان) از صفر با React و MobX.',
+      'پیکربندی Nginx برای مسیریابی ترافیک میان پنل قدیمی و جدید در یک مهاجرت بزرگ‌مقیاس.',
+      'در تیم ریتنشن، ساخت APIهای داشبورد و میکروسرویس‌های بک‌اند با Golang، gRPC، NATS و PostgreSQL.',
+      'استقرار سرویس‌ها روی OpenShift Kubernetes و مدیریت CI/CD با GitLab.',
+    ],
+  },
+  {
+    company: 'زرین‌پال',
+    place: 'تهران',
+    role: 'توسعه‌دهندهٔ فول‌استک',
+    dates: 'سپتامبر ۲۰۱۹ – ژانویهٔ ۲۰۲۰',
+    note: 'درگاه پرداخت اینترنتی بزرگ‌مقیاس',
+    points: [
+      'رهبری تیم ساخت درگاه پرداخت بلاک‌چینی با Golang، Node.js، PostgreSQL، Socket.io، Next.js، React، MobX و TypeScript.',
+      'پیاده‌سازی تست بک‌اند با node-tap و تست فرانت‌اند با Jest.',
+      'نگهداری مستندات API پذیرندگان با Swagger.',
+    ],
+  },
+  {
+    company: 'پارس‌تصمیم — ام‌تی‌ان ایرانسل',
+    place: 'تهران',
+    role: 'توسعه‌دهندهٔ فول‌استک',
+    dates: 'دسامبر ۲۰۱۵ – اوت ۲۰۱۹',
+    note: 'سیستم‌های تجارت الکترونیک و خرده‌فروشی مخابراتی',
+    points: [
+      'مشارکت در طراحی راه‌حل و توسعهٔ فروشگاه اینترنتی سیم‌کارت، شارژ و بسته که به کانال اصلی فروش ایرانسل تبدیل شد، با Python، Flask، PostgreSQL و Celery.',
+      'سرپرست فنی و معمار راه‌حل «دیجیتال POS»، سیستمی مرکزی که اکنون در ۱۰٬۰۰۰ فروشگاه ایرانسل سراسر کشور استفاده می‌شود، با Node.js، React، PostgreSQL و MongoDB.',
+      'همکاری با تیم‌های مالی و کشف تقلب برای طراحی مدل دادهٔ تراکنش‌ها و ساخت گزارش‌های مالی تضمین درآمد.',
+    ],
+  },
+];
+
+const skills = [
+  { name: 'Python', level: 5 }, { name: 'Node.js', level: 5 },
+  { name: 'React', level: 5 }, { name: 'Linux', level: 5 },
+  { name: 'Next.js', level: 5 }, { name: 'TypeScript', level: 5 },
+  { name: 'PostgreSQL', level: 5 }, { name: 'Docker', level: 5 },
+  { name: 'Golang', level: 5 }, { name: 'gRPC', level: 5 },
+  { name: 'AWS', level: 5 }, { name: 'GitLab CI/CD', level: 5 },
+  { name: 'رهبری تیم', level: 5 }, { name: 'اسکرام', level: 5 },
+  { name: 'MongoDB', level: 4 }, { name: 'Kubernetes', level: 3 },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.instructor.name,
+  alternateName: 'پوریا جهاندیده',
+  url: `${SITE.url}/fa/resume`,
+  sameAs: [SITE.instructor.linkedin, SITE.telegram.href],
+  image: `${SITE.url}/headshot.jpg`,
+  jobTitle: 'مهندس هوش مصنوعی و سرپرست تیم مهندسی',
+  email: `mailto:${SITE.instructor.email}`,
+};
+---
+
+<BaseLayout
+  title="پوریا جهاندیده — مهندس هوش مصنوعی و سرپرست تیم مهندسی | رزومه"
+  description="مهندس هوش مصنوعی و سرپرست تیم مهندسی با ۱۰ سال تجربهٔ ساخت پلتفرم‌های وب مقیاس‌پذیر، سیستم‌های فین‌تک و میکروسرویس‌های توزیع‌شده. مدرس منتورشیپ ۱۲ هفته‌ای مهندسی هوش مصنوعی."
+  canonical="/fa/resume"
+  lang="fa"
+  schema={[schema]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <div class="rhead">
+        <img src="/headshot.jpg" alt="پوریا جهاندیده" width="104" height="104" loading="eager" />
+        <div>
+          <span class="pill pill-gold">مدرس</span>
+          <h1>پوریا جهاندیده</h1>
+          <p class="role">مهندس هوش مصنوعی · سرپرست تیم مهندسی · توسعه‌دهندهٔ فول‌استک</p>
+          <div class="contact">
+            <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">لینکدین ↗</a>
+            <a href={`mailto:${SITE.instructor.email}`}>{SITE.instructor.email}</a>
+            <span>ایروان، ارمنستان · دورکاری</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cols">
+        <div class="main-col">
+          <h2>خلاصهٔ حرفه‌ای</h2>
+          <p class="summary">
+            سرپرست تیم مهندسی و توسعه‌دهندهٔ فول‌استک با <b>۱۰ سال تجربه</b> در ساخت
+            پلتفرم‌های وب مقیاس‌پذیر، سیستم‌های فین‌تک و میکروسرویس‌های توزیع‌شده. سابقهٔ
+            اثبات‌شده در رهبری تیم‌های چندتخصصی از طراح و توسعه‌دهنده تا مدیر محصول، با
+            تخصص عمیق در Python، Node.js، React/Next.js، PostgreSQL، Docker، Kubernetes
+            و پایپ‌لاین‌های CI/CD. اکنون مشغول ساخت ایجنت‌های هوش مصنوعی و محصولات
+            یادگیری ماشین کاربردی.
+          </p>
+
+          <h2>سوابق شغلی</h2>
+          <div class="timeline">
+            {experience.map((e) => (
+              <div class="job">
+                <div class="job-hd">
+                  <div>
+                    <h3>{e.role}</h3>
+                    <div class="job-co">{e.company} <span>· {e.place}</span></div>
+                  </div>
+                  <div class="job-date">{e.dates}</div>
+                </div>
+                {e.note && <p class="job-note">{e.note}</p>}
+                <ul>
+                  {e.points.map((p) => <li>{p}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <aside class="side">
+          <div class="side-box">
+            <h3>مهارت‌ها</h3>
+            <div class="skills">
+              {skills.map((s) => (
+                <div class="skill">
+                  <span class="sk-name">{s.name}</span>
+                  <span class="dots" aria-label={`${s.level} از 5`}>
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <i class={i <= s.level ? 'on' : ''}></i>
+                    ))}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="side-box">
+            <h3>تحصیلات</h3>
+            <div class="edu">
+              <b>کارشناسی ارشد مدیریت کسب‌وکار (MBA)</b>
+              <span>دانشگاه تهران</span>
+              <span class="d">آوریل ۲۰۲۴ – ژوئن ۲۰۲۵</span>
+            </div>
+            <div class="edu">
+              <b>کارشناسی مهندسی نرم‌افزار</b>
+              <span>دانشگاه علم و صنعت ایران</span>
+              <span class="d">سپتامبر ۲۰۰۹ – اوت ۲۰۱۴</span>
+            </div>
+          </div>
+
+          <div class="side-box">
+            <h3>جوایز و گواهینامه‌ها</h3>
+            <ul class="awards">
+              <li>گواهینامه‌های LPIC-1، LPIC-2، LPIC-301، LPIC-303، LPIC-304 — فناوران آنیسا</li>
+              <li>برندهٔ هکاتون اسنپ، جایزهٔ بهترین قابلیت — برای قابلیت «مقصد پیشنهادی»</li>
+              <li>عضو افتخاری انجمن علمی — به پاس تدریس، کارگاه‌ها و جلسات مسترمایند</li>
+            </ul>
+          </div>
+
+          <div class="side-box">
+            <h3>زبان‌ها</h3>
+            <ul class="awards">
+              <li>انگلیسی — پیشرفته</li>
+              <li>فارسی — زبان مادری</li>
+              <li>فرانسه — مبتدی</li>
+            </ul>
+          </div>
+
+          <div class="side-box cta-box">
+            <h3>با من کار کنید</h3>
+            <p>مهندسان را در یک پروژهٔ ۱۲ هفته‌ای مهندسی هوش مصنوعی منتور می‌کنم.</p>
+            <a class="btn btn-primary full" href={SITE.cta.href} target="_blank" rel="noopener">
+              در لینکدین پیام بدهید ←
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 3rem 0;
+    background:
+      radial-gradient(900px 480px at 22% -25%, rgba(74, 46, 160, .5) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(-158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .rhead { display: flex; gap: 1.8rem; align-items: center; }
+  .rhead img { border-radius: 20px; object-fit: cover; flex: none; border: 1px solid var(--line-str); }
+  .rhead h1 { margin: .7rem 0 .2rem; font-size: clamp(1.9rem, 4.4vw, 2.7rem); }
+  .role { color: var(--gold); font-weight: 600; margin-bottom: .8rem; }
+  .contact { display: flex; flex-wrap: wrap; gap: 1.1rem; font-size: .89rem; color: var(--fg-dimmer); }
+
+  .cols { display: grid; grid-template-columns: 1fr 290px; gap: 3rem; align-items: start; }
+  .summary { font-size: 1.02rem; }
+  .main-col h2 { margin-top: 2.4rem; }
+  .main-col h2:first-child { margin-top: 0; }
+
+  .timeline { display: flex; flex-direction: column; gap: 2rem; margin-top: 1.4rem; }
+  .job { border-right: 2px solid var(--line-str); padding-right: 1.3rem; position: relative; }
+  .job::before {
+    content: ''; position: absolute; right: -6px; top: .45rem;
+    width: 10px; height: 10px; border-radius: 50%; background: var(--violet);
+    border: 2px solid var(--ink-900);
+  }
+  .job-hd { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .job h3 { margin: 0 0 .15rem; font-size: 1.08rem; color: #fff; }
+  .job-co { font-weight: 600; color: var(--violet-lt); font-size: .95rem; }
+  .job-co span { color: var(--fg-dimmer); font-weight: 400; }
+  .job-date { font-size: .84rem; color: var(--fg-dimmer); white-space: nowrap; padding-top: .15rem; }
+  .job-note { font-size: .9rem; color: var(--fg-dimmer); font-style: italic; margin: .5rem 0 .6rem; }
+  .job ul { margin: 0; padding-right: 1.1rem; padding-left: 0; }
+  .job li { font-size: .94rem; color: var(--fg-dim); margin-bottom: .38rem; }
+  .job li::marker { color: var(--violet-lt); }
+
+  .side { position: sticky; top: 86px; display: flex; flex-direction: column; gap: 1rem; }
+  .side-box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.3rem; }
+  .side-box h3 { font-size: .8rem; color: var(--violet-lt); margin-bottom: .9rem; }
+
+  .skills { display: flex; flex-direction: column; gap: .5rem; }
+  .skill { display: flex; justify-content: space-between; align-items: center; gap: .8rem; }
+  .sk-name { font-size: .87rem; color: var(--fg-dim); }
+  .dots { display: flex; gap: 3px; flex: none; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(140, 122, 220, .25); display: block; }
+  .dots i.on { background: var(--gold); }
+
+  .edu { margin-bottom: 1rem; display: flex; flex-direction: column; gap: .12rem; }
+  .edu:last-child { margin-bottom: 0; }
+  .edu b { font-size: .9rem; color: #fff; }
+  .edu span { font-size: .86rem; color: var(--fg-dim); }
+  .edu .d { font-size: .8rem; color: var(--fg-dimmer); }
+
+  ul.awards { margin: 0; padding-right: 1.05rem; padding-left: 0; }
+  ul.awards li { font-size: .87rem; color: var(--fg-dim); margin-bottom: .5rem; }
+  ul.awards li::marker { color: var(--gold); }
+
+  .cta-box p { font-size: .9rem; margin-bottom: 1rem; }
+  .btn.full { width: 100%; justify-content: center; }
+
+  @media (max-width: 900px) {
+    .cols { grid-template-columns: 1fr; gap: 2rem; }
+    .side { position: static; }
+  }
+  @media (max-width: 620px) {
+    .rhead { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+  }
+</style>

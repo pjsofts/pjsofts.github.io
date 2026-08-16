@@ -1,12 +1,31 @@
 ---
-import { SITE, NAV } from '../data/site';
+import { SITE, NAV, NAV_FA } from '../data/site';
+
+interface Props {
+  lang?: 'en' | 'fa';
+}
+const { lang = 'en' } = Astro.props;
+
 const path = Astro.url.pathname;
-const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
+const nav = lang === 'fa' ? NAV_FA : NAV;
+const home = lang === 'fa' ? '/fa/' : '/';
+const isActive = (href: string) => !href.includes('#') && path.startsWith(href.replace(/\/$/, ''));
+
+// EN⇄FA switch targets the same page in the other language where a
+// translation exists; otherwise it falls back to that language's home.
+const TRANSLATED = ['/', '/curriculum', '/jobs', '/resume'];
+const normalized = (path.replace(/^\/fa/, '').replace(/\/+$/, '') || '/');
+const base = '/' + (normalized.split('/')[1] ?? '');
+const hasTwin = TRANSLATED.includes(normalized) || (normalized.startsWith('/curriculum/') && normalized !== '/curriculum/');
+const switchHref =
+  lang === 'fa'
+    ? (hasTwin ? normalized : '/')
+    : (hasTwin ? `/fa${normalized === '/' ? '/' : normalized}` : '/fa/');
 ---
 
 <header class="site-header">
   <div class="wrap hdr">
-    <a href="/" class="brand" aria-label={`${SITE.name} — home`}>
+    <a href={home} class="brand" aria-label={`${SITE.name} — home`}>
       <img src="/logo.jpg" alt="" width="34" height="34" />
       <span class="brand-txt">AI&nbsp;ENGINEERING</span>
     </a>
@@ -17,11 +36,14 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
     </label>
 
     <nav class="nav" aria-label="Main">
-      {NAV.map((n) => (
+      {nav.map((n) => (
         <a href={n.href} class={isActive(n.href) ? 'on' : ''}>{n.label}</a>
       ))}
+      <a class="lang-switch" href={switchHref} lang={lang === 'fa' ? 'en' : 'fa'}>
+        {lang === 'fa' ? 'EN' : 'فارسی'}
+      </a>
       <a class="btn btn-primary nav-cta" href={SITE.cta.href} target="_blank" rel="noopener">
-        Join the course
+        {lang === 'fa' ? 'ثبت‌نام در دوره' : 'Join the course'}
       </a>
     </nav>
   </div>
@@ -47,6 +69,14 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
   .nav a { font-size: .92rem; font-weight: 600; color: var(--fg-dim); text-decoration: none; }
   .nav a:hover, .nav a.on { color: var(--fg); }
   .nav a.on { color: var(--gold); }
+  .lang-switch {
+    font-size: .8rem !important;
+    padding: .3rem .7rem;
+    border: 1px solid var(--line-str);
+    border-radius: 999px;
+    color: var(--fg) !important;
+  }
+  .lang-switch:hover { border-color: var(--gold); color: var(--gold) !important; }
   .nav-cta { font-size: .85rem !important; padding: .55rem 1.15rem !important; color: #33270a !important; }
 
   .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .4rem; }

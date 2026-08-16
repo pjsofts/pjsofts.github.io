@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SITE } from '../../../data/site';
+import { WEEKS_FA, withEnglish } from '../../../data/weeks-fa';
+
+const foundations = WEEKS_FA.filter((w) => w.part === 'مبانی');
+const clone = WEEKS_FA.filter((w) => w.part === 'ساخت کلون');
+
+const faDigits = (n: number | string) =>
+  String(n).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'مهندسی هوش مصنوعی — سرفصل ۱۲ هفته‌ای',
+  inLanguage: 'fa',
+  itemListElement: WEEKS_FA.map((w) => ({
+    '@type': 'ListItem',
+    position: withEnglish(w).n,
+    name: `هفتهٔ ${faDigits(withEnglish(w).n)} — ${w.title}`,
+    url: `${SITE.url}/fa/curriculum/${w.slug}`,
+  })),
+};
+---
+
+<BaseLayout
+  title="سرفصل ۱۲ هفته‌ای مهندسی هوش مصنوعی — هفته‌به‌هفته"
+  description="سرفصل کامل ۱۲ هفته‌ای مهندسی هوش مصنوعی: حلقهٔ ایجنت، تول‌کالینگ، ایوال، ران‌تایم پروداکشنی، RAG و پایگاه‌دادهٔ برداری، مهندسی کانتکست، برنامه‌ریزی، حافظه، سندباکس، ردیابی و هماهنگ‌سازی چند-ایجنتی."
+  canonical="/fa/curriculum"
+  lang="fa"
+  schema={[schema]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <span class="pill pill-gold">نقشهٔ راه</span>
+      <h1>دوازده هفته،<br />یک محصول واقعی</h1>
+      <p class="sub">
+        هر هفته به‌صورت عملی و با کد واقعی پیاده‌سازی می‌شود، به انتخاب شما با پایتون یا
+        تایپ‌اسکریپت. سه هفتهٔ اول مبانی‌ای را می‌سازد که هر مهندس هوش مصنوعی لازم دارد؛
+        نُه هفتهٔ بعد آن‌ها را به کلونی کارا از یک ایجنت کدنویسی حرفه‌ای تبدیل می‌کند.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="part-intro">
+        <span class="pill pill-violet">بخش اول · هفته‌های ۱ تا ۳</span>
+        <h2>مبانی</h2>
+        <p>
+          اجزای پایهٔ مهندسی مدرن هوش مصنوعی: حلقهٔ ایجنت، ارزیابی، و یک ران‌تایم در حد
+          پروداکشن. سه هفته‌ای که بیشتر دوره‌ها هرگز به آن نمی‌رسند.
+        </p>
+      </div>
+      <div class="grid g2">
+        {foundations.map((w) => (
+          <a class="card wcard" href={`/fa/curriculum/${w.slug}`}>
+            <div class="wtop">
+              <span class="wnum">هفتهٔ {faDigits(withEnglish(w).n)}</span>
+              <span class="whrs">{w.hours}</span>
+            </div>
+            <h3>{w.title}</h3>
+            <div class="wsub">{w.subtitle}</div>
+            <p class="wsum">{w.summary}</p>
+            <div class="wtopics">
+              {w.topics.slice(0, 5).map((t) => <span class="tag">{t}</span>)}
+            </div>
+            <div class="wship">🛠 شیپ می‌کنید: <b>{w.ship}</b></div>
+          </a>
+        ))}
+      </div>
+
+      <div class="part-intro second">
+        <span class="pill pill-violet">بخش دوم · هفته‌های ۴ تا ۱۲</span>
+        <h2>ساخت کلون</h2>
+        <p>
+          هر هفته یک زیرسیستم. هر هفته ابزار شما — <code>mycode</code> — یک قابلیت واقعی
+          به دست می‌آورد، و تا هفتهٔ ۱۲ کدبیس می‌خواند، فایل ویرایش می‌کند، برنامه
+          می‌ریزد، به یاد می‌آورد، کارش را پیش‌نمایش می‌دهد، خودش را ردیابی می‌کند و
+          تیمی از زیرایجنت‌ها را رهبری می‌کند.
+        </p>
+      </div>
+      <div class="grid g2">
+        {clone.map((w) => (
+          <a class="card wcard" href={`/fa/curriculum/${w.slug}`}>
+            <div class="wtop">
+              <span class="wnum">هفتهٔ {faDigits(withEnglish(w).n)}</span>
+              <span class="whrs">{w.hours}</span>
+            </div>
+            <h3>{w.title}</h3>
+            <div class="wsub">{w.subtitle}</div>
+            <p class="wsum">{w.summary}</p>
+            <div class="wtopics">
+              {w.topics.slice(0, 5).map((t) => <span class="tag">{t}</span>)}
+            </div>
+            <div class="wship">🛠 شیپ می‌کنید: <b>{w.ship}</b></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap narrow ctr">
+      <h2>جمعهٔ هفتهٔ ۱۲ جزوه ندارید. یک ابزار دارید.</h2>
+      <p>
+        یک ایجنت کدنویس کامل و کارا که از صفر ساخته‌اید — و فهم عمیقی برای توضیح هر خط آن.
+      </p>
+      <a class="btn btn-primary" href={SITE.cta.href} target="_blank" rel="noopener">
+        در لینکدین پیام بدهید ←
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 4rem 0 3rem;
+    background:
+      radial-gradient(900px 500px at 22% -20%, rgba(74, 46, 160, .55) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(-158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .pg-hero h1 { margin: 1rem 0 0; }
+  .sub { font-size: 1.1rem; max-width: 64ch; margin-top: 1.1rem; }
+
+  .part-intro { margin: 1rem 0 1.6rem; max-width: 68ch; }
+  .part-intro.second { margin-top: 3.6rem; }
+  .part-intro h2 { margin: .8rem 0 .4rem; }
+  .part-intro p { margin: 0; }
+
+  .wcard { display: flex; flex-direction: column; text-decoration: none; }
+  .wcard:hover { text-decoration: none; }
+  .wtop { display: flex; justify-content: space-between; align-items: center; margin-bottom: .7rem; }
+  .wnum { font-size: .78rem; font-weight: 800; color: var(--gold); }
+  .whrs { font-size: .76rem; color: var(--fg-dimmer); }
+  .wcard h3 { margin: 0 0 .15rem; color: #fff; font-size: 1.2rem; }
+  .wsub { color: var(--violet-lt); font-size: .92rem; margin-bottom: .7rem; }
+  .wsum { font-size: .92rem; margin-bottom: .9rem; flex: 1; }
+  .wtopics { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .9rem; }
+  .tag {
+    font-size: .74rem; padding: .2rem .55rem; border-radius: 999px;
+    background: rgba(109, 75, 208, .16); border: 1px solid var(--line);
+    color: var(--fg-dim);
+  }
+  .wship { font-size: .86rem; color: var(--fg-dim); border-top: 1px solid var(--line); padding-top: .75rem; }
+  .wship b { color: var(--gold); font-weight: 700; }
+
+  .final {
+    background: radial-gradient(700px 340px at 50% 0%, rgba(109, 75, 208, .3) 0%, rgba(109, 75, 208, 0) 70%), var(--ink-800);
+    border-top: 1px solid var(--line);
+  }
+  .ctr { text-align: center; }
+  .final p { max-width: 52ch; margin: 0 auto 1.7rem; }
+</style>

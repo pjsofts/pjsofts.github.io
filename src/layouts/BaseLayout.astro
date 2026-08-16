@@ -16,6 +16,8 @@ export interface Props {
   noindex?: boolean;
   /** Root-relative social share image. Falls back to the default OG card. */
   image?: string;
+  /** Page language; "fa" renders RTL with Persian chrome. */
+  lang?: 'en' | 'fa';
 }
 
 const {
@@ -27,6 +29,7 @@ const {
   publishedTime,
   noindex = false,
   image,
+  lang = 'en',
 } = Astro.props;
 
 const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site);
@@ -48,7 +51,7 @@ const baseSchema = [
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang} dir={lang === 'fa' ? 'rtl' : 'ltr'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -85,11 +88,11 @@ const baseSchema = [
     <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} is:inline />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
-    <Header />
+    <a class="skip" href="#main">{lang === 'fa' ? 'پرش به محتوا' : 'Skip to content'}</a>
+    <Header lang={lang} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

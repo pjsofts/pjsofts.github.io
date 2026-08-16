@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SITE } from '../../../data/site';
+import { WEEKS_FA, withEnglish, type WeekFa } from '../../../data/weeks-fa';
+
+export function getStaticPaths() {
+  return WEEKS_FA.map((w) => ({ params: { slug: w.slug }, props: { week: w } }));
+}
+
+interface Props {
+  week: WeekFa;
+}
+const { week } = Astro.props;
+const en = withEnglish(week);
+const idx = WEEKS_FA.findIndex((w) => w.slug === week.slug);
+const prev = WEEKS_FA[idx - 1];
+const next = WEEKS_FA[idx + 1];
+
+const faDigits = (n: number | string) =>
+  String(n).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: `هفتهٔ ${faDigits(en.n)} — ${week.title}: ${week.subtitle}`,
+  description: week.summary,
+  url: `${SITE.url}/fa/curriculum/${week.slug}`,
+  inLanguage: 'fa',
+  provider: { '@type': 'Person', name: SITE.instructor.name },
+  isPartOf: { '@type': 'Course', name: 'مهندسی هوش مصنوعی — منتورشیپ ۱۲ هفته‌ای', url: `${SITE.url}/fa/` },
+  teaches: week.topics,
+};
+---
+
+<BaseLayout
+  title={`هفتهٔ ${faDigits(en.n)}: ${week.title} — ${week.subtitle} | دورهٔ مهندسی هوش مصنوعی`}
+  description={week.summary}
+  canonical={`/fa/curriculum/${week.slug}`}
+  lang="fa"
+  schema={[schema]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="مسیر صفحه">
+        <a href="/fa/">خانه</a> <span>/</span>
+        <a href="/fa/curriculum">سرفصل‌ها</a> <span>/</span>
+        <span class="cur">هفتهٔ {faDigits(en.n)}</span>
+      </nav>
+      <span class="pill pill-gold">هفتهٔ {faDigits(en.n)} · {week.part}</span>
+      <h1>{week.title}</h1>
+      <p class="wsubtitle">{week.subtitle}</p>
+      <div class="meta">
+        <span>⏱ {week.hours}</span>
+        <span>🐍 پایتون / 🔷 تایپ‌اسکریپت</span>
+        <span class="ship">🛠 شیپ می‌کنید: {week.ship}</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="cols">
+        <article class="main-col">
+          <div class="eyebrow">این هفته چیست</div>
+          {week.intro.map((p) => <p class="intro-p">{p}</p>)}
+
+          <h2>گام‌به‌گام</h2>
+          <p>هر بخش یک قابلیت به همان کدبیسِ در حال رشد اضافه می‌کند و هر کدام یک نقطهٔ قابل‌اجرا است.</p>
+          <ol class="parts">
+            {week.parts.map((p, i) => (
+              <li>
+                <span class="pn">{faDigits(String(i + 1).padStart(2, '0'))}</span>
+                <span class="pbody">
+                  <b>{p.title}</b>
+                  <span>{p.detail}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+
+          <h2>بعد از این هفته می‌توانید</h2>
+          <ul class="tick">
+            {week.outcomes.map((o) => <li>{o}</li>)}
+          </ul>
+        </article>
+
+        <aside class="side">
+          <div class="side-box">
+            <h3>سرفصل‌های این هفته</h3>
+            <div class="tags">
+              {week.topics.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          </div>
+          <div class="side-box">
+            <h3>نسخهٔ انگلیسی</h3>
+            <p class="en-note">این هفته را به انگلیسی بخوانید:</p>
+            <a class="btn btn-ghost full" href={`/curriculum/${week.slug}`}>Week {en.n} — {en.title}</a>
+          </div>
+          <div class="side-box cta-box">
+            <h3>عضویت در منتورشیپ</h3>
+            <p>این هفته — و یازده هفتهٔ دیگر — را با بازبینی مستقیم و رفع گیر بسازید.</p>
+            <a class="btn btn-primary full" href={SITE.cta.href} target="_blank" rel="noopener">
+              در لینکدین پیام بدهید ←
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      <nav class="pager" aria-label="پیمایش هفته‌ها">
+        {prev ? (
+          <a class="pg prev" href={`/fa/curriculum/${prev.slug}`}>
+            <span class="pl">→ هفتهٔ قبل</span>
+            <span class="pt">هفتهٔ {faDigits(withEnglish(prev).n)} — {prev.title}</span>
+          </a>
+        ) : <span />}
+        {next ? (
+          <a class="pg next" href={`/fa/curriculum/${next.slug}`}>
+            <span class="pl">هفتهٔ بعد ←</span>
+            <span class="pt">هفتهٔ {faDigits(withEnglish(next).n)} — {next.title}</span>
+          </a>
+        ) : <span />}
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 2.4rem 0 2.8rem;
+    background:
+      radial-gradient(900px 480px at 22% -25%, rgba(74, 46, 160, .5) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(-158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .crumbs { font-size: .84rem; color: var(--fg-dimmer); margin-bottom: 1.3rem; }
+  .crumbs a { color: var(--fg-dim); }
+  .crumbs span { margin: 0 .35rem; }
+  .crumbs .cur { color: var(--gold); }
+  .pg-hero h1 { margin: 1rem 0 .2rem; font-size: clamp(1.9rem, 4.6vw, 3rem); }
+  .wsubtitle { font-size: 1.2rem; color: var(--violet-lt); margin-bottom: 1.2rem; }
+  .meta { display: flex; flex-wrap: wrap; gap: 1.3rem; font-size: .89rem; color: var(--fg-dimmer); }
+  .meta .ship { color: var(--gold); }
+
+  .cols { display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; }
+  .intro-p { font-size: 1.04rem; }
+  .main-col h2 { margin-top: 2.6rem; }
+
+  ol.parts { list-style: none; padding: 0; margin: 1.4rem 0 0; }
+  ol.parts li {
+    display: flex; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pn {
+    flex: none; font-size: .86rem; font-weight: 700;
+    color: var(--gold); padding-top: .18rem; width: 26px;
+  }
+  .pbody { display: flex; flex-direction: column; gap: .2rem; }
+  .pbody b { color: #fff; font-size: 1rem; }
+  .pbody span { color: var(--fg-dim); font-size: .95rem; }
+
+  ul.tick { list-style: none; padding: 0; margin: 1rem 0 0; }
+  ul.tick li { position: relative; padding: .42rem 1.6rem .42rem 0; color: var(--fg-dim); }
+  ul.tick li::before { content: '✓'; position: absolute; right: 0; color: var(--green); font-weight: 800; }
+
+  .side { position: sticky; top: 86px; display: flex; flex-direction: column; gap: 1rem; }
+  .side-box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.3rem; }
+  .side-box h3 { font-size: .82rem; color: var(--violet-lt); margin-bottom: .9rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .tag {
+    font-size: .77rem; padding: .25rem .6rem; border-radius: 999px;
+    background: rgba(109, 75, 208, .16); border: 1px solid var(--line); color: var(--fg-dim);
+  }
+  .en-note { font-size: .86rem; margin-bottom: .8rem; }
+  .cta-box p { font-size: .91rem; margin-bottom: 1rem; }
+  .btn.full { width: 100%; justify-content: center; }
+
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3.5rem; }
+  .pg {
+    display: flex; flex-direction: column; gap: .25rem;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 1rem 1.2rem; text-decoration: none;
+  }
+  .pg:hover { border-color: var(--line-str); text-decoration: none; }
+  .pg.next { text-align: left; }
+  .pl { font-size: .78rem; color: var(--gold); font-weight: 700; }
+  .pt { font-size: .95rem; color: var(--fg); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .cols { grid-template-columns: 1fr; gap: 2rem; }
+    .side { position: static; }
+  }
+  @media (max-width: 600px) {
+    .pager { grid-template-columns: 1fr; }
+    .pg.next { text-align: right; }
+  }
+</style>

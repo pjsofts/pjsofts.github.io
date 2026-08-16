@@ -1,0 +1,218 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { JOBS, CATEGORIES } from '../../data/jobs';
+import { SITE } from '../../data/site';
+
+const sorted = [...JOBS].sort((a, b) => b.posted.localeCompare(a.posted));
+const open = sorted.filter((j) => j.status === 'open');
+const closed = sorted.filter((j) => j.status === 'closed');
+
+const groups = CATEGORIES.map((c) => ({
+  name: c,
+  jobs: open.filter((j) => j.category === c),
+})).filter((g) => g.jobs.length > 0);
+
+const anchor = (c: string) => c.toLowerCase().replace(/[^a-z]+/g, '-');
+
+const fmt = (d: string) =>
+  new Date(`${d}T00:00:00Z`).toLocaleDateString('fa-IR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
+const faDigits = (n: number | string) =>
+  String(n).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
+---
+
+<BaseLayout
+  title="بورد شغلی — موقعیت‌های مهندسی، هوش مصنوعی و طراحی | مهندسی هوش مصنوعی"
+  description="آرشیوی از موقعیت‌های نرم‌افزار، هوش مصنوعی، داده و طراحی که ارزش دیدن دارند؛ از لینکدین جمع‌آوری و این‌جا به‌طور کامل نوشته شده‌اند تا بعد از حذف آگهی اصلی هم خوانا بمانند."
+  canonical="/fa/jobs"
+  lang="fa"
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <span class="pill pill-gold">استخدام</span>
+      <h1>بورد شغلی</h1>
+      <p class="sub">
+        موقعیت‌هایی که به آن‌ها برمی‌خورم و به نظرم ارزش اشتراک دارند. پست‌های لینکدین حذف
+        می‌شوند و موقعیت‌ها پر می‌شوند، پس هر کدام این‌جا به‌طور کامل نوشته شده — آرشیو
+        حتی بعد از مردن لینک اصلی خوانا می‌ماند. متن آگهی‌ها به زبان اصلی (انگلیسی) است.
+      </p>
+      {sorted.length > 0 && (
+        <p class="count">
+          <b>{faDigits(open.length)}</b> باز · <b>{faDigits(closed.length)}</b> آرشیوشده · تازه‌ترین: {fmt(sorted[0].posted)}
+        </p>
+      )}
+      <div class="tg">
+        <p>
+          موقعیت‌های تازه را همان موقع که پیدا می‌کنم در تلگرام می‌فرستم —
+          <a href={SITE.telegram.href} target="_blank" rel="noopener">{SITE.telegram.handle}</a>.
+        </p>
+        <a class="btn btn-primary" href={SITE.telegram.href} target="_blank" rel="noopener">
+          عضویت در تلگرام ↗
+        </a>
+      </div>
+
+      {groups.length > 1 && (
+        <nav class="jump" aria-label="دسته‌بندی مشاغل">
+          {groups.map((g) => (
+            <a href={`#${anchor(g.name)}`}>{g.name} <span>{faDigits(g.jobs.length)}</span></a>
+          ))}
+        </nav>
+      )}
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      {open.length === 0 && closed.length === 0 && (
+        <p class="empty">فعلاً چیزی نیست. به‌زودی سر بزنید.</p>
+      )}
+
+      {groups.map((g) => (
+        <>
+          <h2 class="cat" id={anchor(g.name)}>{g.name}</h2>
+          <div class="job-list">
+            {g.jobs.map((j) => (
+              <article class="job" id={j.slug}>
+                <div class="job-hd">
+                  {j.logo
+                    ? <img class="job-logo" src={j.logo} alt={`لوگوی ${j.company}`} width="52" height="52" loading="lazy" />
+                    : <div class="job-logo ph" aria-hidden="true">{j.company.charAt(0)}</div>}
+                  <div class="job-id">
+                    <h3>
+                      <a href={`/jobs/${j.slug}`}>{j.title}</a>
+                      {j.unpaid && <span class="tag warn">بدون حقوق / سهام</span>}
+                    </h3>
+                    <p class="job-co">{j.company}</p>
+                  </div>
+                  <time class="job-date" datetime={j.posted}>{fmt(j.posted)}</time>
+                </div>
+
+                <p class="job-sum">{j.summary}</p>
+
+                <ul class="job-meta">
+                  <li><span>موقعیت مکانی</span>{j.location}</li>
+                  <li><span>نوع همکاری</span>{j.arrangement}</li>
+                  {j.contact && <li><span>ارسال رزومه به</span><a href={`mailto:${j.contact}`}>{j.contact}</a></li>}
+                </ul>
+
+                {j.applyNote && <p class="job-note">{j.applyNote}</p>}
+
+                {j.stack.length > 0 && (
+                  <div class="job-stack">
+                    {j.stack.map((s) => <span class="pill pill-violet">{s}</span>)}
+                  </div>
+                )}
+
+                <div class="job-cta">
+                  <a class="btn btn-ghost" href={`/jobs/${j.slug}`}>جزئیات (انگلیسی)</a>
+                  {j.applyUrl && (
+                    <a class="btn btn-ghost" href={j.applyUrl} target="_blank" rel="noopener nofollow">
+                      درخواست ↗
+                    </a>
+                  )}
+                  <a class="btn btn-ghost" href={j.url} target="_blank" rel="noopener nofollow">
+                    آگهی اصلی ↗
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      ))}
+
+      {closed.length > 0 && (
+        <>
+          <h2 class="cat closed-hd">آرشیو (پرشده یا بسته)</h2>
+          <div class="job-list">
+            {closed.map((j) => (
+              <article class="job closed" id={j.slug}>
+                <div class="job-hd">
+                  {j.logo
+                    ? <img class="job-logo" src={j.logo} alt={`لوگوی ${j.company}`} width="52" height="52" loading="lazy" />
+                    : <div class="job-logo ph" aria-hidden="true">{j.company.charAt(0)}</div>}
+                  <div class="job-id">
+                    <h3><a href={`/jobs/${j.slug}`}>{j.title}</a></h3>
+                    <p class="job-co">{j.company}</p>
+                  </div>
+                  <time class="job-date" datetime={j.posted}>{fmt(j.posted)}</time>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero {
+    padding: 3.4rem 0 2.8rem;
+    background:
+      radial-gradient(900px 480px at 22% -25%, rgba(74, 46, 160, .5) 0%, rgba(74, 46, 160, 0) 60%),
+      linear-gradient(-158deg, #211a3e 0%, #171233 60%, #0d0b1c 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .pg-hero h1 { margin: 1rem 0 0; }
+  .sub { font-size: 1.06rem; max-width: 62ch; margin-top: 1rem; }
+  .count { font-size: .92rem; color: var(--fg-dimmer); }
+  .count b { color: var(--gold); }
+
+  .tg {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    border: 1px solid var(--line-str); background: rgba(109, 75, 208, .12);
+    border-radius: 12px; padding: .9rem 1.2rem; margin-top: 1.4rem; max-width: 720px;
+  }
+  .tg p { margin: 0; font-size: .93rem; }
+
+  .jump { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem; }
+  .jump a {
+    font-size: .84rem; font-weight: 600; color: var(--fg-dim);
+    border: 1px solid var(--line); border-radius: 999px; padding: .35rem .9rem;
+    text-decoration: none;
+  }
+  .jump a:hover { color: var(--gold); border-color: var(--line-str); }
+  .jump span { color: var(--gold); }
+
+  .cat { margin: 2.6rem 0 1.2rem; font-size: 1.3rem; }
+  .closed-hd { color: var(--fg-dimmer); }
+  .job-list { display: flex; flex-direction: column; gap: 1.1rem; }
+  .job {
+    background: linear-gradient(-165deg, var(--panel), var(--ink-800));
+    border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.5rem;
+  }
+  .job.closed { opacity: .55; padding: 1rem 1.5rem; }
+  .job-hd { display: flex; align-items: center; gap: 1rem; }
+  .job-logo {
+    flex: none; width: 52px; height: 52px; border-radius: 12px;
+    object-fit: cover; border: 1px solid var(--line-str); background: var(--panel);
+  }
+  .job-logo.ph {
+    display: grid; place-items: center; font-weight: 800; font-size: 1.3rem;
+    color: #c9b6ff; background: rgba(109, 75, 208, .22);
+  }
+  .job-id { flex: 1; min-width: 0; }
+  .job-id h3 { margin: 0; font-size: 1.08rem; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+  .job-id h3 a { color: #fff; }
+  .job-co { margin: .15rem 0 0; font-size: .9rem; color: var(--gold); font-weight: 600; }
+  .job-date { font-size: .8rem; color: var(--fg-dimmer); white-space: nowrap; }
+  .tag.warn {
+    font-size: .7rem; font-weight: 700; padding: .18rem .55rem; border-radius: 999px;
+    background: rgba(242, 169, 201, .15); color: var(--pink); border: 1px solid rgba(242, 169, 201, .3);
+  }
+
+  .job-sum { margin: 1rem 0 .8rem; font-size: .95rem; }
+  .job-meta { list-style: none; padding: 0; margin: 0 0 .8rem; display: flex; flex-wrap: wrap; gap: 1.6rem; }
+  .job-meta li { font-size: .88rem; color: var(--fg-dim); display: flex; flex-direction: column; gap: .1rem; }
+  .job-meta span { font-size: .72rem; color: var(--fg-dimmer); }
+  .job-note { font-size: .86rem; color: var(--fg-dimmer); font-style: italic; margin: 0 0 .8rem; }
+  .job-stack { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: 1rem; }
+  .job-cta { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .job-cta .btn { padding: .5rem 1.05rem; font-size: .85rem; }
+  .empty { color: var(--fg-dimmer); }
+</style>
