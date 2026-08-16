@@ -13,10 +13,12 @@ const isActive = (href: string) => !href.includes('#') && path.startsWith(href.r
 
 // EN⇄FA switch targets the same page in the other language where a
 // translation exists; otherwise it falls back to that language's home.
-const TRANSLATED = ['/', '/curriculum', '/jobs', '/resume'];
+const TRANSLATED = ['/', '/curriculum', '/jobs', '/resume', '/blog'];
 const normalized = (path.replace(/^\/fa/, '').replace(/\/+$/, '') || '/');
-const base = '/' + (normalized.split('/')[1] ?? '');
-const hasTwin = TRANSLATED.includes(normalized) || (normalized.startsWith('/curriculum/') && normalized !== '/curriculum/');
+const hasTwin =
+  TRANSLATED.includes(normalized) ||
+  normalized.startsWith('/curriculum/') ||
+  normalized.startsWith('/blog/');
 const switchHref =
   lang === 'fa'
     ? (hasTwin ? normalized : '/')

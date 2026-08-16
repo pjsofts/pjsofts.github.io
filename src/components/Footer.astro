@@ -39,9 +39,9 @@ const year = new Date().getFullYear();
 
       <div>
         <h4>{fa ? 'نوشته‌ها' : 'Writing'}</h4>
-        <a href="/blog">{fa ? 'همهٔ مقاله‌ها (انگلیسی)' : 'All articles'}</a>
-        <a href="/blog/chat-completions-vs-responses-api">Completions vs Responses API</a>
-        <a href="/blog/designing-tools-for-ai-agents">{fa ? 'طراحی ابزار برای ایجنت‌ها' : 'Designing tools for agents'}</a>
+        <a href={fa ? '/fa/blog' : '/blog'}>{fa ? 'همهٔ مقاله‌ها' : 'All articles'}</a>
+        <a href={fa ? '/fa/blog/chat-completions-vs-responses-api' : '/blog/chat-completions-vs-responses-api'}>Completions vs Responses API</a>
+        <a href={fa ? '/fa/blog/designing-tools-for-ai-agents' : '/blog/designing-tools-for-ai-agents'}>{fa ? 'طراحی ابزار برای ایجنت‌ها' : 'Designing tools for agents'}</a>
         <a href="/rss.xml">{fa ? 'خوراک RSS' : 'RSS feed'}</a>
       </div>
 

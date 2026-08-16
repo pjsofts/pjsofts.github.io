@@ -19,4 +19,22 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+// Persian translations of blog posts. Same slug as the English original so
+// the EN/FA switcher can pair them; same schema.
+const blogFa = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog-fa' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    tags: z.array(z.string()).default([]),
+    readingTime: z.number().optional(),
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, blogFa };

@@ -31,11 +31,11 @@ export const NAV = [
   { label: 'Instructor', href: '/resume' },
 ] as const;
 
-/** Persian navigation for the /fa mirror. The blog stays English for now. */
+/** Persian navigation for the /fa mirror. */
 export const NAV_FA = [
   { label: 'دوره', href: '/fa/#course' },
   { label: 'سرفصل‌ها', href: '/fa/curriculum' },
-  { label: 'بلاگ', href: '/blog' },
+  { label: 'بلاگ', href: '/fa/blog' },
   { label: 'فرصت‌های شغلی', href: '/fa/jobs' },
   { label: 'مدرس', href: '/fa/resume' },
 ] as const;
