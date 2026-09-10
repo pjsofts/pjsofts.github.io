@@ -59,6 +59,160 @@ export interface Job {
 
 /** Sorted newest first by the page itself; order here is only for readability. */
 export const JOBS: Job[] = [
+  // ===== Batch added 2026-09-10 =====
+
+  // ---------- 2026-09-09 ----------
+  {
+    slug: 'snappfood-lead-and-backend',
+    title: 'Technical Team Lead & Back-End Engineer',
+    company: 'SnappFood',
+    category: 'Engineering',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-09-09',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7503374529642037248',
+    status: 'open',
+    summary:
+      'Two openings posted by the company itself — a technical team lead and a back-end engineer. The post is a culture note rather than a job description: it lists no requirements, stack, location or conditions, and sends candidates straight to a form per role.',
+    stack: [],
+    applyUrl: 'https://lnkd.in/d8BJp--u',
+    applyNote:
+      'Separate links per role — technical team lead above; back-end engineer at https://lnkd.in/evbFgAEy. Everything about the roles is behind those forms.',
+  },
+
+  // ---------- 2026-09-08 ----------
+  {
+    slug: 'restar-ai-engineer',
+    title: 'AI Engineer',
+    company: 'Restar',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Remote',
+    posted: '2026-09-08',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7503103732306382848',
+    status: 'open',
+    summary:
+      'An AI engineering role built on a back-end foundation: the post asks first for architecture, system design and database work, then for hands-on agentic development with retrieval and vector stores. Full-time and remote, Saturday to Thursday, 9:00 to 18:00.',
+    stack: [
+      'Back-end engineering fundamentals', 'Software architecture and system design',
+      'Database design', 'Clean Code and SOLID', 'Agentic AI development',
+      'RAG', 'Deep Agent', 'LangGraph', 'Vector databases',
+    ],
+    applyUrl: 'https://t.me/ahengine',
+    applyNote: 'Résumés go to the poster on Telegram — there is no email or form.',
+  },
+  {
+    slug: 'telegraphi-senior-ai-engineer',
+    title: 'Senior AI Engineer',
+    company: 'Telegraphi',
+    category: 'AI & Data',
+    location: 'Mashhad',
+    arrangement: 'On-site',
+    posted: '2026-09-08',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7503157680828506113',
+    status: 'open',
+    summary:
+      'Speech and language modelling rather than integration work: training and fine-tuning STT, TTS and LLM models, then optimising and quantising them for inference. The post is explicit that it wants architecture-level depth — reading papers, debugging performance — and not someone who runs pre-built models or wires up an API.',
+    stack: [
+      'At least 4 years in AI / ML', 'Transformer architectures', 'PyTorch',
+      'Training and fine-tuning STT, TTS and LLM models',
+      'Model optimisation and quantisation', 'Performance debugging',
+      'Reading research papers in English',
+    ],
+    applyNote:
+      'The post asks for a résumé plus samples of technical work, but publishes no address — apply through the poster on LinkedIn. A commenter asked whether the role could be remote; the post does not say.',
+  },
+
+  // ---------- 2026-09-06 ----------
+  {
+    slug: 'azki-ai-enablement-engineer',
+    title: 'AI Enablement Engineer',
+    company: 'Azki',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Not specified',
+    posted: '2026-09-06',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7502238165013897216',
+    status: 'open',
+    summary:
+      'A role about getting LLMs, retrieval and agents into the company\'s own engineering practice. The post is short and pointed — it wants an engineer who builds things with AI rather than one who chats with it — and keeps the requirements behind the application link.',
+    stack: [
+      'Software engineering background', 'LLMs', 'RAG', 'AI agents', 'AI tooling',
+    ],
+    applyUrl: 'https://lnkd.in/eXN55UPK',
+    applyNote: 'The post is a call for candidates and referrals; the full description is behind the link.',
+  },
+  {
+    slug: 'linkup-senior-genai',
+    title: 'Senior Generative AI Engineer',
+    company: 'Linkup',
+    category: 'AI & Data',
+    location: 'Relocation required — Armenia, Azerbaijan or similar',
+    arrangement: 'On-site after relocation',
+    posted: '2026-09-06',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7502292977709637632',
+    status: 'open',
+    summary:
+      'Building real products on LLMs, retrieval and agents, at a stated $1,500–$2,200 a month. Interviews are held online from Iran, but the role itself requires relocating: the post names Armenia, Azerbaijan or comparable countries.',
+    stack: [
+      'Python', 'LLMs, RAG and agents in production', 'Transformer-based models',
+      'Prompt engineering', 'Embeddings and vector databases', 'Semantic search',
+      'AI agents and assistants', 'API integration',
+      'Fine-tuning, LoRA, PEFT (preferred)', 'LangChain, LlamaIndex (preferred)',
+      'MLOps (preferred)', 'Multimodal AI, OCR, computer vision (preferred)',
+      'Real-time systems (preferred)', 'Model monitoring (preferred)',
+      'Llama / Mistral / Qwen infrastructure (preferred)',
+    ],
+    applyUrl: 'https://lnkd.in/eQEpvU-t',
+    applyNote:
+      'Relocation is mandatory for the contract, and the post says employment runs through a contractor intermediary rather than direct hire. Read those terms before applying.',
+  },
+
+  // ---------- 2026-09-05 ----------
+  {
+    slug: 'tunoo-senior-agentic-dev',
+    title: 'Senior AI Agentic Developer',
+    company: 'Tunoo',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Remote',
+    posted: '2026-09-05',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7502021400476639232',
+    status: 'open',
+    summary:
+      'Agentic systems on a Python and FastAPI microservice stack — tool calling, multi-agent workflows and retrieval over a vector store. The post asks specifically for hands-on experience building agentic AI and LLM architectures, not adjacent ML work. Full-time and remote.',
+    stack: [
+      'Python', 'FastAPI', 'REST APIs', 'LangChain', 'LangGraph', 'RAG',
+      'Milvus and other vector databases', 'SQL and NoSQL', 'MCP',
+      'Microservice architecture', 'LLM and AI agent development',
+      'Tool calling and multi-agent workflows',
+    ],
+    applyNote: 'Résumés go by direct message to the poster on LinkedIn.',
+  },
+
+  // ---------- 2026-08-29 ----------
+  {
+    slug: 'datin-senior-llm-agentic',
+    title: 'Senior LLM & Agentic AI Engineer',
+    company: 'Datin (AI solutions unit)',
+    category: 'AI & Data',
+    location: 'Not specified',
+    arrangement: 'Remote',
+    posted: '2026-08-29',
+    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7499332489534992384',
+    status: 'open',
+    summary:
+      'Turning LLM work into a product instead of a demo: agent architecture, context management, retrieval, evaluation, and the trade-offs between quality, cost, latency and scalability. The post says plainly that connecting an LLM API is not the job. Fully remote.',
+    stack: [
+      'Python', 'System architecture', 'RAG', 'Agent architecture',
+      'Context management', 'Vector databases', 'Deploying AI systems',
+      'Model evaluation', 'Quality, cost, latency and scalability trade-offs',
+      'Fine-tuning (bonus)', 'Hugging Face (bonus)', 'vLLM (bonus)', 'MCP (bonus)',
+      'Multi-agent systems (bonus)', 'GPU optimisation (bonus)', 'LLM security (bonus)',
+    ],
+    applyUrl: 'https://lnkd.in/dma4wY3m',
+  },
+
   // ===== Batch added 2026-07-26 =====
 
   // ---------- 2026-07-26 ----------
