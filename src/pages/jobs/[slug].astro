@@ -38,6 +38,7 @@ const related = JOBS.filter(
 ---
 
 <BaseLayout
+  theme="paper"
   title={`${job.title} — ${job.company}`}
   description={clip(job.summary)}
   canonical={`/jobs/${job.slug}`}
@@ -210,7 +211,7 @@ const related = JOBS.filter(
     color: var(--violet-lt); background: rgba(109, 75, 208, .12);
     border: 1px solid var(--line-str); border-radius: 12px; max-width: 68ch;
   }
-  .note b { color: #fff; }
+  .note b { color: var(--fg); }
 
   h2 { font-size: 1.15rem; margin: 2.8rem 0 .4rem; }
   .stack-note { margin: 0 0 1rem; font-size: .84rem; color: var(--fg-dimmer); }
@@ -232,7 +233,7 @@ const related = JOBS.filter(
     transition: border-color .16s ease;
   }
   .more a:hover { border-color: var(--gold); }
-  .more b { display: block; color: #fff; font-size: .95rem; font-weight: 600; }
+  .more b { display: block; color: var(--fg); font-size: .95rem; font-weight: 600; }
   .more span { font-size: .85rem; color: var(--gold); }
 
   .tg {

@@ -73,8 +73,8 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
      On the landing page the header is stationery, not chrome: paper, a hard
      ink rule under it, and the CTA as a gold pill you could print. */
   :global(html[data-theme='paper']) .site-header {
-    background: rgba(247, 243, 234, 0.88);
-    border-bottom: 2px solid var(--ink);
+    background: rgba(247, 243, 234, 0.9);
+    border-bottom: 1px solid var(--rule);
   }
   :global(html[data-theme='paper']) .brand-txt {
     color: var(--ink);
@@ -92,14 +92,14 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
   :global(html[data-theme='paper']) .nav a.on { color: var(--violet-deep); }
   :global(html[data-theme='paper']) .nav-cta {
     background: var(--gold) !important;
-    border: 2px solid var(--ink) !important;
-    box-shadow: 0 2px 0 var(--ink);
+    border: 1px solid var(--gold-deep) !important;
+    box-shadow: var(--lift);
     color: var(--ink) !important;
-    border-radius: 999px;
+    border-radius: 8px;
   }
   :global(html[data-theme='paper']) .burger span { background: var(--ink); }
   :global(html[data-theme='paper']) .nav {
     background: var(--paper);
-    border-bottom: 2px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
   }
 </style>

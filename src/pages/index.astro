@@ -123,7 +123,7 @@ const marquee = [
 
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <span class="tag tag-gold">12-week mentorship · Python / TypeScript</span>
+        <span class="lbl lbl-gold">12-week mentorship · Python / TypeScript</span>
 
         <h1 class="display-1">
           Build the AI coding agent<br />
@@ -190,7 +190,7 @@ const marquee = [
   <section id="course">
     <div class="wrap two-col">
       <div class="col-head">
-        <span class="tag">Why this exists</span>
+        <span class="lbl">Why this exists</span>
         <h2 class="display-2">Most engineers use AI&nbsp;tools.<br />Very few can build one.</h2>
       </div>
       <div class="col-body">
@@ -221,7 +221,7 @@ const marquee = [
   <section id="outcomes" class="s-paper2">
     <div class="wrap">
       <div class="sec-head">
-        <span class="tag tag-violet">The capstone</span>
+        <span class="lbl lbl-violet">The capstone</span>
         <h2 class="display-2">What you have by Week&nbsp;12</h2>
         <p class="lede">Not notes. A tool — built one subsystem per week.</p>
       </div>
@@ -247,7 +247,7 @@ const marquee = [
   <section id="curriculum">
     <div class="wrap">
       <div class="sec-head">
-        <span class="tag">The roadmap</span>
+        <span class="lbl">The roadmap</span>
         <h2 class="display-2">Twelve weeks, one real product</h2>
         <p class="lede">
           Three weeks of fundamentals most courses never reach, then nine that assemble
@@ -256,7 +256,7 @@ const marquee = [
       </div>
 
       <div class="part-hd">
-        <span class="tag tag-ink">Part I</span>
+        <span class="lbl lbl-ink">Part I</span>
         <h3 class="display-3">Foundations</h3>
       </div>
       <div class="weeks">
@@ -274,7 +274,7 @@ const marquee = [
       </div>
 
       <div class="part-hd">
-        <span class="tag tag-ink">Part II</span>
+        <span class="lbl lbl-ink">Part II</span>
         <h3 class="display-3">Build the clone</h3>
       </div>
       <div class="weeks">
@@ -301,7 +301,7 @@ const marquee = [
   <section class="s-ink rhythm">
     <div class="wrap">
       <div class="sec-head">
-        <span class="tag">How a week goes</span>
+        <span class="lbl">How a week goes</span>
         <h2 class="display-2">Read it, build it, then read the real thing</h2>
       </div>
 
@@ -321,7 +321,7 @@ const marquee = [
       </ol>
 
       <aside class="inside">
-        <span class="tag tag-gold">Inside Claude Code</span>
+        <span class="lbl lbl-gold">Inside Claude Code</span>
         <p>
           A recurring feature of the handouts. After you build a subsystem we open the real
           implementation and study the decisions a production team made — the constants they
@@ -336,7 +336,7 @@ const marquee = [
   <section>
     <div class="wrap">
       <div class="sec-head">
-        <span class="tag">Fit</span>
+        <span class="lbl">Fit</span>
         <h2 class="display-2">Who this is for</h2>
       </div>
       <div class="fit">
@@ -377,7 +377,7 @@ const marquee = [
         <span class="inst-badge"><Mark size={22} variant="bare" /> instructor</span>
       </div>
       <div class="inst-copy">
-        <span class="tag">Who teaches it</span>
+        <span class="lbl">Who teaches it</span>
         <h2 class="display-2">Pouria Jahandideh</h2>
         <p class="inst-role">AI Engineer · Engineering Team Lead · 10 years in production</p>
         <p>
@@ -404,7 +404,7 @@ const marquee = [
     <section id="jobs">
       <div class="wrap">
         <div class="sec-head">
-          <span class="tag">Hiring</span>
+          <span class="lbl">Hiring</span>
           <h2 class="display-2">Roles worth a look</h2>
           <p class="lede">
             AI, ML and data positions I come across and think are worth sharing — written out
@@ -438,7 +438,7 @@ const marquee = [
   <section id="faq">
     <div class="wrap two-col">
       <div class="col-head">
-        <span class="tag">Questions</span>
+        <span class="lbl">Questions</span>
         <h2 class="display-2">Frequently asked</h2>
       </div>
       <div class="col-body faqs">
@@ -526,7 +526,7 @@ const marquee = [
     gap: 2.2rem;
     margin: 2.8rem 0 0;
     padding-top: 1.6rem;
-    border-top: 2px solid rgba(23, 19, 46, 0.14);
+    border-top: 1px solid var(--rule);
   }
   .stats dt {
     font-family: var(--display);
@@ -559,8 +559,8 @@ const marquee = [
   }
 
   /* ---------------- marquee ---------------- */
-  .band-track b { font-weight: 700; }
-  .band-track i { font-style: normal; color: var(--violet-deep); }
+  .band-track b { font-weight: 500; color: #e9e4ff; }
+  .band-track i { font-style: normal; color: var(--gold); }
 
   /* ---------------- section furniture ---------------- */
   .sec-head { max-width: 60ch; margin-bottom: 2.8rem; }
@@ -581,9 +581,9 @@ const marquee = [
     margin: 2rem 0 0;
     padding: 1.3rem 1.5rem;
     background: var(--violet-wash);
-    border: 2px solid var(--ink);
-    border-radius: 16px;
-    box-shadow: var(--lift-2);
+    border: 1px solid rgba(109, 75, 208, 0.28);
+    border-left: 3px solid var(--violet);
+    border-radius: var(--r);
     color: var(--ink);
     font-style: normal;
   }
@@ -633,27 +633,27 @@ const marquee = [
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.1rem;
-    border: 2px solid var(--ink);
-    border-radius: 14px;
-    background: var(--paper);
+    gap: 1.1rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--violet);
+    border-radius: var(--r);
+    background: #fdfbf6;
     text-decoration: none;
-    transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+    transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
   }
   .wk:hover {
-    background: #fff;
-    transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 var(--ink);
+    transform: translateY(-2px);
+    box-shadow: var(--lift-hover);
+    border-left-color: var(--gold-deep);
     text-decoration: none;
   }
   .wk-n {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 1.6rem;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 1.15rem;
     line-height: 1;
-    color: var(--paper-3);
-    -webkit-text-stroke: 1.5px var(--ink);
+    color: var(--violet-deep);
   }
   .wk-main { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
   .wk-t { font-weight: 600; color: var(--ink); }
@@ -690,8 +690,9 @@ const marquee = [
   .inside {
     margin-top: 3rem;
     padding: 1.6rem 1.8rem;
-    border: 2px solid var(--gold);
-    border-radius: 18px;
+    border: 1px solid rgba(232, 198, 90, 0.45);
+    border-left: 3px solid var(--gold);
+    border-radius: var(--r);
     background: rgba(232, 198, 90, 0.07);
   }
   .inside p { margin: 0.9rem 0 0; color: #c3bce8; max-width: 76ch; }
@@ -722,28 +723,28 @@ const marquee = [
   .inst-photo img {
     display: block;
     width: 100%;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
     box-shadow: var(--lift-2);
     object-fit: cover;
     aspect-ratio: 1;
   }
   .inst-badge {
     position: absolute;
-    left: -14px;
-    bottom: -16px;
+    left: -12px;
+    bottom: -14px;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     background: var(--gold);
-    border: 2px solid var(--ink);
+    border: 1px solid var(--gold-deep);
     border-radius: 999px;
     padding: 0.4rem 0.95rem;
     font-family: var(--mono);
     font-size: 0.72rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    box-shadow: var(--lift);
+    box-shadow: var(--lift-2);
   }
   .inst-copy h2 { margin: 0.9rem 0 0.4rem; }
   .inst-role {
@@ -763,8 +764,8 @@ const marquee = [
     display: grid; place-items: center;
     background: var(--violet);
     color: #fff;
-    border: 2px solid var(--ink);
-    border-radius: 10px;
+    border: 0;
+    border-radius: 8px;
     font-family: var(--display);
     font-weight: 700;
   }
@@ -775,7 +776,7 @@ const marquee = [
 
   /* ---------------- faq ---------------- */
   .faqs { display: grid; }
-  .faq { border-bottom: 2px solid rgba(23, 19, 46, 0.12); }
+  .faq { border-bottom: 1px solid var(--rule); }
   .faq summary {
     display: flex;
     align-items: center;
@@ -792,7 +793,7 @@ const marquee = [
   .faq summary i {
     flex: none;
     width: 22px; height: 22px;
-    border: 2px solid var(--ink);
+    border: 1.5px solid var(--rule-strong);
     border-radius: 50%;
     position: relative;
   }

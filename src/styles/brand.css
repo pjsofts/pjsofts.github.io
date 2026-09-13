@@ -39,10 +39,20 @@
   --sans: "Inter", ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* The shadow that makes a card an object rather than a rectangle. */
-  --lift: 0 2px 0 var(--ink);
-  --lift-2: 6px 6px 0 var(--ink);
-  --lift-soft: 0 18px 40px -24px rgba(23, 19, 46, 0.45);
+  /* Rules and elevation.
+   *
+   * The first pass at this page used chunky borders and hard offset shadows —
+   * the sticker look. That belongs to somebody else's brand. This one is the
+   * handout: thin ink rules, small radii, and elevation you can feel rather
+   * than see. The colour does the talking; the geometry stays quiet.
+   */
+  --rule: rgba(23, 19, 46, 0.14);
+  --rule-strong: rgba(23, 19, 46, 0.28);
+  --r: 10px;            /* the one corner radius */
+  --r-lg: 14px;
+  --lift: 0 1px 2px rgba(23, 19, 46, 0.06);
+  --lift-2: 0 2px 4px rgba(23, 19, 46, 0.05), 0 14px 28px -20px rgba(23, 19, 46, 0.5);
+  --lift-hover: 0 3px 6px rgba(23, 19, 46, 0.07), 0 22px 40px -24px rgba(23, 19, 46, 0.55);
 }
 
 /* ---------- the paper theme ------------------------------- */
@@ -79,25 +89,38 @@ html[data-theme="paper"] ::selection { background: var(--gold); color: var(--ink
 .display-2 { font-size: clamp(2.1rem, 4.4vw, 3.3rem); }
 .display-3 { font-size: clamp(1.35rem, 2.2vw, 1.75rem); }
 
-/* A label that reads as printed stationery rather than a UI chip. */
-.tag {
+/* A label that reads as printed stationery rather than a UI chip.
+   Named .lbl, not .tag: the blog post page already has a .tag for its topic
+   pills, and a primitive that quietly restyles someone else's component is a
+   bug waiting for a screenshot to reveal it. */
+.lbl {
   display: inline-flex;
   align-items: center;
-  gap: 0.5ch;
+  gap: 0.6ch;
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.71rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 0.42rem 0.85rem;
-  border-radius: 999px;
-  border: 1.5px solid var(--ink);
-  background: var(--paper);
-  color: var(--ink);
+  color: var(--violet-deep);
+  padding: 0;
+  border: 0;
+  background: none;
 }
-.tag-gold { background: var(--gold); }
-.tag-violet { background: var(--violet); border-color: var(--violet-deep); color: #fff; }
-.tag-ink { background: var(--ink); color: var(--paper); }
+/* The rule before the label is the whole device: it reads as a section mark in
+   a technical document rather than a UI badge. */
+.lbl::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--violet);
+  flex: none;
+}
+.lbl-gold { color: var(--gold-deep); }
+.lbl-gold::before { background: var(--gold-deep); }
+.lbl-violet { color: var(--violet-deep); }
+.lbl-ink { color: var(--ink); }
+.lbl-ink::before { background: var(--ink); }
 
 /* ---------- buttons: physical objects --------------------- */
 .b {
@@ -106,38 +129,50 @@ html[data-theme="paper"] ::selection { background: var(--gold); color: var(--ink
   gap: 0.6rem;
   font-family: var(--sans);
   font-weight: 600;
-  font-size: 0.98rem;
-  padding: 0.92rem 1.6rem;
-  border-radius: 999px;
-  border: 2px solid var(--ink);
+  font-size: 0.96rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
   text-decoration: none !important;
   cursor: pointer;
-  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease, border-color 0.14s ease;
   box-shadow: var(--lift);
 }
-.b:hover { transform: translateY(-2px); box-shadow: 0 4px 0 var(--ink); }
-.b:active { transform: translateY(0); box-shadow: 0 1px 0 var(--ink); }
+.b:hover { transform: translateY(-1px); box-shadow: var(--lift-2); }
+.b:active { transform: translateY(0); box-shadow: var(--lift); }
 /* `a` is coloured by the theme block, so every button colour needs the same
    weight or the link colour wins and you get violet text on an ink pill. */
 html[data-theme="paper"] .b-primary { background: var(--gold); color: var(--ink); }
 html[data-theme="paper"] .b-primary:hover { background: #f0d270; color: var(--ink); }
 html[data-theme="paper"] .b-ink { background: var(--ink); color: var(--paper); }
 html[data-theme="paper"] .b-ink:hover { background: var(--ink-2); color: #fff; }
-html[data-theme="paper"] .b-plain { background: var(--paper); color: var(--ink); }
-html[data-theme="paper"] .b-plain:hover { background: #fff; color: var(--ink); }
+html[data-theme="paper"] .b-plain {
+  background: transparent;
+  border-color: var(--rule-strong);
+  color: var(--ink);
+}
+html[data-theme="paper"] .b-plain:hover {
+  background: #fff;
+  border-color: var(--violet);
+  color: var(--violet-deep);
+}
 
 /* ---------- cards ----------------------------------------- */
 .k {
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 18px;
+  background: #fdfbf6;
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
   padding: 1.5rem;
-  box-shadow: var(--lift-2);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  box-shadow: var(--lift);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
 }
-.k:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
-.k-gold { background: var(--gold-wash); }
-.k-violet { background: var(--violet-wash); }
+.k:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--lift-hover);
+  border-color: var(--violet);
+}
+.k-gold { background: var(--gold-wash); border-color: rgba(201, 163, 56, 0.32); }
+.k-violet { background: var(--violet-wash); border-color: rgba(109, 75, 208, 0.28); }
 .k-flat { box-shadow: none; }
 .k-flat:hover { transform: none; box-shadow: none; }
 
@@ -146,8 +181,8 @@ html[data-theme="paper"] .b-plain:hover { background: #fff; color: var(--ink); }
    the one object that says "this course is about the thing under the UI". */
 .term {
   background: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 16px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-lg);
   overflow: hidden;
   box-shadow: var(--lift-2);
   font-family: var(--mono);
@@ -183,27 +218,29 @@ html[data-theme="paper"] .b-plain:hover { background: #fff; color: var(--ink); }
 .term .d { color: #6f68a3; }
 
 /* ---------- the gold band --------------------------------- */
+/* A keyword rail, set like a spec sheet: mono, small, on the ink ground the
+   terminals use. The gold shouting band was borrowed; this is the handout. */
 .band {
-  background: var(--gold);
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+  background: var(--ink);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
   overflow: hidden;
-  padding: 0.85rem 0;
+  padding: 0.75rem 0;
 }
 .band-track {
   display: flex;
-  gap: 2.5rem;
+  gap: 2.2rem;
   width: max-content;
-  animation: band 38s linear infinite;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  color: var(--ink);
+  animation: band 44s linear infinite;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: #c3bce8;
   text-transform: uppercase;
   white-space: nowrap;
 }
-.band-track span { display: inline-flex; align-items: center; gap: 2.5rem; }
+.band-track span { display: inline-flex; align-items: center; gap: 2.2rem; }
 @keyframes band { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .band-track { animation: none; }
@@ -225,16 +262,269 @@ html[data-theme="paper"] .s-ink h3,
 html[data-theme="paper"] .s-ink h4 { color: #fff; }
 html[data-theme="paper"] .s-ink p { color: #a49dd0; }
 html[data-theme="paper"] .s-ink strong { color: #fff; }
-html[data-theme="paper"] .s-ink .tag {
+html[data-theme="paper"] .s-ink .lbl {
   border-color: var(--gold);
   background: transparent;
   color: var(--gold);
 }
-html[data-theme="paper"] .s-ink .tag-gold { background: var(--gold); color: var(--ink); }
+html[data-theme="paper"] .s-ink .lbl-gold { background: var(--gold); color: var(--ink); }
 
 .rule { border: 0; border-top: 2px solid var(--ink); opacity: 0.12; margin: 0; }
 
 @media (max-width: 640px) {
   html[data-theme="paper"] section { padding: 3.6rem 0; }
   .k { padding: 1.2rem; }
+}
+
+/* ============================================================
+   The rest of the site on paper
+   ============================================================
+   The blog, curriculum, jobs and résumé pages are built from the primitives in
+   global.css — .btn, .card, .pill, .callout, .eyebrow, .prose. Rather than
+   rewrite eight pages, retheme those primitives here for the paper ground. The
+   markup does not change; only the surface does.
+   ============================================================ */
+
+/* ---------- the token remap ------------------------------- */
+/*
+ * The interior pages were written against the dark theme's tokens: --fg,
+ * --fg-dim, --panel, --ink-800, --line. There are about eighty such
+ * declarations across eight pages, and patching them one at a time would be
+ * eighty chances to miss one.
+ *
+ * So instead of rewriting the pages, we redefine what those tokens MEAN on
+ * paper. Every card, hero, border and dimmed caption follows automatically,
+ * and a page written next month against the same tokens will too.
+ */
+html[data-theme="paper"] {
+  --fg: var(--ink);
+  --fg-dim: var(--ink-soft);
+  --fg-dimmer: #78729a;
+
+  --panel: #fdfbf6;
+  --panel-2: var(--paper-2);
+
+  --ink-900: var(--paper);
+  --ink-800: var(--paper-2);
+  --ink-700: var(--paper-2);
+  --ink-600: var(--paper-3);
+  --ink-500: var(--paper-3);
+
+  --line: var(--rule);
+  --line-str: var(--rule-strong);
+
+  /* On dark these were the light accents; on paper they have to darken or the
+     text they colour disappears into the page. */
+  --violet-lt: var(--violet-deep);
+  --gold-dk: var(--gold-deep);
+  --green: #2f8f5b;
+  --pink: #b4407a;
+
+  /* Code stays ink: a code block is a terminal, on every ground. */
+  --code-bg: var(--ink);
+}
+
+/* ---------- section grounds ------------------------------- */
+html[data-theme="paper"] .alt { background: var(--paper-2); }
+
+/* Page heroes: the interior equivalent of the landing hero. A sand band with
+   a hairline, not a violet glow on near-black. */
+html[data-theme="paper"] .pg-hero {
+  background: var(--paper-2) !important;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Anything still asking for white text is asking on a dark ground that no
+   longer exists. Card and hero headings follow the page. */
+html[data-theme="paper"] .card h3,
+html[data-theme="paper"] .card h4,
+html[data-theme="paper"] .pg-hero h1,
+html[data-theme="paper"] .pg-hero h2 { color: var(--ink); }
+
+/* ---------- labels ---------------------------------------- */
+html[data-theme="paper"] .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6ch;
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.16em;
+  color: var(--violet-deep);
+}
+html[data-theme="paper"] .eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--violet);
+  flex: none;
+}
+
+/* ---------- buttons --------------------------------------- */
+html[data-theme="paper"] .btn {
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  font-weight: 600;
+  box-shadow: var(--lift);
+}
+html[data-theme="paper"] .btn-primary {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: var(--lift);
+}
+html[data-theme="paper"] .btn-primary:hover {
+  background: #f0d270;
+  color: var(--ink);
+  box-shadow: var(--lift-2);
+  transform: translateY(-1px);
+}
+html[data-theme="paper"] .btn-ghost {
+  background: transparent;
+  border-color: var(--rule-strong);
+  color: var(--ink);
+}
+html[data-theme="paper"] .btn-ghost:hover {
+  background: #fff;
+  border-color: var(--violet);
+  color: var(--violet-deep);
+  transform: translateY(-1px);
+}
+
+/* ---------- cards ----------------------------------------- */
+html[data-theme="paper"] .card {
+  background: #fdfbf6;
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  box-shadow: var(--lift);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+html[data-theme="paper"] .card:hover {
+  transform: translateY(-2px);
+  border-color: var(--violet);
+  box-shadow: var(--lift-hover);
+}
+
+/* ---------- pills ----------------------------------------- */
+html[data-theme="paper"] .pill {
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  border-radius: 6px;
+}
+html[data-theme="paper"] .pill-gold { background: var(--gold); color: var(--ink); }
+html[data-theme="paper"] .pill-violet {
+  background: var(--violet-wash);
+  color: var(--violet-deep);
+  border: 1px solid rgba(109, 75, 208, 0.28);
+}
+html[data-theme="paper"] .pill-plain {
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  color: var(--ink-soft);
+}
+
+/* ---------- callouts -------------------------------------- */
+html[data-theme="paper"] .callout {
+  background: var(--violet-wash);
+  border: 1px solid rgba(109, 75, 208, 0.28);
+  border-left: 3px solid var(--violet);
+  border-radius: var(--r);
+}
+html[data-theme="paper"] .callout .ct { color: var(--violet-deep); font-family: var(--display); }
+
+/* ---------- prose ----------------------------------------- */
+html[data-theme="paper"] .prose { color: var(--ink-soft); }
+html[data-theme="paper"] .prose h2 { margin-top: 2.8rem; }
+html[data-theme="paper"] .prose h3 { color: var(--ink); margin-top: 2rem; }
+html[data-theme="paper"] .prose ul,
+html[data-theme="paper"] .prose ol { color: var(--ink-soft); }
+html[data-theme="paper"] .prose li::marker { color: var(--violet); }
+html[data-theme="paper"] .prose img { border: 1px solid var(--rule); border-radius: var(--r); }
+html[data-theme="paper"] .prose strong { color: var(--ink); }
+
+/* Inline code: a tinted chip, not a dark box. */
+html[data-theme="paper"] code {
+  background: var(--violet-wash);
+  border: 1px solid rgba(109, 75, 208, 0.2);
+  color: var(--violet-deep);
+  border-radius: 5px;
+}
+
+/* Block code IS the terminal. Same object as the hero panel, so a code sample
+   and a session transcript read as the same thing — which, in this course,
+   they are. global.css sets the background with !important, so this must too. */
+html[data-theme="paper"] pre {
+  background: var(--ink) !important;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--lift-2);
+  color: #d9d3f5;
+}
+html[data-theme="paper"] pre code { color: inherit; background: none; border: 0; }
+
+html[data-theme="paper"] blockquote {
+  border-left: 3px solid var(--gold);
+  color: var(--ink-soft);
+  font-style: normal;
+}
+
+html[data-theme="paper"] table { font-size: 0.92rem; }
+html[data-theme="paper"] th {
+  background: var(--paper-2);
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule-strong);
+  font-family: var(--mono);
+  font-weight: 600;
+}
+html[data-theme="paper"] td { border-bottom: 1px solid var(--rule); color: var(--ink-soft); }
+
+html[data-theme="paper"] hr { border-top: 1px solid var(--rule); opacity: 1; }
+
+/* ---------- misc ------------------------------------------ */
+html[data-theme="paper"] details { border-color: var(--rule); }
+html[data-theme="paper"] .skip { background: var(--gold); color: var(--ink); }
+html[data-theme="paper"] :focus-visible { outline-color: var(--violet); }
+
+/* ---------- gold as text ---------------------------------- */
+/*
+ * Gold is a fill colour. As TEXT on a sand ground it is barely there — the
+ * pages were written for gold-on-near-black, where it glows. Anything that
+ * colours type gold gets the deeper tone on paper; the flat gold fills (pills,
+ * buttons, the badge) keep the bright one.
+ */
+html[data-theme="paper"] .role,
+html[data-theme="paper"] .jco,
+html[data-theme="paper"] .job-co,
+html[data-theme="paper"] .company,
+html[data-theme="paper"] .kicker,
+html[data-theme="paper"] .wk-s,
+html[data-theme="paper"] .ft-role,
+html[data-theme="paper"] .count b,
+html[data-theme="paper"] .tg a:not(.btn) { color: var(--gold-deep); }
+
+/* Panels built from translucent violet read as mauve sludge on sand. */
+html[data-theme="paper"] .tg {
+  background: var(--violet-wash);
+  border: 1px solid rgba(109, 75, 208, 0.28);
+  border-radius: var(--r);
+}
+
+/* A placeholder company mark should read as a mark, not a ghost. */
+html[data-theme="paper"] .logo.ph,
+html[data-theme="paper"] .jlogo.ph,
+html[data-theme="paper"] .job-logo.ph {
+  background: var(--violet);
+  color: #fff;
+  border: 0;
+  font-family: var(--display);
+  font-weight: 700;
+}
+
+/* Notes and asides inherit the violet wash rather than a muddy translucent
+   violet meant for a dark ground. */
+html[data-theme="paper"] .note {
+  background: var(--violet-wash);
+  border: 1px solid rgba(109, 75, 208, 0.28);
+  border-left: 3px solid var(--violet);
+  border-radius: var(--r);
+  color: var(--ink-soft);
 }

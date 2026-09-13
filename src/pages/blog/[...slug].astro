@@ -45,6 +45,7 @@ const breadcrumb = {
 ---
 
 <BaseLayout
+  theme="paper"
   title={post.data.title}
   description={post.data.description}
   canonical={`/blog/${post.id}`}
@@ -185,13 +186,54 @@ const breadcrumb = {
     background: linear-gradient(150deg, rgba(109, 75, 208, .22), rgba(109, 75, 208, .06));
     border: 1px solid var(--line-str); border-radius: var(--radius);
   }
-  .post-cta h3 { color: #fff; margin-bottom: .4rem; }
+  .post-cta h3 { color: var(--fg); margin-bottom: .4rem; }
   .post-cta p { font-size: .95rem; margin-bottom: 1.2rem; }
   .pc-btns { display: flex; gap: .7rem; flex-wrap: wrap; }
 
   .rel { background: var(--ink-800); border-top: 1px solid var(--line); }
   .rcard { text-decoration: none; }
   .rcard:hover { text-decoration: none; }
-  .rcard h3 { font-size: 1.02rem; color: #fff; margin-bottom: .4rem; }
+  .rcard h3 { font-size: 1.02rem; color: var(--fg); margin-bottom: .4rem; }
   .rcard p { font-size: .88rem; margin: 0; }
+
+  /* ---- paper ground ----
+     The hero band, the table of contents and the related strip each carry their
+     own dark surface from the ink theme. On paper they have to be restated, or
+     you get ink headings on an ink gradient. */
+  :global(html[data-theme='paper']) .pg-hero {
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--rule);
+  }
+  :global(html[data-theme='paper']) .pg-hero .lede { color: var(--ink-soft); }
+  :global(html[data-theme='paper']) .pg-hero .pmeta,
+  :global(html[data-theme='paper']) .pg-hero .crumbs,
+  :global(html[data-theme='paper']) .pg-hero .crumbs span { color: var(--ink-soft); }
+  :global(html[data-theme='paper']) .pg-hero .crumbs a { color: var(--violet-deep); }
+  :global(html[data-theme='paper']) .ptags .tag {
+    background: transparent;
+    border: 1px solid rgba(109, 75, 208, 0.3);
+    color: var(--violet-deep);
+    font-family: var(--mono);
+    border-radius: 6px;
+  }
+  :global(html[data-theme='paper']) .hero-img {
+    background: #fdfbf6;
+    border: 1px solid var(--rule);
+    border-radius: var(--r);
+  }
+  /* The table of contents stays ink: it is a panel, like a terminal, and the
+     contrast marks it as apparatus rather than prose. */
+  :global(html[data-theme='paper']) .toc {
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: var(--r-lg);
+    box-shadow: var(--lift-2);
+  }
+  :global(html[data-theme='paper']) .toc-h { color: var(--gold); font-family: var(--mono); }
+  :global(html[data-theme='paper']) .toc a { color: #c3bce8; }
+  :global(html[data-theme='paper']) .toc a:hover { color: var(--gold); }
+  :global(html[data-theme='paper']) .rel {
+    background: var(--paper-2);
+    border-top: 1px solid var(--rule);
+  }
 </style>

@@ -35,6 +35,7 @@ const breadcrumb = {
 ---
 
 <BaseLayout
+  theme="paper"
   title={`Week ${week.n}: ${week.title} — ${week.subtitle} | AI Engineering Course`}
   description={week.summary}
   canonical={`/curriculum/${week.slug}`}
@@ -151,7 +152,7 @@ const breadcrumb = {
     color: var(--gold); padding-top: .18rem; width: 26px;
   }
   .pbody { display: flex; flex-direction: column; gap: .2rem; }
-  .pbody b { color: #fff; font-size: 1rem; }
+  .pbody b { color: var(--fg); font-size: 1rem; }
   .pbody span { color: var(--fg-dim); font-size: .93rem; }
 
   ul.tick { list-style: none; padding: 0; margin: 1rem 0 0; }

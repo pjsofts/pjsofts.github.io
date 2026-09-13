@@ -30,6 +30,7 @@ const schema = {
 ---
 
 <BaseLayout
+  theme="paper"
   title="AI Engineering Blog — Agents, Evals, Tool Design & LLM Architecture"
   description="In-depth articles on building AI agents: agent loops, tool design, evals, context engineering, RAG, and how production coding agents like Claude Code and the Grok CLI are actually built."
   canonical="/blog"
@@ -136,7 +137,7 @@ const schema = {
   .feat-grid { margin-bottom: 3.4rem; }
   .post { text-decoration: none; display: flex; flex-direction: column; }
   .post:hover { text-decoration: none; }
-  .post h2 { font-size: 1.35rem; color: #fff; margin: .6rem 0 .5rem; line-height: 1.25; }
+  .post h2 { font-size: 1.35rem; color: var(--fg); margin: .6rem 0 .5rem; line-height: 1.25; }
   .thumb {
     margin: -.35rem 0 1rem;
     border: 1px solid var(--line);
@@ -163,7 +164,7 @@ const schema = {
   }
   .row:hover { text-decoration: none; }
   .row:hover h3 { color: var(--gold); }
-  .row h3 { color: #fff; margin: 0 0 .35rem; font-size: 1.12rem; }
+  .row h3 { color: var(--fg); margin: 0 0 .35rem; font-size: 1.12rem; }
   .row p { font-size: .92rem; margin: 0 0 .7rem; }
   .row-meta {
     flex: none; text-align: right; font-size: .8rem; color: var(--fg-dimmer);
