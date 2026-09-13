@@ -1,0 +1,240 @@
+/* ============================================================
+   AI Engineering — the brand layer
+   ============================================================
+
+   The idea: this course produces two artefacts, a printed handout and a
+   terminal session. So the site is the handout — warm paper, real typography,
+   generous margins — with the terminal appearing inside it as ink-black panels.
+   Violet and gold are not decorations on a dark surface any more; they are
+   flat fills you can see from across the room.
+
+   Two grounds, switched by `data-theme` on <html>:
+     paper  the landing page
+     ink    the blog and curriculum (the existing dark reading theme)
+   ============================================================ */
+
+:root {
+  /* --- the paper ground ------------------------------------ */
+  --paper: #f7f3ea;        /* the page */
+  --paper-2: #efe7d7;      /* a band, one shade down */
+  --paper-3: #e6dcc7;      /* rules, hairlines, quiet fills */
+
+  /* --- the ink -------------------------------------------- */
+  --ink: #17132e;          /* text, and the terminal panels */
+  --ink-2: #231d48;
+  --ink-soft: #55507a;     /* secondary text on paper */
+
+  /* --- the two brand colours, as fills --------------------- */
+  --violet: #6d4bd0;
+  --violet-deep: #4a2ea0;
+  --violet-wash: #ede8fb;
+  --gold: #e8c65a;
+  --gold-deep: #c9a338;
+  --gold-wash: #faf0d2;
+
+  /* one more, for terminals only: the green a prompt goes when it works */
+  --term-green: #7ddca4;
+
+  --display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --sans: "Inter", ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* The shadow that makes a card an object rather than a rectangle. */
+  --lift: 0 2px 0 var(--ink);
+  --lift-2: 6px 6px 0 var(--ink);
+  --lift-soft: 0 18px 40px -24px rgba(23, 19, 46, 0.45);
+}
+
+/* ---------- the paper theme ------------------------------- */
+html[data-theme="paper"] body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+html[data-theme="paper"] h1,
+html[data-theme="paper"] h2,
+html[data-theme="paper"] h3,
+html[data-theme="paper"] h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+html[data-theme="paper"] p { color: var(--ink-soft); }
+html[data-theme="paper"] strong,
+html[data-theme="paper"] b { color: var(--ink); font-weight: 600; }
+html[data-theme="paper"] a { color: var(--violet-deep); }
+html[data-theme="paper"] a:hover { color: var(--ink); }
+
+html[data-theme="paper"] ::selection { background: var(--gold); color: var(--ink); }
+
+/* ---------- type scale ------------------------------------ */
+.display-1 { font-size: clamp(2.9rem, 7.2vw, 5.4rem); }
+.display-2 { font-size: clamp(2.1rem, 4.4vw, 3.3rem); }
+.display-3 { font-size: clamp(1.35rem, 2.2vw, 1.75rem); }
+
+/* A label that reads as printed stationery rather than a UI chip. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5ch;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+.tag-gold { background: var(--gold); }
+.tag-violet { background: var(--violet); border-color: var(--violet-deep); color: #fff; }
+.tag-ink { background: var(--ink); color: var(--paper); }
+
+/* ---------- buttons: physical objects --------------------- */
+.b {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.98rem;
+  padding: 0.92rem 1.6rem;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+  box-shadow: var(--lift);
+}
+.b:hover { transform: translateY(-2px); box-shadow: 0 4px 0 var(--ink); }
+.b:active { transform: translateY(0); box-shadow: 0 1px 0 var(--ink); }
+/* `a` is coloured by the theme block, so every button colour needs the same
+   weight or the link colour wins and you get violet text on an ink pill. */
+html[data-theme="paper"] .b-primary { background: var(--gold); color: var(--ink); }
+html[data-theme="paper"] .b-primary:hover { background: #f0d270; color: var(--ink); }
+html[data-theme="paper"] .b-ink { background: var(--ink); color: var(--paper); }
+html[data-theme="paper"] .b-ink:hover { background: var(--ink-2); color: #fff; }
+html[data-theme="paper"] .b-plain { background: var(--paper); color: var(--ink); }
+html[data-theme="paper"] .b-plain:hover { background: #fff; color: var(--ink); }
+
+/* ---------- cards ----------------------------------------- */
+.k {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: var(--lift-2);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.k:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+.k-gold { background: var(--gold-wash); }
+.k-violet { background: var(--violet-wash); }
+.k-flat { box-shadow: none; }
+.k-flat:hover { transform: none; box-shadow: none; }
+
+/* ---------- the terminal panel ---------------------------- */
+/* The recurring motif. Ink ground, mono type, a title bar with three dots —
+   the one object that says "this course is about the thing under the UI". */
+.term {
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--lift-2);
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: #d9d3f5;
+}
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 0.9rem;
+  background: #100d24;
+  border-bottom: 1px solid rgba(233, 228, 255, 0.12);
+}
+.term-bar i {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: #3b3566; display: block;
+}
+.term-bar i:first-child { background: var(--gold); }
+.term-bar span {
+  margin-left: auto;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6f68a3;
+}
+.term-body { padding: 1rem 1.15rem 1.2rem; }
+.term-body .l { display: block; white-space: pre-wrap; }
+.term .u { color: var(--gold); }
+.term .g { color: var(--term-green); }
+.term .v { color: #b49bff; }
+.term .d { color: #6f68a3; }
+
+/* ---------- the gold band --------------------------------- */
+.band {
+  background: var(--gold);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  overflow: hidden;
+  padding: 0.85rem 0;
+}
+.band-track {
+  display: flex;
+  gap: 2.5rem;
+  width: max-content;
+  animation: band 38s linear infinite;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.band-track span { display: inline-flex; align-items: center; gap: 2.5rem; }
+@keyframes band { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .band-track { animation: none; }
+}
+
+/* ---------- section rhythm -------------------------------- */
+/*
+ * Everything below is scoped under html[data-theme="paper"] on purpose. The
+ * theme block above sets heading colour with that same selector, so a bare
+ * `.s-ink h2` loses the cascade and you get ink headings on an ink ground —
+ * invisible, and invisible in a way that only shows up in a screenshot.
+ */
+html[data-theme="paper"] section { padding: 5.5rem 0; }
+html[data-theme="paper"] .s-paper2 { background: var(--paper-2); }
+html[data-theme="paper"] .s-ink { background: var(--ink); color: #d9d3f5; }
+html[data-theme="paper"] .s-ink h1,
+html[data-theme="paper"] .s-ink h2,
+html[data-theme="paper"] .s-ink h3,
+html[data-theme="paper"] .s-ink h4 { color: #fff; }
+html[data-theme="paper"] .s-ink p { color: #a49dd0; }
+html[data-theme="paper"] .s-ink strong { color: #fff; }
+html[data-theme="paper"] .s-ink .tag {
+  border-color: var(--gold);
+  background: transparent;
+  color: var(--gold);
+}
+html[data-theme="paper"] .s-ink .tag-gold { background: var(--gold); color: var(--ink); }
+
+.rule { border: 0; border-top: 2px solid var(--ink); opacity: 0.12; margin: 0; }
+
+@media (max-width: 640px) {
+  html[data-theme="paper"] section { padding: 3.6rem 0; }
+  .k { padding: 1.2rem; }
+}

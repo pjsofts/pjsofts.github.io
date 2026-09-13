@@ -1,0 +1,28 @@
+/* Self-hosted variable fonts, latin subset. One file per family — Google serves
+   these as variable, so a single woff2 covers every weight we use. Self-hosted
+   rather than linked so the page has no third-party request on the critical
+   path and the type never flashes in from someone else's CDN. */
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/space-grotesk.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono.woff2") format("woff2");
+}

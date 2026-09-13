@@ -1,5 +1,6 @@
 ---
 import { SITE, NAV } from '../data/site';
+import Mark from './Mark.astro';
 const path = Astro.url.pathname;
 const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
 ---
@@ -7,7 +8,7 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
 <header class="site-header">
   <div class="wrap hdr">
     <a href="/" class="brand" aria-label={`${SITE.name} — home`}>
-      <img src="/logo.jpg" alt="" width="34" height="34" />
+      <Mark size={34} />
       <span class="brand-txt">AI&nbsp;ENGINEERING</span>
     </a>
 
@@ -66,5 +67,39 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
     #nav-toggle:checked ~ .nav { max-height: 420px; padding: .8rem 1.35rem 1.3rem; }
     .nav a { padding: .7rem 0; width: 100%; }
     .nav-cta { margin-top: .6rem; }
+  }
+
+  /* ---- the paper ground ----
+     On the landing page the header is stationery, not chrome: paper, a hard
+     ink rule under it, and the CTA as a gold pill you could print. */
+  :global(html[data-theme='paper']) .site-header {
+    background: rgba(247, 243, 234, 0.88);
+    border-bottom: 2px solid var(--ink);
+  }
+  :global(html[data-theme='paper']) .brand-txt {
+    color: var(--ink);
+    font-family: var(--display);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+  :global(html[data-theme='paper']) .brand:hover .brand-txt { color: var(--violet-deep); }
+  :global(html[data-theme='paper']) .nav a {
+    color: var(--ink-soft);
+    font-family: var(--sans);
+  }
+  :global(html[data-theme='paper']) .nav a:hover,
+  :global(html[data-theme='paper']) .nav a.on { color: var(--ink); }
+  :global(html[data-theme='paper']) .nav a.on { color: var(--violet-deep); }
+  :global(html[data-theme='paper']) .nav-cta {
+    background: var(--gold) !important;
+    border: 2px solid var(--ink) !important;
+    box-shadow: 0 2px 0 var(--ink);
+    color: var(--ink) !important;
+    border-radius: 999px;
+  }
+  :global(html[data-theme='paper']) .burger span { background: var(--ink); }
+  :global(html[data-theme='paper']) .nav {
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
   }
 </style>

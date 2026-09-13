@@ -1,5 +1,7 @@
 ---
+import '../styles/fonts.css';
 import '../styles/global.css';
+import '../styles/brand.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE } from '../data/site';
@@ -16,6 +18,11 @@ export interface Props {
   noindex?: boolean;
   /** Root-relative social share image. Falls back to the default OG card. */
   image?: string;
+  /**
+   * "paper" is the brand ground: warm off-white, ink text, violet and gold as
+   * flat fills. "ink" is the dark reading theme the blog and curriculum use.
+   */
+  theme?: 'paper' | 'ink';
 }
 
 const {
@@ -27,6 +34,7 @@ const {
   publishedTime,
   noindex = false,
   image,
+  theme = 'ink',
 } = Astro.props;
 
 const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site);
@@ -48,7 +56,7 @@ const baseSchema = [
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -79,7 +87,7 @@ const baseSchema = [
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Blog`} href="/rss.xml" />
 
-    <meta name="theme-color" content="#12142e" />
+    <meta name="theme-color" content={theme === 'paper' ? '#f7f3ea' : '#12142e'} />
     <meta name="generator" content={Astro.generator} />
 
     <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} is:inline />

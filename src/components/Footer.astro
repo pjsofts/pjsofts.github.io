@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../data/site';
+import Mark from './Mark.astro';
 const year = new Date().getFullYear();
 ---
 
@@ -8,7 +9,7 @@ const year = new Date().getFullYear();
     <div class="ftr-grid">
       <div>
         <div class="fbrand">
-          <img src="/logo.jpg" alt="" width="38" height="38" />
+          <Mark size={38} />
           <div>
             <div class="fb-name">AI ENGINEERING</div>
             <div class="fb-sub">Build a Claude Code clone from scratch</div>
@@ -74,4 +75,27 @@ const year = new Date().getFullYear();
   @media (max-width: 460px) {
     .ftr-grid { grid-template-columns: 1fr; }
   }
+
+  /* ---- the paper ground ----
+     Without this the footer keeps the dark theme's dim-on-dark text and lands
+     on a light ground: an empty strip at the end of the page. It continues the
+     final CTA's ink band instead, with a gold hairline as the seam. */
+  :global(html[data-theme='paper']) .ftr {
+    background: var(--ink);
+    border-top: 2px solid var(--gold);
+    margin-top: 0;
+    color: #a49dd0;
+  }
+  :global(html[data-theme='paper']) .fb-name {
+    color: #fff;
+    font-family: var(--display);
+    letter-spacing: 0.12em;
+  }
+  :global(html[data-theme='paper']) .fb-sub,
+  :global(html[data-theme='paper']) .fdesc,
+  :global(html[data-theme='paper']) .fnote,
+  :global(html[data-theme='paper']) .ftr-bot { color: #8e87b8; }
+  :global(html[data-theme='paper']) .ftr h4 { color: var(--gold); font-family: var(--mono); }
+  :global(html[data-theme='paper']) .ftr-grid a { color: #c3bce8; }
+  :global(html[data-theme='paper']) .ftr-grid a:hover { color: var(--gold); }
 </style>

@@ -1,0 +1,51 @@
+---
+// The brand mark.
+//
+// It replaces logo.jpg, which was a 640x640 AI-generated poster of nine
+// labelled cards — unreadable at the 34px it was actually being drawn at, and
+// the first thing anyone saw.
+//
+// This is a prompt: the thing you stare at all day while you build an agent.
+// Ink ground, gold caret, violet underscore. It survives 20px, it prints in one
+// colour, and nobody else's course has it.
+interface Props {
+  size?: number;
+  /** "solid" is the ink tile; "bare" draws the glyph in currentColor. */
+  variant?: 'solid' | 'bare';
+  class?: string;
+}
+const { size = 40, variant = 'solid', class: cls = '' } = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 40 40"
+  fill="none"
+  aria-hidden="true"
+  class={cls}
+>
+  {variant === 'solid' && (
+    <>
+      <rect x="0.5" y="0.5" width="39" height="39" rx="11" fill="#17132E" />
+      <rect x="0.5" y="0.5" width="39" height="39" rx="11" stroke="#4A2EA0" stroke-width="1.5" />
+    </>
+  )}
+  {/* the caret */}
+  <path
+    d="M12 13.5 L19.5 20 L12 26.5"
+    stroke={variant === 'solid' ? '#E8C65A' : 'currentColor'}
+    stroke-width="3.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  {/* the cursor */}
+  <rect
+    x="21.5"
+    y="24"
+    width="8"
+    height="3.2"
+    rx="1.6"
+    fill={variant === 'solid' ? '#8F74E6' : 'currentColor'}
+  />
+</svg>
