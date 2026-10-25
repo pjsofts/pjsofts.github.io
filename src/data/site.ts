@@ -26,6 +26,7 @@ export const SITE = {
 export const NAV = [
   { label: 'Course', href: '/#course' },
   { label: 'Curriculum', href: '/curriculum' },
+  { label: 'Webinar', href: '/webinar/ai-agent-workflows' },
   { label: 'Blog', href: '/blog' },
   { label: 'Jobs', href: '/jobs' },
   { label: 'Instructor', href: '/resume' },

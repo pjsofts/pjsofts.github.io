@@ -1,0 +1,586 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Mark from '../../../components/Mark.astro';
+import Topology from '../../../components/Topology.astro';
+import { SITE } from '../../../data/site';
+import { WEBINAR, MODULES, TOPIC_COUNT, webinarDay } from '../../../data/webinar';
+
+const day = webinarDay();
+const dayShort = webinarDay({ weekday: 'short', day: 'numeric', month: 'short' });
+const slidesHref = `/webinar/${WEBINAR.slug}/slides`;
+
+const eventSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: `${WEBINAR.title} — free webinar`,
+  description: WEBINAR.tagline,
+  startDate: `${WEBINAR.date}T${WEBINAR.start}:00${WEBINAR.tzOffset}`,
+  endDate: `${WEBINAR.date}T${WEBINAR.end}:00${WEBINAR.tzOffset}`,
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  isAccessibleForFree: true,
+  location: { '@type': 'VirtualLocation', url: `${SITE.url}/webinar/${WEBINAR.slug}` },
+  organizer: { '@type': 'Person', name: SITE.instructor.name, url: SITE.url },
+  performer: { '@type': 'Person', name: SITE.instructor.name },
+  offers: {
+    '@type': 'Offer',
+    price: 0,
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+    url: `${SITE.url}/webinar/${WEBINAR.slug}`,
+  },
+};
+
+const marquee = MODULES.flatMap((m) => m.topics.map((t) => t.title));
+
+// The three rungs the whole session climbs. The question at every rung is the
+// same one: who decides what happens next?
+const dial = [
+  ['Workflow', 'Your code writes the arrows. Every call does one job you chose in advance.', 'chain'],
+  ['Single agent', 'The model picks the next step from the tools you gave it, until it decides it is done.', 'react'],
+  ['Multi-agent', 'Models pick the next step and which agent takes it.', 'supervisor'],
+] as const;
+
+const faqs = [
+  {
+    q: 'Is it really free?',
+    a: 'Yes. No card, no upsell inside the session. If you like it, the 12-week AI Engineering course is linked at the bottom of this page, and that is the only pitch.',
+  },
+  {
+    q: 'How do I get the link?',
+    a: 'Message me on LinkedIn or by email. I add you to the Telegram group, and the live link, reminders and slides all go out there.',
+  },
+  {
+    q: 'Do I need to know a framework?',
+    a: 'No. Every pattern is shown as boxes, arrows and a few lines of plain code, so it maps onto whatever SDK or framework you use, or onto none.',
+  },
+  {
+    q: 'Will there be a recording or slides?',
+    a: 'The slides are already public, linked on this page. Anything else from the session is shared in the Telegram group.',
+  },
+];
+---
+
+<BaseLayout
+  title={`${WEBINAR.title} — Free ${WEBINAR.hours}-Hour Webinar`}
+  description={`A free live webinar by ${SITE.instructor.name}: agent fundamentals, non-agent workflows, single-agent and multi-agent patterns, and how to evaluate them. ${day}, ${WEBINAR.start}–${WEBINAR.end} ${WEBINAR.tz}.`}
+  canonical={`/webinar/${WEBINAR.slug}`}
+  theme="paper"
+  schema={[eventSchema]}
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <span class="blob blob-violet" aria-hidden="true"></span>
+    <span class="blob blob-gold" aria-hidden="true"></span>
+
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="lbl lbl-gold">Free webinar · {WEBINAR.where} · {WEBINAR.hours} hours</span>
+
+        <h1 class="display-1">
+          AI agent workflows,<br />
+          <span class="mark-gold">pattern by pattern.</span>
+        </h1>
+
+        <p class="hero-sub">
+          A free live session on how agents are put together. We cover the parts every
+          agent shares, the workflows that need no agent at all, single-agent loops,
+          multi-agent systems, and how to tell whether any of it works.
+        </p>
+
+        <div class="hero-cta">
+          <a class="b b-ink" href={WEBINAR.join.href} target="_blank" rel="noopener">
+            {WEBINAR.join.label} →
+          </a>
+          <a class="b b-plain" href={slidesHref}>See the slides</a>
+        </div>
+
+        <dl class="stats">
+          <div><dt>{WEBINAR.hours}</dt><dd>hours live</dd></div>
+          <div><dt>{MODULES.length}</dt><dd>modules</dd></div>
+          <div><dt>{TOPIC_COUNT}</dt><dd>topics</dd></div>
+          <div><dt>0</dt><dd>cost</dd></div>
+        </dl>
+      </div>
+
+      <!-- The ticket: the facts someone needs, set as the session it describes. -->
+      <div class="hero-term">
+        <div class="term">
+          <div class="term-bar">
+            <i></i><i></i><i></i><span>webinar --info</span>
+          </div>
+          <div class="term-body">
+            <span class="l"><span class="u">›</span> webinar --info {WEBINAR.slug}</span>
+            <span class="l"></span>
+            <span class="l"><span class="d">title  </span> {WEBINAR.title}</span>
+            <span class="l"><span class="d">when   </span> <span class="v">{day}</span></span>
+            <span class="l"><span class="d">time   </span> {WEBINAR.start} – {WEBINAR.end} {WEBINAR.tz}</span>
+            <span class="l"><span class="d">where  </span> {WEBINAR.where}</span>
+            <span class="l"><span class="d">price  </span> <span class="g">{WEBINAR.price}</span></span>
+            <span class="l"><span class="d">host   </span> {SITE.instructor.name}</span>
+            <span class="l"></span>
+            <span class="l"><span class="u">›</span> webinar --join</span>
+            <span class="l"><span class="g">✔</span> message me → added to the Telegram group</span>
+            <span class="l"><span class="u">›</span> <span class="cursor">▋</span></span>
+          </div>
+        </div>
+        <p class="term-note">{dayShort} · {WEBINAR.start}–{WEBINAR.end} {WEBINAR.tz}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MARQUEE ===================== -->
+  <div class="band">
+    <div class="band-track">
+      <span>{marquee.map((m) => (<><b>{m}</b><i aria-hidden="true">✳</i></>))}</span>
+      <span aria-hidden="true">{marquee.map((m) => (<><b>{m}</b><i>✳</i></>))}</span>
+    </div>
+  </div>
+
+  <!-- ===================== THE QUESTION ===================== -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="lbl">The thread through all four hours</span>
+        <h2 class="display-2">Who decides what happens next?</h2>
+        <p class="lede">
+          Every pattern in this session answers that one question differently. Move the
+          decision from your code to the model and you gain flexibility, and you pay for it
+          in cost, latency and predictability. The skill is knowing when that trade is worth it.
+        </p>
+      </div>
+
+      <ol class="dial">
+        {dial.map(([t, b, kind], i) => (
+          <li class="k k-flat">
+            <span class="dial-n">0{i + 1}</span>
+            <h3>{t}</h3>
+            <p>{b}</p>
+            <Topology kind={kind} title={`${t} diagram`} class="dial-topo" />
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== AGENDA ===================== -->
+  <section id="agenda" class="s-paper2">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="lbl lbl-violet">The agenda</span>
+        <h2 class="display-2">Five modules, {TOPIC_COUNT} topics</h2>
+        <p class="lede">
+          We start with the building blocks and climb, one rung of autonomy at a time, to
+          systems of agents. Then we measure them.
+        </p>
+      </div>
+
+      <div class="mods">
+        {MODULES.map((m) => (
+          <article class="mod">
+            <header class="mod-hd">
+              <span class="mod-n">{m.n}</span>
+              <div>
+                <h3>{m.title}</h3>
+                <p class="mod-who">{m.who}</p>
+              </div>
+            </header>
+            <ol class="topics">
+              {m.topics.map((t) => (
+                <li>
+                  <span class="tp-t">{t.title}</span>
+                  <span class="tp-l">{t.line}</span>
+                </li>
+              ))}
+            </ol>
+            <div class="mod-topo">
+              <Topology kind={m.diagram} title={`${m.title} diagram`} />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SLIDES ===================== -->
+  <section class="s-ink" id="slides">
+    <div class="wrap slides-grid">
+      <div>
+        <span class="lbl">The slides</span>
+        <h2 class="display-2">Read the deck before you come</h2>
+        <p>
+          The full deck is public: every pattern as a diagram, with when to use it and what
+          to watch for. Arrow keys to move, <kbd>F</kbd> for full screen, and print it to PDF
+          if you want it on paper.
+        </p>
+        <div class="hero-cta">
+          <a class="b b-primary" href={slidesHref}>Open the slides →</a>
+        </div>
+      </div>
+      <a class="deck-peek" href={slidesHref} aria-label="Open the slides">
+        <div class="peek-slide">
+          <span class="peek-lbl">04 · Multi-agent systems</span>
+          <span class="peek-title">Supervisor</span>
+          <Topology kind="supervisor" title="Supervisor pattern" />
+          <span class="peek-foot"><Mark size={18} /> {WEBINAR.title}</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================== HOW TO JOIN ===================== -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="lbl">How to join</span>
+        <h2 class="display-2">Three steps, all of them short</h2>
+      </div>
+      <ol class="steps">
+        <li class="k k-flat">
+          <span class="step-n">01</span>
+          <h3>Message me</h3>
+          <p>
+            On <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn</a> or
+            at <a href={`mailto:${SITE.instructor.email}?subject=${encodeURIComponent(WEBINAR.title + ' webinar')}`}>{SITE.instructor.email}</a>.
+            One line is enough.
+          </p>
+        </li>
+        <li class="k k-flat">
+          <span class="step-n">02</span>
+          <h3>Join the Telegram group</h3>
+          <p>I add you to the webinar group. The live link and reminders go out there.</p>
+        </li>
+        <li class="k k-flat">
+          <span class="step-n">03</span>
+          <h3>Show up {dayShort}</h3>
+          <p>{WEBINAR.start}–{WEBINAR.end} {WEBINAR.tz}, live. Bring questions, especially about agents you are already building.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== INSTRUCTOR ===================== -->
+  <section class="s-paper2">
+    <div class="wrap inst">
+      <div class="inst-photo">
+        <img
+          src="/headshot.jpg"
+          alt={`${SITE.instructor.name}, host`}
+          width="300"
+          height="300"
+          loading="lazy"
+        />
+        <span class="inst-badge"><Mark size={22} variant="bare" /> host</span>
+      </div>
+      <div class="inst-copy">
+        <span class="lbl">Who is hosting</span>
+        <h2 class="display-2">{SITE.instructor.name}</h2>
+        <p class="inst-role">{SITE.instructor.role}</p>
+        <p>
+          I build AI agents professionally and teach the 12-week
+          <a href="/">AI Engineering</a> mentorship, where students build a coding agent
+          from scratch. This webinar is the map of that territory: the patterns you will
+          meet in every agent framework, and how to choose between them.
+        </p>
+        <div class="hero-cta">
+          <a class="b b-plain" href="/resume">Résumé</a>
+          <a class="b b-plain" href="/blog">Articles</a>
+          <a class="b b-plain" href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section id="faq">
+    <div class="wrap two-col">
+      <div class="col-head">
+        <span class="lbl">Questions</span>
+        <h2 class="display-2">Before you ask</h2>
+      </div>
+      <div class="col-body faqs">
+        {faqs.map((f) => (
+          <details class="faq">
+            <summary>{f.q}<i aria-hidden="true"></i></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL ===================== -->
+  <section class="s-ink final">
+    <div class="wrap ctr">
+      <span class="lbl lbl-gold">{day} · {WEBINAR.start}–{WEBINAR.end} {WEBINAR.tz}</span>
+      <h2 class="display-2">Four hours, every pattern,<br />no cost.</h2>
+      <p>Send me one line and I will add you to the group.</p>
+      <a class="b b-primary" href={WEBINAR.join.href} target="_blank" rel="noopener">
+        {WEBINAR.join.label} →
+      </a>
+      <p class="fine">
+        Want to build all of this yourself? <a href="/">The 12-week AI Engineering course</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------------- hero ---------------- */
+  /* Same furniture as the course landing page, so the two read as one site. */
+  .hero { position: relative; padding: 4.5rem 0 4rem; overflow: hidden; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+  .blob { position: absolute; border-radius: 50%; z-index: 0; }
+  .blob-violet { width: 520px; height: 520px; background: var(--violet-wash); right: -160px; top: -190px; }
+  .blob-gold { width: 260px; height: 260px; background: var(--gold-wash); left: -120px; bottom: -120px; }
+  .hero-grid > * { position: relative; z-index: 1; }
+
+  h1.display-1 {
+    margin: 1.4rem 0 0;
+    font-size: clamp(2.5rem, 5.4vw, 4.3rem);
+    text-wrap: pretty;
+  }
+  .mark-gold {
+    display: inline;
+    background: linear-gradient(transparent 62%, var(--gold) 62%, var(--gold) 94%, transparent 94%);
+    padding: 0 0.08em;
+  }
+  .hero-sub { font-size: 1.16rem; max-width: 52ch; margin: 1.5rem 0 0; color: var(--ink-soft); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2rem; }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.2rem;
+    margin: 2.8rem 0 0;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  .stats dt { font-family: var(--display); font-weight: 700; font-size: 2.4rem; line-height: 1; color: var(--violet-deep); }
+  .stats dd {
+    margin: 0.35rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hero-term { transform: rotate(1.1deg); }
+  .term .cursor { color: var(--gold); animation: blink 1.1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .term-note {
+    margin: 1rem 0 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .band-track b { font-weight: 500; color: #e9e4ff; }
+  .band-track i { font-style: normal; color: var(--gold); }
+
+  /* ---------------- section furniture ---------------- */
+  .sec-head { max-width: 62ch; margin-bottom: 2.8rem; }
+  .sec-head h2 { margin: 1rem 0 0; }
+  .sec-head .lede { margin-top: 1rem; }
+  .lede { font-size: 1.1rem; color: var(--ink-soft); max-width: 60ch; }
+
+  /* ---------------- the dial ---------------- */
+  .dial {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.15rem;
+  }
+  .dial li { display: flex; flex-direction: column; }
+  .dial-n { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.16em; color: var(--gold-deep); }
+  .dial h3 { font-size: 1.3rem; margin: 0.5rem 0 0.4rem; }
+  .dial p { font-size: 0.95rem; margin: 0 0 1.2rem; }
+  .dial :global(.dial-topo) { margin-top: auto; }
+
+  /* ---------------- agenda ---------------- */
+  .s-paper2 { --topo-ground: var(--paper-2); }
+  .mods { display: grid; gap: 1.15rem; }
+  .mod {
+    display: grid;
+    grid-template-columns: 0.8fr 1.3fr 0.9fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 1.6rem 1.7rem;
+    background: #fdfbf6;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--violet);
+    border-radius: var(--r);
+    box-shadow: var(--lift);
+    --topo-ground: #fdfbf6;
+  }
+  .mod-hd { display: flex; gap: 1rem; align-items: baseline; }
+  .mod-n { font-family: var(--mono); font-weight: 600; font-size: 1.15rem; color: var(--violet-deep); }
+  .mod h3 { font-size: 1.35rem; margin: 0; }
+  .mod-who {
+    margin: 0.45rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    color: var(--gold-deep);
+  }
+  .topics { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+  .topics li { display: grid; gap: 0.1rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--rule); }
+  .topics li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .tp-t { font-weight: 600; color: var(--ink); }
+  .tp-l { font-size: 0.9rem; color: var(--ink-soft); }
+  .mod-topo { align-self: center; }
+
+  /* ---------------- slides teaser ---------------- */
+  .slides-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .slides-grid h2 { margin: 1rem 0 0.8rem; }
+  kbd {
+    font-family: var(--mono);
+    font-size: 0.8em;
+    padding: 0.05em 0.4em;
+    border: 1px solid rgba(233, 228, 255, 0.3);
+    border-radius: 4px;
+    color: #fff;
+  }
+  .deck-peek { display: block; text-decoration: none; transform: rotate(-1deg); transition: transform 0.16s ease; }
+  .deck-peek:hover { transform: rotate(0deg) translateY(-3px); text-decoration: none; }
+  .peek-slide {
+    aspect-ratio: 16 / 9;
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7);
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-bottom: 4px solid var(--gold);
+  }
+  /* Not .lbl: the ink band recolours every .lbl gold, and this is a paper slide. */
+  .peek-lbl {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--violet-deep);
+  }
+  .peek-title { font-family: var(--display); font-weight: 700; font-size: 1.8rem; color: var(--ink); letter-spacing: -0.03em; line-height: 1; }
+  .peek-slide :global(.topo) { flex: 1; min-height: 0; }
+  .peek-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---------------- join ---------------- */
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; }
+  .step-n { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.16em; color: var(--gold-deep); }
+  .steps h3 { font-size: 1.15rem; margin: 0.6rem 0 0.45rem; }
+  .steps p { font-size: 0.95rem; margin: 0; }
+
+  /* ---------------- host ---------------- */
+  .inst { display: grid; grid-template-columns: 300px 1fr; gap: 3rem; align-items: start; }
+  .inst-photo { position: relative; }
+  .inst-photo img {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    box-shadow: var(--lift-2);
+    object-fit: cover;
+    aspect-ratio: 1;
+  }
+  .inst-badge {
+    position: absolute;
+    left: -12px;
+    bottom: -14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gold);
+    border: 1px solid var(--gold-deep);
+    border-radius: 999px;
+    padding: 0.4rem 0.95rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    box-shadow: var(--lift-2);
+  }
+  .inst-copy h2 { margin: 0.9rem 0 0.4rem; }
+  .inst-role { font-family: var(--mono); font-size: 0.82rem; color: var(--violet-deep); margin-bottom: 1.2rem; }
+
+  /* ---------------- faq ---------------- */
+  .two-col { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 3.5rem; }
+  .col-head h2 { margin-top: 1rem; position: sticky; top: 100px; }
+  .faqs { display: grid; }
+  .faq { border-bottom: 1px solid var(--rule); }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 0;
+    cursor: pointer;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.08rem;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary i { flex: none; width: 22px; height: 22px; border: 1.5px solid var(--rule-strong); border-radius: 50%; position: relative; }
+  .faq summary i::before,
+  .faq summary i::after {
+    content: "";
+    position: absolute;
+    inset: 50% 4px auto 4px;
+    height: 2px;
+    background: var(--ink);
+    transform: translateY(-50%);
+  }
+  .faq summary i::after { transform: translateY(-50%) rotate(90deg); transition: transform 0.18s ease; }
+  .faq[open] summary i::after { transform: translateY(-50%) rotate(0deg); }
+  .faq p { padding: 0 0 1.3rem; margin: 0; max-width: 68ch; }
+
+  /* ---------------- final ---------------- */
+  .final { text-align: center; }
+  .final h2 { margin-top: 1.2rem; }
+  .final p { max-width: 54ch; margin: 1.2rem auto 2rem; font-size: 1.06rem; }
+  .final .fine { font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.06em; margin-top: 1.6rem; color: #8e87b8; }
+  .final .fine a { color: var(--gold); }
+  .ctr { text-align: center; }
+
+  /* ---------------- responsive ---------------- */
+  @media (max-width: 1000px) {
+    .hero-grid, .two-col, .inst, .slides-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .col-head h2 { position: static; }
+    .mod { grid-template-columns: 1fr 1fr; }
+    .mod-hd { grid-column: 1 / -1; }
+    .inst { max-width: 520px; }
+  }
+  @media (max-width: 760px) {
+    .dial, .steps, .mod { grid-template-columns: 1fr; }
+    .mod { gap: 1.2rem; padding: 1.3rem; }
+  }
+  @media (max-width: 640px) {
+    .stats { gap: 1.4rem 2rem; }
+    .stats dt { font-size: 1.9rem; }
+    .hero-term, .deck-peek { transform: none; }
+    .blob-violet { width: 320px; height: 320px; right: -140px; top: -120px; }
+  }
+</style>

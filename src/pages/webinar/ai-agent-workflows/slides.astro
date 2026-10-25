@@ -1,0 +1,1225 @@
+---
+// The webinar deck. A standalone page rather than BaseLayout: a slide deck wants
+// the whole viewport, no header, no footer, and its own keyboard.
+//
+// Every slide is a 1280x720 stage scaled to fit the window, so what you see on a
+// laptop is what prints, and what prints is what the projector shows.
+import '../../../styles/fonts.css';
+import '../../../styles/global.css';
+import '../../../styles/brand.css';
+import Mark from '../../../components/Mark.astro';
+import Topology from '../../../components/Topology.astro';
+import { SITE } from '../../../data/site';
+import { WEBINAR, MODULES, webinarDay } from '../../../data/webinar';
+
+type Ref = { label: string; href: string };
+type Slide =
+  | { t: 'title' }
+  | { t: 'section'; n: string; title: string; sub: string }
+  | { t: 'statement'; text: string; sub?: string }
+  | { t: 'points'; lbl: string; title: string; points: (string | [string, string])[]; read?: Ref }
+  | { t: 'compare'; lbl: string; title: string; cols: { h: string; tone: 'violet' | 'gold' | 'ink'; items: string[] }[]; foot?: string }
+  | { t: 'pattern'; lbl: string; title: string; idea: string; diagram: string; use: string; watch: string; cite?: string }
+  | { t: 'code'; lbl: string; title: string; caption: string; file: string; code: string; read?: Ref }
+  | { t: 'dial' }
+  | { t: 'agenda' }
+  | { t: 'table'; lbl: string; title: string; head: string[]; rows: string[][] }
+  | { t: 'ladder' }
+  | { t: 'reading' }
+  | { t: 'end' };
+
+const M1 = '01 · Agent fundamentals';
+const M2 = '02 · Non-agent workflows';
+const M3 = '03 · Single-agent systems';
+const M4 = '04 · Multi-agent systems';
+const M5 = '05 · Evaluation';
+
+const slides: Slide[] = [
+  { t: 'title' },
+  {
+    t: 'statement',
+    text: 'Who decides what happens next: your code, or the model?',
+    sub: 'Every pattern today is a different answer to that one question.',
+  },
+  { t: 'agenda' },
+  { t: 'dial' },
+  {
+    t: 'points',
+    lbl: 'How we judge a pattern',
+    title: 'Four questions, every time',
+    points: [
+      ['How many calls?', 'Calls are money and latency. Count them before you draw the boxes.'],
+      ['What does each call see?', 'Every call gets a context window. Smaller and more focused usually means better.'],
+      ['Can I test one step alone?', 'If you can’t isolate a step, you can’t tell which step broke.'],
+      ['How does it fail?', 'Loudly, silently, or by looping forever. Pick the failure you can live with.'],
+    ],
+  },
+
+  // ---------------------------------------------------------------- 01
+  { t: 'section', n: '01', title: 'Agent fundamentals', sub: 'The parts every agent is built from' },
+  {
+    t: 'code',
+    lbl: M1,
+    title: 'An agent is a loop',
+    caption:
+      'Call the model with tools. If it asks for a tool, run it in your code and hand the result back. Stop when it answers without asking. Everything else today is built on top of these lines.',
+    file: 'agent.ts',
+    code: `const messages = [system, user]
+
+while (true) {
+  const res = await llm(messages, tools)
+  messages.push(res)
+
+  if (!res.toolCalls.length) return res.text  // done
+
+  for (const call of res.toolCalls) {
+    const out = await run(call)               // your code
+    messages.push(toolResult(call.id, out))
+  }
+}`,
+    read: { label: 'What is an agent loop, really?', href: '/blog/what-is-an-agent-loop' },
+  },
+  {
+    t: 'compare',
+    lbl: M1,
+    title: 'Reasoning LLMs vs agents',
+    cols: [
+      {
+        h: 'Reasoning LLM',
+        tone: 'violet',
+        items: [
+          'Spends extra tokens thinking before it answers',
+          'Still one request, one response',
+          'Can’t look anything up or change anything',
+          'Better at planning, maths and multi-step logic',
+        ],
+      },
+      {
+        h: 'Agent',
+        tone: 'gold',
+        items: [
+          'A model in a loop with tools',
+          'Acts, sees the result, decides again',
+          'Touches files, APIs, databases, the web',
+          'Any model can drive it, but reasoning models drive it better',
+        ],
+      },
+    ],
+    foot: 'A reasoning model is a better brain. An agent is a brain with hands and a loop. They compose.',
+  },
+  {
+    t: 'points',
+    lbl: M1,
+    title: 'Tools',
+    points: [
+      ['A tool is four things', 'a name, a description, a JSON schema for its arguments, and your function.'],
+      ['The model only proposes', 'it emits a tool call; your code decides whether and how to run it.'],
+      ['Read vs write', 'reading is cheap to allow. Anything that changes the world goes behind a permission check.'],
+      ['The description is a prompt', 'most “the model is dumb” bugs are a vague tool description or a confusing schema.'],
+    ],
+    read: { label: 'Most agent failures are tool design failures', href: '/blog/designing-tools-for-ai-agents' },
+  },
+  {
+    t: 'code',
+    lbl: M1,
+    title: 'What the model actually sees',
+    caption:
+      'This is the whole contract. The model never sees your function, only this. Write the description as if for a new colleague: what it does, when to use it, what it returns.',
+    file: 'tools.json',
+    code: `{
+  "name": "search_courses",
+  "description": "Find courses matching a career goal.
+    Use before recommending any program. Returns at
+    most 10 results, cheapest first.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "goal":   { "type": "string" },
+      "budget": { "type": "number", "description": "USD" }
+    },
+    "required": ["goal"]
+  }
+}`,
+  },
+  {
+    t: 'compare',
+    lbl: M1,
+    title: 'MCP & Skills',
+    cols: [
+      {
+        h: 'MCP · access',
+        tone: 'ink',
+        items: [
+          'A protocol: an MCP server exposes tools, resources and prompts',
+          'Any MCP client can connect: an IDE, a chat app, your own agent',
+          'It standardises the plug, not what the tool does',
+          'Write the integration once, use it from every client',
+        ],
+      },
+      {
+        h: 'Skills · know-how',
+        tone: 'gold',
+        items: [
+          'A folder with a SKILL.md, plus optional scripts and reference files',
+          'Only the name and description sit in context until needed',
+          'Teaches the agent how to do a job, step by step',
+          'Can ship code, so install them like dependencies: from sources you trust',
+        ],
+      },
+    ],
+    foot: 'MCP gives the agent new abilities. A skill tells it how to use the ones it has. You often want both.',
+  },
+  {
+    t: 'code',
+    lbl: M1,
+    title: 'Anatomy of a skill',
+    caption:
+      'The frontmatter is all the agent carries around. When a task matches the description, it reads the body, and only then the files the body points at. That is how a skill protects the context window.',
+    file: 'skills/release-notes/SKILL.md',
+    code: `---
+name: release-notes
+description: Write release notes from merged PRs.
+  Use when the user asks for a changelog.
+---
+
+1. Run scripts/merged_prs.sh <since-tag>
+2. Group PRs by label: feature, fix, chore
+3. Follow the tone in reference/style.md
+4. Never mention internal ticket numbers`,
+  },
+  {
+    t: 'pattern',
+    lbl: M1,
+    title: 'RAG',
+    idea:
+      'Retrieval-augmented generation: index your documents ahead of time, then at question time fetch the few chunks that look relevant and put them in the prompt. New knowledge without retraining.',
+    diagram: 'rag',
+    use: 'The answer lives in documents the model has never seen: policies, catalogues, your codebase.',
+    watch: 'When RAG is wrong it is usually retrieval, not generation. Measure whether the right chunk came back.',
+  },
+  {
+    t: 'points',
+    lbl: M1,
+    title: 'Context',
+    points: [
+      ['The window is the agent’s whole world', 'on every call: system prompt, tools, history, retrieved text, tool results.'],
+      ['More is not better', 'long, noisy context makes models miss what matters, and every token is paid for again on every turn.'],
+      ['Fetch just in time', 'retrieve or read when needed instead of loading everything up front.'],
+      ['Compact and offload', 'summarise old turns, write notes to files, give a sub-task its own clean window.'],
+    ],
+    read: { label: 'Context engineering for agents', href: '/blog/context-engineering-for-agents' },
+  },
+  {
+    t: 'compare',
+    lbl: M1,
+    title: 'Agent memory',
+    cols: [
+      {
+        h: 'Short-term',
+        tone: 'violet',
+        items: [
+          'The model is stateless; the message list is the memory',
+          'Goal, conversation, tool results, scratch notes',
+          'Lives in the context window, so it has to be curated',
+        ],
+      },
+      {
+        h: 'Long-term',
+        tone: 'gold',
+        items: [
+          'Semantic: facts and documents, often searched with RAG',
+          'Episodic: what happened before, past runs and their lessons',
+          'Procedural: how to behave, from system prompts, rules files and skills',
+        ],
+      },
+    ],
+    foot: 'The long-term split comes from the CoALA paper (Sumers et al., 2023). It gives you a vocabulary for where a fact should live.',
+  },
+  {
+    t: 'compare',
+    lbl: M1,
+    title: 'Planning & reflection',
+    cols: [
+      {
+        h: 'Planning · before acting',
+        tone: 'ink',
+        items: [
+          'Break the goal into steps before taking the first one',
+          'Keep the plan in context, like a todo list, so long tasks stay on track',
+          'A plan is a hypothesis. Revise it when a step surprises you',
+        ],
+      },
+      {
+        h: 'Reflection · before finishing',
+        tone: 'gold',
+        items: [
+          'Check the work against criteria before calling it done',
+          'Signals the model can’t fake (tests, linters, validators) beat self-opinion',
+          'Every round costs a call. Cap the rounds',
+        ],
+      },
+    ],
+    foot: 'Planning decides what to do. Reflection decides whether it worked, and often triggers a new plan.',
+  },
+
+  // ---------------------------------------------------------------- 02
+  { t: 'section', n: '02', title: 'Non-agent workflows', sub: 'Your code owns the control flow' },
+  {
+    t: 'pattern',
+    lbl: M2,
+    title: 'Prompt chaining',
+    idea:
+      'Split the task into fixed steps. Each call does one step and its output becomes the next call’s input. Between steps, plain code can check the output and stop or retry.',
+    diagram: 'chain',
+    use: 'The task splits cleanly into the same steps every time: outline, draft, translate, format.',
+    watch: 'Latency adds up step by step, and an early mistake poisons everything after it. Check at the gates.',
+  },
+  {
+    t: 'pattern',
+    lbl: M2,
+    title: 'Routing',
+    idea:
+      'One cheap call classifies the input, then code sends it down the path built for that class: a specialised prompt, a cheaper model, or no LLM at all.',
+    diagram: 'route',
+    use: 'Inputs fall into distinct kinds that deserve different handling, or easy ones can go to a small model.',
+    watch: 'A wrong route fails quietly. Log every decision and give the router an “unsure” path.',
+  },
+  {
+    t: 'pattern',
+    lbl: M2,
+    title: 'Parallelization',
+    idea:
+      'Run several calls at once and combine the results. Sectioning splits the work into independent parts. Voting runs the same task several times and takes the consensus.',
+    diagram: 'parallel',
+    use: 'The parts don’t depend on each other, or you want more confidence: guardrails, reviews, classifications.',
+    watch: 'You pay for every branch. The aggregator is a design problem of its own: what if the branches disagree?',
+  },
+  {
+    t: 'code',
+    lbl: M2,
+    title: 'A workflow is just functions',
+    caption:
+      'No framework needed. Chaining is calling one function after another, routing is a switch statement, parallelization is Promise.all. You can unit-test every line.',
+    file: 'workflow.ts',
+    code: `const kind = await classify(input)        // routing
+
+switch (kind) {
+  case 'refund':
+    return refundFlow(input)
+  case 'question': {
+    const outline = await llm(OUTLINE, input) // chaining
+    if (!isValid(outline)) throw new Error('gate')
+    const [a, b] = await Promise.all([        // parallel
+      llm(DRAFT, outline), llm(CHECK, outline),
+    ])
+    return merge(a, b)
+  }
+}`,
+  },
+  {
+    t: 'statement',
+    text: 'If you can draw the flowchart before the request arrives, you don’t need an agent.',
+    sub: 'Workflows are cheaper, faster and easier to test. Reach for autonomy only when the path really is unknown.',
+  },
+
+  // ---------------------------------------------------------------- 03
+  { t: 'section', n: '03', title: 'Single-agent systems', sub: 'The model picks the next step' },
+  {
+    t: 'pattern',
+    lbl: M3,
+    title: 'ReAct',
+    idea:
+      'Reason, then act, then observe, then reason again. The model writes down a thought, makes a tool call, reads the result, and decides the next move until it can answer.',
+    diagram: 'react',
+    use: 'Open-ended tasks where the next step depends on what you just found: research, debugging, support.',
+    watch: 'Without a step limit and a clear definition of done, it wanders. Cap steps, log every thought.',
+    cite: 'Yao et al., 2022',
+  },
+  {
+    t: 'code',
+    lbl: M3,
+    title: 'ReAct, as a trace',
+    caption:
+      'Nothing here was planned in advance. Each action came from the last observation. That adaptability is the point, and it is also why you can’t predict the cost.',
+    file: 'trace.log',
+    code: `goal  Which services still call payments v1?
+
+think  Search the code for the v1 client first.
+act    grep("PaymentsV1Client", "services/")
+obs    3 files: billing, refunds, legacy-export
+
+think  legacy-export might be dead code. Check it.
+act    read("services/legacy-export/main.ts")
+obs    not imported anywhere since 2024
+
+think  Enough to answer.
+done   billing and refunds. legacy-export is unused.`,
+  },
+  {
+    t: 'pattern',
+    lbl: M3,
+    title: 'Plan & execute',
+    idea:
+      'A planner writes the whole plan up front, then an executor works through it step by step. When a step fails, go back to the planner instead of improvising.',
+    diagram: 'plan',
+    use: 'Long tasks with a predictable shape, where a strong planner and a cheaper executor save money.',
+    watch: 'Plans go stale when reality surprises you. If the steps never change, you may just want a workflow.',
+  },
+  {
+    t: 'pattern',
+    lbl: M3,
+    title: 'Reflection & self-refining',
+    idea:
+      'Generate, critique, revise. In self-refine the model critiques its own draft. In Reflexion a real failure, like a failing test, produces a written lesson that the next attempt carries.',
+    diagram: 'reflect',
+    use: 'Quality is checkable: tests pass, a schema validates, a rubric is clear.',
+    watch: 'A model grading itself with no outside signal tends to approve its own work. Cap the rounds.',
+    cite: 'Madaan et al., 2023 · Shinn et al., 2023',
+  },
+  {
+    t: 'pattern',
+    lbl: M3,
+    title: 'CodeAct',
+    idea:
+      'Instead of one JSON tool call per step, the agent writes a small program as its action. Loops, variables and composition happen in one move, in a language the model has seen a lot of.',
+    diagram: 'codeact',
+    use: 'Many small operations over data: filtering, joining, calculating, batch edits.',
+    watch: 'You are running code a model wrote. That belongs in a sandbox with no secrets and no open network.',
+    cite: 'Wang et al., 2024',
+  },
+  {
+    t: 'code',
+    lbl: M3,
+    title: 'One action instead of five',
+    caption:
+      'With JSON tools this is a glob, then a read per file, then a count, each a round trip through the model. As code it is one action and one observation.',
+    file: 'action.py',
+    code: `# the agent's action is a program
+files = glob("services/**/*.ts")
+hits = [f for f in files if "PaymentsV1Client" in read(f)]
+
+by_service = {}
+for f in hits:
+    svc = f.split("/")[1]
+    by_service[svc] = by_service.get(svc, 0) + 1
+
+print(sorted(by_service.items(), key=lambda kv: -kv[1]))`,
+    read: { label: 'Sandboxing agent code execution', href: '/blog/sandboxing-agent-code-execution' },
+  },
+  {
+    t: 'statement',
+    text: 'Start with one agent.',
+    sub: 'Most “we need multi-agent” problems are one agent that needs better tools or a cleaner context.',
+  },
+
+  // ---------------------------------------------------------------- 04
+  { t: 'section', n: '04', title: 'Multi-agent systems', sub: 'Models pick the step, and who takes it' },
+  {
+    t: 'pattern',
+    lbl: M4,
+    title: 'Sequential agents',
+    idea:
+      'A pipeline like prompt chaining, except every stage is a full agent with its own prompt, tools and maybe model. Each stage can plan, retry and check its own work before handing off.',
+    diagram: 'seq',
+    use: 'Clear stages that need different tools or expertise: research, then write, then review.',
+    watch: 'Errors compound down the line and latency stacks. Define the handoff format and validate it.',
+  },
+  {
+    t: 'pattern',
+    lbl: M4,
+    title: 'Multi-agent parallelization',
+    idea:
+      'Fan the request out to several agents at once, each with its own clean context, then merge. Sectioning splits the work; voting has several agents attempt the same thing.',
+    diagram: 'mparallel',
+    use: 'Broad questions with independent threads: research across sources, reviewing many files.',
+    watch: 'Fast in wall-clock time, expensive in tokens. Merging conflicting findings is the hard part.',
+  },
+  {
+    t: 'pattern',
+    lbl: M4,
+    title: 'Supervisor',
+    idea:
+      'One agent keeps the big picture. It breaks the task down as it goes, briefs subagents, reads what they return and decides what next. Subagents never need to know about each other.',
+    diagram: 'supervisor',
+    use: 'You can’t list the subtasks in advance, and each one benefits from a narrow, clean context.',
+    watch: 'The supervisor is the bottleneck and the biggest bill. A vague brief to a subagent wastes a whole run.',
+  },
+  {
+    t: 'pattern',
+    lbl: M4,
+    title: 'Dispatcher',
+    idea:
+      'The multi-agent version of routing. A triage step reads the request and hands it to exactly one specialist agent. Only one path runs: it is a fork, not a decomposition.',
+    diagram: 'dispatcher',
+    use: 'Requests fall into distinct domains with different tools: billing, technical support, sales.',
+    watch: 'A wrong handoff is hard to recover from. Let specialists hand back, and escalate when unsure.',
+  },
+  {
+    t: 'pattern',
+    lbl: M4,
+    title: 'Evaluator-optimizer',
+    idea:
+      'One agent does the work, a second agent judges it and sends back a critique, and the loop repeats until the evaluator passes it or a limit is hit.',
+    diagram: 'evalopt',
+    use: 'There is a clear bar to clear (tests, a rubric, a spec) and quality matters more than cost.',
+    watch: 'Context grows every round. Always set a max-iteration cap and a timeout.',
+  },
+  {
+    t: 'pattern',
+    lbl: M4,
+    title: 'Peer-to-peer',
+    idea:
+      'No coordinator. Agents message each other directly and pass work around until a stop condition fires. Every agent has to know about every other agent.',
+    diagram: 'p2p',
+    use: 'Rarely. Debates, simulations, problems with no natural hierarchy.',
+    watch: 'The connections grow faster than the agent count. Hardest to debug: a last resort, not a default.',
+  },
+  {
+    t: 'table',
+    lbl: M4,
+    title: 'The multi-agent cheat sheet',
+    head: ['Pattern', 'Who decides the next agent', 'Typical cost', 'Breaks when'],
+    rows: [
+      ['Sequential', 'Fixed order, in code', 'Low · slow', 'An early stage is wrong'],
+      ['Parallel', 'Fixed fan-out, in code', 'High · fast', 'Results conflict at merge'],
+      ['Supervisor', 'The supervisor, as it goes', 'High', 'Briefs are vague'],
+      ['Dispatcher', 'The triage step, once', 'Lowest', 'The route is wrong'],
+      ['Evaluator-optimizer', 'The evaluator’s verdict', 'Grows per round', 'There is no stop condition'],
+      ['Peer-to-peer', 'Every agent', 'Highest', 'Coordination drifts'],
+    ],
+  },
+
+  // ---------------------------------------------------------------- 05
+  { t: 'section', n: '05', title: 'Evaluation', sub: 'Proving any of it works' },
+  {
+    t: 'points',
+    lbl: M5,
+    title: 'What to measure',
+    points: [
+      ['Outcome', 'did the world end up in the right state? Right answer, right file changed, right ticket closed.'],
+      ['Trajectory', 'did it get there sensibly? Check for forbidden actions, but don’t demand one exact path.'],
+      ['Cost and latency', 'next to success, on the same report. A 2% gain at 3× the cost is a different decision.'],
+      ['Benchmarks aren’t your evals', 'they test someone else’s task, usually once, usually only accuracy.'],
+    ],
+  },
+  {
+    t: 'compare',
+    lbl: M5,
+    title: 'pass@k vs pass^k',
+    cols: [
+      {
+        h: 'pass@k · at least one',
+        tone: 'violet',
+        items: [
+          'Chance that at least one of k attempts succeeds',
+          'Goes up as k grows',
+          'Right when you can verify and keep the best one, like code with tests',
+          '70% per run → pass@3 ≈ 97%',
+        ],
+      },
+      {
+        h: 'pass^k · every one',
+        tone: 'gold',
+        items: [
+          'Chance that all k attempts succeed',
+          'Goes down as k grows',
+          'Right for user-facing agents, where every run is someone’s experience',
+          '70% per run → pass^3 ≈ 34%',
+        ],
+      },
+    ],
+    foot: 'Same agent, same 70%. One number says ship it, the other says not yet. pass^k comes from τ-bench (Yao et al., 2024).',
+  },
+  {
+    t: 'points',
+    lbl: M5,
+    title: 'Build your own evals',
+    points: [
+      ['Start from real failures', '20 to 50 tasks taken from what actually went wrong beat a thousand synthetic ones.'],
+      ['Binary pass/fail', 'a clear check you can automate beats a fuzzy 1–10 score.'],
+      ['Test the negatives', 'cases where the agent should not call the tool, refund, or delete.'],
+      ['Clean, repeatable environments', 'as close to production as you can, reset on every run.'],
+      ['Run on every change', 'prompts, tools and models are all code. Evals are their tests.'],
+    ],
+    read: { label: 'Why your agent needs evals', href: '/blog/why-your-ai-agent-needs-evals' },
+  },
+
+  // ---------------------------------------------------------------- close
+  { t: 'ladder' },
+  { t: 'reading' },
+  { t: 'end' },
+];
+
+const N = slides.length;
+const day = webinarDay();
+
+// Tiny highlighter for the code slides: comments dim, strings amber. Escaping
+// first so a `<` in a sample can never become markup.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function hl(code: string) {
+  return code
+    .split('\n')
+    .map((line) => {
+      const m = line.match(/^(.*?)((?:\/\/|#(?!!)).*)$/);
+      const [body, comment] = m && !/["'][^"']*$/.test(m[1]) ? [m[1], m[2]] : [line, ''];
+      const b = esc(body).replace(/("[^"]*"|'[^']*')/g, '<span class="u">$1</span>');
+      return `<span class="l">${b}${comment ? `<span class="d">${esc(comment)}</span>` : ''}</span>`;
+    })
+    .join('');
+}
+
+const dial = [
+  ['Workflow', 'Your code writes the arrows.', 'chain'],
+  ['Single agent', 'The model picks the next step from tools you defined.', 'react'],
+  ['Multi-agent', 'Models pick the next step, and which agent takes it.', 'supervisor'],
+] as const;
+
+const ladder = [
+  ['One good call', 'A single prompt with the right context. Most features stop here.'],
+  ['A workflow', 'You know the steps. One or two of them need an LLM.'],
+  ['One agent', 'The path is unknown, but the set of tools is known.'],
+  ['Many agents', 'Truly independent sub-problems, or more context than one window can hold.'],
+];
+
+const refs = [
+  ['Building effective agents', 'Anthropic, 2024', 'https://www.anthropic.com/engineering/building-effective-agents'],
+  ['ReAct: Synergizing Reasoning and Acting in Language Models', 'Yao et al., 2022', 'https://arxiv.org/abs/2210.03629'],
+  ['Self-Refine: Iterative Refinement with Self-Feedback', 'Madaan et al., 2023', 'https://arxiv.org/abs/2303.17651'],
+  ['Reflexion: Language Agents with Verbal Reinforcement Learning', 'Shinn et al., 2023', 'https://arxiv.org/abs/2303.11366'],
+  ['Executable Code Actions Elicit Better LLM Agents (CodeAct)', 'Wang et al., 2024', 'https://arxiv.org/abs/2402.01030'],
+  ['Cognitive Architectures for Language Agents (CoALA)', 'Sumers et al., 2023', 'https://arxiv.org/abs/2309.02427'],
+  ['τ-bench: tool-agent-user interaction benchmark', 'Yao et al., 2024', 'https://arxiv.org/abs/2406.12045'],
+  ['Practical AI Agent Workflows (slides)', 'Sabrina Goldfarb', 'https://cdn.master.dev/assets/courses/2026-10-23-ai-agent-workflows/ai-agent-workflows-slides.pdf'],
+];
+
+const mine = [
+  ['Building effective agents: a reader’s guide', '/blog/building-effective-agents-a-readers-guide'],
+  ['What is an agent loop, really?', '/blog/what-is-an-agent-loop'],
+  ['Context engineering for agents', '/blog/context-engineering-for-agents'],
+  ['Why your agent needs evals', '/blog/why-your-ai-agent-needs-evals'],
+];
+
+const landing = `/webinar/${WEBINAR.slug}`;
+const title = `${WEBINAR.title} — Slides | ${SITE.name}`;
+const description = `The slide deck for the free ${WEBINAR.title} webinar by ${SITE.instructor.name}: agent fundamentals, workflows, single-agent and multi-agent patterns, and evaluation.`;
+const canonical = new URL(`${landing}/slides`, Astro.site);
+const ogImage = new URL('/og-default.png', Astro.site);
+---
+
+<!doctype html>
+<html lang="en" data-theme="paper">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={SITE.instructor.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="theme-color" content="#17132e" />
+  </head>
+  <body>
+    <div class="viewport">
+      <div class="stage" id="stage">
+        {slides.map((s, i) => (
+          <article
+            class={`slide ${s.t === 'section' || s.t === 'statement' || s.t === 'end' ? 'is-ink' : ''} slide-${s.t}`}
+            data-i={i}
+            aria-label={`Slide ${i + 1} of ${N}`}
+          >
+            {s.t === 'title' && (
+              <>
+                <span class="blob blob-violet" aria-hidden="true"></span>
+                <span class="blob blob-gold" aria-hidden="true"></span>
+                <div class="title-body">
+                  <span class="lbl lbl-gold">Free webinar · {day}</span>
+                  <h1>
+                    AI agent workflows,<br /><span class="mark-gold">pattern by pattern.</span>
+                  </h1>
+                  <p class="title-sub">{WEBINAR.tagline}</p>
+                  <div class="title-by">
+                    <Mark size={52} />
+                    <div>
+                      <strong>{SITE.instructor.name}</strong>
+                      <span>pjsofts.github.io · linkedin.com/in/pouria-jahandideh</span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {s.t === 'section' && (
+              <div class="sec-body">
+                <span class="sec-n">{s.n}</span>
+                <h2>{s.title}</h2>
+                <p>{s.sub}</p>
+              </div>
+            )}
+
+            {s.t === 'statement' && (
+              <div class="stmt-body">
+                <p class="stmt">{s.text}</p>
+                {s.sub && <p class="stmt-sub">{s.sub}</p>}
+              </div>
+            )}
+
+            {s.t === 'agenda' && (
+              <>
+                <header class="hd"><span class="lbl">Today</span><h2>Five modules, one climb</h2></header>
+                <ol class="agenda">
+                  {MODULES.map((m) => (
+                    <li>
+                      <span class="ag-n">{m.n}</span>
+                      <span class="ag-t">{m.title}</span>
+                      <span class="ag-l">{m.topics.map((t) => t.title).join(' · ')}</span>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            )}
+
+            {s.t === 'dial' && (
+              <>
+                <header class="hd"><span class="lbl">The control dial</span><h2>Three rungs of autonomy</h2></header>
+                <div class="dial">
+                  {dial.map(([t, b, kind], j) => (
+                    <div class="dial-col">
+                      <span class="dial-n">0{j + 1}</span>
+                      <h3>{t}</h3>
+                      <p>{b}</p>
+                      <Topology kind={kind} title={`${t} diagram`} />
+                    </div>
+                  ))}
+                </div>
+                <p class="foot-note">More autonomy buys flexibility, and costs calls, latency and predictability.</p>
+              </>
+            )}
+
+            {s.t === 'points' && (
+              <>
+                <header class="hd"><span class="lbl">{s.lbl}</span><h2>{s.title}</h2></header>
+                <ol class={`pts ${s.points.length > 4 ? 'is-dense' : ''}`}>
+                  {s.points.map((p, j) => (
+                    <li>
+                      <span class="pt-n">{String(j + 1).padStart(2, '0')}</span>
+                      {Array.isArray(p) ? (
+                        <span><strong>{p[0]}</strong> <span class="pt-rest">{p[1]}</span></span>
+                      ) : (
+                        <span>{p}</span>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+                {s.read && <a class="read" href={s.read.href}>Read more → {s.read.label}</a>}
+              </>
+            )}
+
+            {s.t === 'compare' && (
+              <>
+                <header class="hd"><span class="lbl">{s.lbl}</span><h2>{s.title}</h2></header>
+                <div class="cmp">
+                  {s.cols.map((c) => (
+                    <div class={`cmp-col tone-${c.tone}`}>
+                      <h3>{c.h}</h3>
+                      <ul>{c.items.map((it) => <li>{it}</li>)}</ul>
+                    </div>
+                  ))}
+                </div>
+                {s.foot && <p class="foot-note">{s.foot}</p>}
+              </>
+            )}
+
+            {s.t === 'pattern' && (
+              <>
+                <header class="hd">
+                  <span class="lbl">{s.lbl}</span>
+                  <h2>{s.title}{s.cite && <span class="cite">{s.cite}</span>}</h2>
+                </header>
+                <div class="pat">
+                  <p class="pat-idea">{s.idea}</p>
+                  <div class="pat-topo"><Topology kind={s.diagram} title={`${s.title} diagram`} /></div>
+                </div>
+                <div class="pat-uw">
+                  <div class="uw uw-use"><span>Use when</span><p>{s.use}</p></div>
+                  <div class="uw uw-watch"><span>Watch for</span><p>{s.watch}</p></div>
+                </div>
+              </>
+            )}
+
+            {s.t === 'code' && (
+              <div class="code-grid">
+                <div class="code-copy">
+                  <span class="lbl">{s.lbl}</span>
+                  <h2>{s.title}</h2>
+                  <p>{s.caption}</p>
+                  {s.read && <a class="read" href={s.read.href}>Read more → {s.read.label}</a>}
+                </div>
+                <div class="term">
+                  <div class="term-bar"><i></i><i></i><i></i><span>{s.file}</span></div>
+                  <div class="term-body code" set:html={hl(s.code)} />
+                </div>
+              </div>
+            )}
+
+            {s.t === 'table' && (
+              <>
+                <header class="hd"><span class="lbl">{s.lbl}</span><h2>{s.title}</h2></header>
+                <table class="tbl">
+                  <thead><tr>{s.head.map((h) => <th>{h}</th>)}</tr></thead>
+                  <tbody>{s.rows.map((r) => <tr>{r.map((c, j) => (j === 0 ? <th scope="row">{c}</th> : <td>{c}</td>))}</tr>)}</tbody>
+                </table>
+              </>
+            )}
+
+            {s.t === 'ladder' && (
+              <>
+                <header class="hd"><span class="lbl">So what do I use?</span><h2>Climb only when the rung below fails</h2></header>
+                <ol class="ladder">
+                  {ladder.map(([t, b], j) => (
+                    <li style={`--step:${j}`}>
+                      <span class="ld-n">{String(j + 1).padStart(2, '0')}</span>
+                      <strong>{t}</strong>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ol>
+                <p class="foot-note">“Fails” means fails your evals, not that it feels too simple.</p>
+              </>
+            )}
+
+            {s.t === 'reading' && (
+              <>
+                <header class="hd"><span class="lbl">Further reading</span><h2>Where these ideas come from</h2></header>
+                <div class="reading">
+                  <ul class="refs">
+                    {refs.map(([t, by, href]) => (
+                      <li><a href={href} target="_blank" rel="noopener">{t}</a><span>{by}</span></li>
+                    ))}
+                  </ul>
+                  <div class="mine">
+                    <h3>On this site</h3>
+                    <ul>{mine.map(([t, href]) => <li><a href={href}>{t}</a></li>)}</ul>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {s.t === 'end' && (
+              <div class="end-body">
+                <Mark size={72} />
+                <h2>Thank you. Questions?</h2>
+                <p>
+                  Build all of this yourself, from the agent loop up, in the 12-week
+                  AI Engineering course.
+                </p>
+                <ul class="end-links">
+                  <li><span>site</span> pjsofts.github.io</li>
+                  <li><span>linkedin</span> linkedin.com/in/pouria-jahandideh</li>
+                  <li><span>email</span> {SITE.instructor.email}</li>
+                  <li><span>telegram</span> {SITE.telegram.handle}</li>
+                </ul>
+              </div>
+            )}
+
+            {s.t !== 'title' && (
+              <footer class="sfoot">
+                <span class="sf-brand"><Mark size={20} variant="bare" /> {SITE.instructor.name} · {WEBINAR.title}</span>
+                <span class="sf-n">{String(i + 1).padStart(2, '0')} / {N}</span>
+              </footer>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <nav class="controls" aria-label="Slide controls">
+      <a class="ctl-back" href={landing}>← Webinar page</a>
+      <div class="ctl-mid">
+        <button type="button" data-go="prev" aria-label="Previous slide">←</button>
+        <span id="counter" aria-live="polite">1 / {N}</span>
+        <button type="button" data-go="next" aria-label="Next slide">→</button>
+      </div>
+      <div class="ctl-right">
+        <button type="button" data-go="full" aria-label="Full screen">⛶ <span>F</span></button>
+        <button type="button" data-go="print" aria-label="Print or save as PDF">PDF</button>
+      </div>
+    </nav>
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll<HTMLElement>('.slide'));
+      const counter = document.getElementById('counter')!;
+      const bar = document.getElementById('bar')!;
+      const N = slides.length;
+      let cur = 0;
+
+      // Slides are 1-indexed in the URL, so #12 is what the counter says.
+      const fromHash = () => {
+        const n = parseInt(location.hash.slice(1), 10);
+        return Number.isFinite(n) ? Math.min(Math.max(n - 1, 0), N - 1) : 0;
+      };
+
+      function show(i: number) {
+        cur = Math.min(Math.max(i, 0), N - 1);
+        slides.forEach((s, j) => s.classList.toggle('on', j === cur));
+        counter.textContent = `${cur + 1} / ${N}`;
+        bar.style.width = `${((cur + 1) / N) * 100}%`;
+        history.replaceState(null, '', `#${cur + 1}`);
+      }
+
+      function fit() {
+        const s = Math.min(window.innerWidth / 1280, (window.innerHeight - 52) / 720);
+        document.documentElement.style.setProperty('--s', String(s));
+      }
+
+      function full() {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen?.();
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const k = e.key;
+        if (['ArrowRight', 'PageDown', ' ', 'l'].includes(k)) show(cur + 1);
+        else if (['ArrowLeft', 'PageUp', 'h'].includes(k)) show(cur - 1);
+        else if (k === 'Home') show(0);
+        else if (k === 'End') show(N - 1);
+        else if (k === 'f' || k === 'F') full();
+        else return;
+        e.preventDefault();
+      });
+
+      document.querySelectorAll<HTMLButtonElement>('[data-go]').forEach((b) =>
+        b.addEventListener('click', () => {
+          const go = b.dataset.go;
+          if (go === 'next') show(cur + 1);
+          else if (go === 'prev') show(cur - 1);
+          else if (go === 'full') full();
+          else if (go === 'print') window.print();
+        }),
+      );
+
+      let x0: number | null = null;
+      document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+      document.addEventListener('touchend', (e) => {
+        if (x0 === null) return;
+        const dx = e.changedTouches[0].clientX - x0;
+        if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1));
+        x0 = null;
+      });
+
+      window.addEventListener('resize', fit);
+      window.addEventListener('hashchange', () => show(fromHash()));
+      fit();
+      show(fromHash());
+    </script>
+  </body>
+</html>
+
+<style>
+  /* ---------------- the frame ---------------- */
+  :global(html), :global(body) { height: 100%; }
+  :global(body) {
+    margin: 0;
+    overflow: hidden;
+    background: #0b0918 !important;
+  }
+  .viewport {
+    position: fixed;
+    inset: 0 0 52px 0;
+    display: grid;
+    place-items: center;
+  }
+  .stage {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    transform: scale(var(--s, 1));
+    flex: none;
+  }
+
+  /* ---------------- a slide ---------------- */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: 64px 84px 76px;
+    background: var(--paper);
+    color: var(--ink);
+    overflow: hidden;
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+    --topo-ground: var(--paper);
+  }
+  .slide.on { display: flex; }
+  .slide.is-ink { background: var(--ink); color: #d9d3f5; }
+
+  .slide :global(.lbl) { font-size: 14px; }
+  .hd { margin-bottom: 34px; }
+  .hd h2, .code-copy h2 {
+    margin: 14px 0 0;
+    font-size: 54px;
+    line-height: 1.02;
+  }
+  .cite {
+    margin-left: 18px;
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    vertical-align: middle;
+  }
+
+  .sfoot {
+    position: absolute;
+    left: 84px;
+    right: 84px;
+    bottom: 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .sf-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--violet-deep); }
+  .sf-brand :global(svg) { color: var(--violet); }
+  .is-ink .sfoot { border-top-color: rgba(233, 228, 255, 0.14); color: #8e87b8; }
+  .is-ink .sf-brand { color: #c3bce8; }
+  .is-ink .sf-brand :global(svg) { color: var(--gold); }
+
+  .foot-note {
+    margin: auto 0 0;
+    padding: 16px 22px;
+    font-size: 21px;
+    line-height: 1.45;
+    color: var(--ink);
+    background: var(--gold-wash);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+  }
+  .read {
+    margin-top: auto;
+    align-self: flex-start;
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--violet-deep) !important;
+  }
+
+  /* ---------------- title ---------------- */
+  .slide-title { justify-content: center; }
+  .blob { position: absolute; border-radius: 50%; }
+  .blob-violet { width: 720px; height: 720px; background: var(--violet-wash); right: -220px; top: -300px; }
+  .blob-gold { width: 360px; height: 360px; background: var(--gold-wash); left: -160px; bottom: -180px; }
+  .title-body { position: relative; z-index: 1; }
+  .slide-title h1 { margin: 28px 0 0; font-size: 104px; line-height: 0.98; }
+  .mark-gold { background: linear-gradient(transparent 62%, var(--gold) 62%, var(--gold) 94%, transparent 94%); padding: 0 0.06em; }
+  .title-sub { margin: 30px 0 0; font-size: 28px; max-width: 34ch; color: var(--ink-soft); }
+  .title-by { display: flex; align-items: center; gap: 18px; margin-top: 56px; }
+  .title-by strong { display: block; font-family: var(--display); font-size: 26px; }
+  .title-by span { font-family: var(--mono); font-size: 15px; color: var(--ink-soft); }
+
+  /* ---------------- section / statement / end ---------------- */
+  .sec-body, .stmt-body, .end-body { margin: auto 0; }
+  .sec-n { font-family: var(--mono); font-size: 30px; font-weight: 600; color: var(--gold); letter-spacing: 0.1em; }
+  .sec-body h2 { margin: 18px 0 0; font-size: 104px; line-height: 0.98; color: #fff; }
+  .sec-body p { margin: 26px 0 0; font-size: 30px; color: #a49dd0; }
+  .sec-body::before {
+    content: "";
+    display: block;
+    width: 96px;
+    height: 6px;
+    background: var(--gold);
+    margin-bottom: 40px;
+  }
+
+  .stmt { margin: 0; font-family: var(--display); font-weight: 700; font-size: 70px; line-height: 1.06; letter-spacing: -0.03em; color: #fff; max-width: 20ch; text-wrap: balance; }
+  .stmt-sub { margin: 34px 0 0; font-size: 28px; color: #a49dd0; max-width: 50ch; padding-left: 22px; border-left: 4px solid var(--gold); }
+
+  .end-body { text-align: left; }
+  .end-body h2 { margin: 30px 0 0; font-size: 88px; color: #fff; }
+  .end-body p { margin: 20px 0 0; font-size: 26px; color: #a49dd0; max-width: 44ch; }
+  .end-links { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; font-family: var(--mono); font-size: 20px; color: #fff; }
+  .end-links span { display: inline-block; width: 110px; color: var(--gold); text-transform: uppercase; font-size: 14px; letter-spacing: 0.14em; }
+
+  /* ---------------- agenda ---------------- */
+  .agenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .agenda li {
+    display: grid;
+    grid-template-columns: 64px 330px 1fr;
+    align-items: baseline;
+    gap: 20px;
+    padding: 16px 22px;
+    background: #fdfbf6;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--violet);
+    border-radius: 10px;
+  }
+  .ag-n { font-family: var(--mono); font-size: 22px; font-weight: 600; color: var(--violet-deep); }
+  .ag-t { font-family: var(--display); font-weight: 700; font-size: 28px; letter-spacing: -0.02em; }
+  .ag-l { font-size: 17px; color: var(--ink-soft); line-height: 1.4; }
+
+  /* ---------------- dial ---------------- */
+  .dial { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-bottom: 26px; }
+  .dial-col { padding: 22px 22px 16px; background: #fdfbf6; border: 1px solid var(--rule); border-radius: 12px; --topo-ground: #fdfbf6; }
+  .dial-n { font-family: var(--mono); font-size: 15px; letter-spacing: 0.16em; color: var(--gold-deep); }
+  .dial-col h3 { margin: 8px 0 6px; font-size: 32px; }
+  .dial-col p { margin: 0 0 14px; font-size: 19px; line-height: 1.4; min-height: 54px; }
+
+  /* ---------------- points ---------------- */
+  .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+  .pts li { display: grid; grid-template-columns: 56px 1fr; gap: 14px; font-size: 26px; line-height: 1.38; color: var(--ink-soft); }
+  .pts.is-dense { gap: 12px; }
+  .pts.is-dense li { font-size: 23px; }
+  .pt-n { font-family: var(--mono); font-weight: 600; font-size: 20px; color: var(--violet); padding-top: 5px; }
+  .pts strong { display: block; color: var(--ink); font-family: var(--display); font-weight: 700; }
+  .pt-rest { font-size: 0.86em; }
+
+  /* ---------------- compare ---------------- */
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-bottom: 26px; }
+  .cmp-col { padding: 24px 28px; border-radius: 12px; border: 1px solid var(--rule); }
+  .cmp-col h3 { margin: 0 0 14px; font-size: 28px; }
+  .cmp-col ul { margin: 0; padding: 0 0 0 22px; display: grid; gap: 10px; }
+  .cmp-col li { font-size: 21px; line-height: 1.38; color: var(--ink-soft); }
+  .cmp-col li::marker { color: var(--violet); }
+  .cmp-col.tone-violet { background: var(--violet-wash); border-color: rgba(109, 75, 208, 0.28); }
+  .cmp-col.tone-gold { background: var(--gold-wash); border-color: rgba(201, 163, 56, 0.4); }
+  .cmp-col.tone-gold li::marker { color: var(--gold-deep); }
+  .cmp-col.tone-ink { background: var(--ink); border-color: var(--ink); }
+  .cmp-col.tone-ink h3 { color: #fff; }
+  .cmp-col.tone-ink li { color: #c3bce8; }
+  .cmp-col.tone-ink li::marker { color: var(--gold); }
+
+  /* ---------------- pattern ---------------- */
+  .slide-pattern .hd { margin-bottom: 22px; }
+  .pat { display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 40px; align-items: center; flex: 1; min-height: 0; }
+  .pat-idea { margin: 0; font-size: 24px; line-height: 1.45; color: var(--ink); }
+  .pat-topo { min-width: 0; }
+  .pat-uw { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px; }
+  .uw { padding: 14px 20px; border-radius: 10px; border: 1px solid var(--rule); }
+  .uw span { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+  .uw p { margin: 6px 0 0; font-size: 18.5px; line-height: 1.4; color: var(--ink); }
+  .uw-use { background: var(--violet-wash); border-color: rgba(109, 75, 208, 0.28); }
+  .uw-use span { color: var(--violet-deep); }
+  .uw-watch { background: var(--gold-wash); border-color: rgba(201, 163, 56, 0.4); }
+  .uw-watch span { color: var(--gold-deep); }
+
+  /* ---------------- code ---------------- */
+  .code-grid { display: grid; grid-template-columns: 0.68fr 1.32fr; gap: 44px; align-items: center; flex: 1; min-height: 0; }
+  .code-copy { display: flex; flex-direction: column; height: 100%; justify-content: center; }
+  .code-copy p { margin: 22px 0 28px; font-size: 22px; line-height: 1.5; }
+  .code-copy .read { margin-top: 0; }
+  .slide .term { font-size: 17px; line-height: 1.6; }
+  .slide .term-bar span { font-size: 12px; }
+  .code { padding: 20px 24px 24px; }
+  .code :global(.l) { display: block; white-space: pre; min-height: 1.6em; }
+
+  /* ---------------- table ---------------- */
+  .tbl { display: table; width: 100%; margin: 0; font-size: 21px; border-collapse: separate; border-spacing: 0; background: #fdfbf6; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+  .tbl thead th { font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 20px; background: var(--ink); color: #fff; border: 0; }
+  .tbl tbody th { font-family: var(--display); font-size: 22px; color: var(--ink); background: transparent; text-transform: none; letter-spacing: -0.01em; padding: 13px 20px; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+  .tbl td { padding: 13px 20px; color: var(--ink-soft); }
+  .tbl tbody tr:last-child > * { border-bottom: 0; }
+
+  /* ---------------- ladder ---------------- */
+  .ladder { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 12px; }
+  .ladder li {
+    display: grid;
+    grid-template-columns: 56px 240px 1fr;
+    gap: 18px;
+    align-items: baseline;
+    padding: 16px 22px;
+    margin-left: calc(var(--step) * 56px);
+    background: #fdfbf6;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--violet);
+    border-radius: 10px;
+  }
+  .ladder li:last-child { border-left-color: var(--gold-deep); }
+  .ld-n { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--violet-deep); }
+  .ladder strong { font-family: var(--display); font-size: 26px; }
+  .ladder span:last-child { font-size: 20px; color: var(--ink-soft); }
+
+  /* ---------------- reading ---------------- */
+  .reading { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 40px; }
+  .refs { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  .refs li { display: flex; justify-content: space-between; gap: 18px; padding-bottom: 9px; border-bottom: 1px solid var(--rule); font-size: 18px; }
+  .refs a { color: var(--ink) !important; font-weight: 500; }
+  .refs span { font-family: var(--mono); font-size: 14px; color: var(--ink-soft); white-space: nowrap; }
+  .mine { padding: 22px 24px; background: var(--violet-wash); border: 1px solid rgba(109, 75, 208, 0.28); border-radius: 12px; align-self: start; }
+  .mine h3 { margin: 0 0 12px; font-size: 22px; }
+  .mine ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 18px; }
+
+  /* ---------------- controls ---------------- */
+  .controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 52px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 18px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #a49dd0;
+  }
+  .controls a { color: #c3bce8 !important; }
+  .controls a:hover { color: var(--gold) !important; text-decoration: none; }
+  .ctl-mid { display: flex; align-items: center; gap: 14px; }
+  .ctl-right { justify-self: end; display: flex; gap: 8px; }
+  .controls button {
+    font: inherit;
+    color: #e9e4ff;
+    background: rgba(233, 228, 255, 0.08);
+    border: 1px solid rgba(233, 228, 255, 0.16);
+    border-radius: 6px;
+    padding: 5px 11px;
+    cursor: pointer;
+  }
+  .controls button:hover { border-color: var(--gold); color: var(--gold); }
+  .controls button span { opacity: 0.6; font-size: 11px; }
+  .progress { position: fixed; left: 0; right: 0; bottom: 52px; height: 3px; background: rgba(233, 228, 255, 0.08); }
+  .progress i { display: block; height: 100%; width: 0; background: var(--gold); transition: width 0.2s ease; }
+
+  @media (max-width: 560px) {
+    .ctl-back { font-size: 0; }
+    .ctl-back::before { content: "←"; font-size: 15px; }
+  }
+
+  :global(:fullscreen) .controls,
+  :global(:fullscreen) .progress { opacity: 0; transition: opacity 0.2s ease; }
+  :global(:fullscreen) .controls:hover { opacity: 1; }
+  :global(:fullscreen) .viewport { inset: 0; }
+
+  /* ---------------- print: one slide per page ---------------- */
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    :global(html), :global(body) { height: auto; overflow: visible; background: none !important; }
+    .viewport { position: static; display: block; }
+    .stage { transform: none; width: 1280px; height: auto; }
+    .slide {
+      display: flex !important;
+      position: relative;
+      width: 1280px;
+      height: 720px;
+      box-shadow: none;
+      break-after: page;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .controls, .progress { display: none; }
+  }
+</style>
