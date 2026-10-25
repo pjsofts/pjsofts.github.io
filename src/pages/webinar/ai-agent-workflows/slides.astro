@@ -621,7 +621,9 @@ const ogImage = new URL('/og-default.png', Astro.site);
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon-64.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#17132e" />
   </head>
   <body>
@@ -812,7 +814,7 @@ const ogImage = new URL('/og-default.png', Astro.site);
 
             {s.t === 'end' && (
               <div class="end-body">
-                <Mark size={72} />
+                <img class="end-logo" src="/logo.png" width="200" height="200" alt="Pouria Jahandideh — AI Academy" />
                 <h2>Thank you. Questions?</h2>
                 <p>
                   Build all of this yourself, from the agent loop up, in the 12-week
@@ -1047,10 +1049,11 @@ const ogImage = new URL('/og-default.png', Astro.site);
   .stmt { margin: 0; font-family: var(--display); font-weight: 700; font-size: 70px; line-height: 1.06; letter-spacing: -0.03em; color: #fff; max-width: 20ch; text-wrap: balance; }
   .stmt-sub { margin: 34px 0 0; font-size: 28px; color: #a49dd0; max-width: 50ch; padding-left: 22px; border-left: 4px solid var(--gold); }
 
-  .end-body { text-align: left; }
-  .end-body h2 { margin: 30px 0 0; font-size: 88px; color: #fff; }
+  .end-body { text-align: left; position: relative; }
+  .end-logo { display: block; width: 150px; height: 150px; border-radius: 16px; margin-bottom: 30px; }
+  .end-body h2 { margin: 0; font-size: 88px; color: #fff; }
   .end-body p { margin: 20px 0 0; font-size: 26px; color: #a49dd0; max-width: 44ch; }
-  .end-links { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; font-family: var(--mono); font-size: 20px; color: #fff; }
+  .end-links { list-style: none; padding: 0; margin: 40px 0 0; max-width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; font-family: var(--mono); font-size: 20px; color: #fff; }
   .end-links span { display: inline-block; width: 110px; color: var(--gold); text-transform: uppercase; font-size: 14px; letter-spacing: 0.14em; }
 
   /* ---------------- agenda ---------------- */
