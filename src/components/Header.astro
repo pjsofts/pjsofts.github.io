@@ -73,9 +73,9 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
      On the landing page the header is stationery, not chrome: paper, a hard
      ink rule under it, and the CTA as a violet pill. */
   :global(html[data-theme='paper']) .site-header {
-    background: rgba(245, 246, 243, 0.88);
-    backdrop-filter: saturate(1.6) blur(12px);
-    -webkit-backdrop-filter: saturate(1.6) blur(12px);
+    background: rgba(245, 246, 243, 0.97);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--rule);
   }
   :global(html[data-theme='paper']) .brand-txt {
@@ -100,8 +100,12 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
     border-radius: 8px;
   }
   :global(html[data-theme='paper']) .burger span { background: var(--ink); }
-  :global(html[data-theme='paper']) .nav {
-    background: var(--paper);
-    border-bottom: 1px solid var(--rule);
+  /* Only the mobile dropdown needs its own ground; on desktop the links sit
+     straight on the bar. */
+  @media (max-width: 780px) {
+    :global(html[data-theme='paper']) .nav {
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+    }
   }
 </style>
