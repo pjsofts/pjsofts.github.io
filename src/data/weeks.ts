@@ -2,6 +2,12 @@ export interface Week {
   n: number;
   slug: string;
   part: 'Foundations' | 'Build the Clone';
+  /** Shown instead of "Week N", for a lesson outside the numbered weeks. */
+  label?: string;
+  /** Shown instead of the default "Python / TypeScript" line. */
+  stack?: string;
+  /** Link to the lesson's slide deck, if it is on the site. */
+  slides?: string;
   title: string;
   subtitle: string;
   hours: string;
@@ -54,7 +60,106 @@ export const WEEKS: Week[] = [
   },
   {
     n: 2,
-    slug: 'week-2-evals-and-discipline',
+    slug: 'week-2-agent-workflows',
+    part: 'Foundations',
+    title: 'Agent Workflows',
+    subtitle: 'Pick the right pattern',
+    hours: '~5 hours, hands-on',
+    ship: '13 workflow patterns you can run, watch and compare',
+    slides: '/webinar/ai-agent-workflows/slides/',
+    summary:
+      'Not every problem needs an agent. From one LLM call to many agents: prompt chaining, routing, parallelization, ReAct, plan-and-execute, reflection, CodeAct, and five multi-agent patterns — each one running, so you can see who decides the next step and what it costs.',
+    intro: [
+      'Last week you built an agent. This week you learn when not to. Most production "AI features" are workflows: fixed steps where your code owns the control flow and the model fills in the blanks. They are cheaper, faster and far more predictable than an agent.',
+      'The one question that sorts every pattern: who decides the next step, your code or the model? Move that decision to the model and you gain flexibility — and pay for it in cost, latency and predictability. The skill is knowing when that trade is worth it.',
+      'We build thirteen patterns in plain Python, each one small enough to read in a minute, and run them side by side in a live visualizer that lights up every step, highlights the line that is running, and counts the model calls.',
+      'Then we close with evaluation: how to prove that the pattern you picked actually works, by judging the outcome and the trajectory, not just the final sentence.',
+    ],
+    topics: ['Workflows vs agents', 'Prompt chaining · Routing · Parallelization', 'ReAct · Plan & execute · Reflection · CodeAct', 'Multi-agent patterns', 'Evaluating agents'],
+    parts: [
+      { title: 'Agent fundamentals', detail: 'Tools, MCP and skills, RAG, context, memory, planning: the parts every agent is made of, in one map.' },
+      { title: 'Non-agent workflows', detail: 'Prompt chaining, routing and parallelization. Your code owns the control flow; the model fills in the steps.' },
+      { title: 'Single-agent systems', detail: 'ReAct, plan-and-execute, reflection and CodeAct. The model picks the next step inside a loop you bound.' },
+      { title: 'Multi-agent systems', detail: 'Sequential agents, parallel agents, supervisor, dispatcher, evaluator-optimizer and peer-to-peer — and why you rarely need the last one.' },
+      { title: 'Choosing a pattern', detail: 'Cost, latency and predictability side by side. Start with the simplest thing that works and move up only when it does not.' },
+      { title: 'Evaluating agents', detail: 'Outcome vs trajectory, pass@k vs pass^k, and a suite built from real failures.' },
+    ],
+    outcomes: [
+      'Tell a workflow from an agent, and choose between them on purpose',
+      'Implement the common single- and multi-agent patterns from scratch',
+      'Compare patterns on cost, latency and reliability with real numbers',
+    ],
+  },
+  {
+    n: 3,
+    slug: 'week-3-harness-engineering',
+    part: 'Foundations',
+    title: 'Harness Engineering',
+    subtitle: 'Make it survive production',
+    hours: '~6 hours, hands-on',
+    ship: 'A runtime that runs any agent reliably',
+    summary:
+      'Build the layer that makes an agent survive production: durable execution that shrugs off crashes, a sandbox for model-written code, flat memory, least-privilege routing, parallel supervision, and human approval that can wait three days.',
+    intro: [
+      'Week 1 you built an agent. Week 2 you learned the patterns around one, and when a plain workflow is the better choice. This week we build the thing most engineers never see until it bites them: the harness — the runtime layer between your agent loop and the real world.',
+      'This is a systems week, not an app week. The agent itself is deliberately boring: a domain-neutral support-triage bot, our crash-test dummy. The harness is the protagonist.',
+      'Agent systems are workflow systems. The LLM decides the next semantic step; the harness owns execution. Everything this week hangs off that one split.',
+      'The rhythm is the same in every part: name a production failure mode, watch the naive agent fail live, build the one harness capability that fixes it, then re-run and watch it survive.',
+    ],
+    topics: ['Durable execution & crash recovery', 'Sandboxed code execution', 'Flat memory', 'Routing & handoffs', 'Parallel supervision', 'Approval that waits days'],
+    parts: [
+      { title: 'The failure modes', detail: 'Watch a naive agent break in the five ways production actually breaks it.' },
+      { title: 'Durable state', detail: 'Persist the workflow so a crash mid-tool-call is a resume, not a restart.' },
+      { title: 'Sandboxed execution', detail: 'Run model-written code without handing it your machine.' },
+      { title: 'Flat memory', detail: 'Keep context bounded so a long-running agent does not grow without limit.' },
+      { title: 'Routing to specialists', detail: 'Least-privilege handoffs — each sub-agent gets only the tools it needs.' },
+      { title: 'Parallel supervision', detail: 'Run work concurrently and degrade gracefully when one branch fails.' },
+      { title: 'Long-lived approval', detail: 'Pause a workflow for three days waiting on a human, then resume exactly where it stopped.' },
+    ],
+    outcomes: [
+      'Separate semantic decisions (the model) from execution (the harness)',
+      'Make an agent crash-recoverable with durable state',
+      'Sandbox untrusted, model-generated code',
+      'Support human approval that outlives the process',
+    ],
+  },
+  {
+    n: 4,
+    slug: 'week-4-background-agents',
+    part: 'Foundations',
+    title: 'Background Agents',
+    subtitle: 'Agents that work while you sleep',
+    hours: '~4 hours, hands-on',
+    stack: '🐍 Python + Inngest',
+    slides: '/curriculum/week-4-background-agents/slides/',
+    ship: 'An incident agent you can leave running',
+    summary:
+      'A chat agent stops when you close the tab. A background agent is started by an event, survives crashes, waits for the world, asks a person before the risky action, and never does the same thing twice. Built in six steps of plain Python on Inngest.',
+    intro: [
+      'Last week the harness made an agent survive production. This week the agent leaves the screen. A chat agent is an interface; a background agent is a lifecycle. Nobody is watching it: an alert starts it at 3 a.m., it runs for minutes or days, and the work has to survive the process dying, the reply getting lost, and the world changing while it waits.',
+      'This week builds an on-call agent for a checkout service that breaks in three ways: a bad feature the agent may switch off, a bad release that needs a person to approve the rollback, and a payment gateway that belongs to another team, where the honest move is to wait or ask.',
+      'Each of the six steps adds a few lines to the previous one, so the diff is the lesson. The code uses the real Inngest SDK — ctx.step.run, step.sleep, step.wait_for_event — and a live visualizer lets you kill the agent mid-run and watch finished steps come back from the journal instead of running again.',
+      'The question to ask at every line: what if the process dies here, what if the world changed while we waited, and who is allowed to decide this?',
+    ],
+    topics: ['Event-driven agent runs', 'Durable steps with Inngest', 'Waiting for events', 'Human approval', 'Idempotent retries', 'Asking for help'],
+    parts: [
+      { title: 'A goal and a loop', detail: 'Observe fresh every cycle, let the model propose one action, and check the goal in code. A policy table, not the prompt, decides what may run.' },
+      { title: 'Durable steps', detail: 'Wrap every piece of work in ctx.step.run. Kill the process: Inngest runs the function again from the top and finished steps return their saved result.' },
+      { title: 'Wait for the world', detail: 'step.wait_for_event with a timeout. The event is a doorbell, not the truth: after waking, look again before believing anything.' },
+      { title: 'A person approves', detail: 'The risky action waits in an inbox for a yes. Silence is not a yes, and a yes given for an older version of the service is dropped.' },
+      { title: 'Safe retries', detail: 'The reply was lost but the change happened. An action id built from run, cycle and action makes the retry the same request, so it is never done twice.' },
+      { title: 'Ask for help', detail: 'When the cause is outside our service, ask. An answer is information, not permission: nothing runs because a person said so.' },
+    ],
+    outcomes: [
+      'Run an agent from an event, with no one watching, and bound it',
+      'Make agent progress survive crashes with durable steps',
+      'Pause for events and people without holding a process open',
+      'Design retries that can never repeat a side effect',
+    ],
+  },
+  {
+    n: 5,
+    slug: 'week-5-evals-and-discipline',
     part: 'Foundations',
     title: 'Evals & Engineering Discipline',
     subtitle: 'Make it good, prove it',
@@ -63,7 +168,7 @@ export const WEEKS: Week[] = [
     summary:
       'Build a diagram-design agent, put real evals around it, then make it measurably better — context engineering, sharper tools, RAG, richer output, human approval, and a data flywheel that turns every correction into a test.',
     intro: [
-      'Last week you built an agent from scratch and you know exactly how it works. This week you learn the part of the job that separates a demo from a product: the discipline.',
+      'You have built an agent, picked workflow patterns on purpose, given it a harness, and let it run in the background. This week you learn the part of the job that separates a demo from a product: the discipline.',
       'We build a new agent — a diagram design assistant that draws flowcharts, org charts and architecture diagrams onto a canvas you can watch in your browser — and then we stop adding features and start measuring. Golden datasets. Automated scorers. A baseline.',
       "Then, for the entire second half, we improve the agent one technique at a time — and after every single change we re-run the evals and look at the numbers. Some scores will jump 2×. Some won't move, and that's a lesson too.",
       'You never ship an improvement you haven\'t measured. That single habit is the profession.',
@@ -91,102 +196,42 @@ export const WEEKS: Week[] = [
     ],
   },
   {
-    n: 3,
-    slug: 'week-3-the-runtime-harness',
-    part: 'Foundations',
-    title: 'The Runtime — Build a Harness',
-    subtitle: 'Make it survive production',
-    hours: '~6 hours, hands-on',
-    ship: 'A runtime that runs any agent reliably',
-    summary:
-      'Build the layer that makes an agent survive production: durable execution that shrugs off crashes, a sandbox for model-written code, flat memory, least-privilege routing, parallel supervision, and human approval that can wait three days.',
-    intro: [
-      'Week 1 you built an agent. Week 2 you built the discipline around one. This week we build the thing most engineers never see until it bites them: the harness — the runtime layer between your agent loop and the real world.',
-      'This is a systems week, not an app week. The agent itself is deliberately boring: a domain-neutral support-triage bot, our crash-test dummy. The harness is the protagonist.',
-      'Agent systems are workflow systems. The LLM decides the next semantic step; the harness owns execution. Everything this week hangs off that one split.',
-      'The rhythm is the same in every part: name a production failure mode, watch the naive agent fail live, build the one harness capability that fixes it, then re-run and watch it survive.',
-    ],
-    topics: ['Durable execution & crash recovery', 'Sandboxed code execution', 'Flat memory', 'Routing & handoffs', 'Parallel supervision', 'Approval that waits days'],
-    parts: [
-      { title: 'The failure modes', detail: 'Watch a naive agent break in the five ways production actually breaks it.' },
-      { title: 'Durable state', detail: 'Persist the workflow so a crash mid-tool-call is a resume, not a restart.' },
-      { title: 'Sandboxed execution', detail: 'Run model-written code without handing it your machine.' },
-      { title: 'Flat memory', detail: 'Keep context bounded so a long-running agent does not grow without limit.' },
-      { title: 'Routing to specialists', detail: 'Least-privilege handoffs — each sub-agent gets only the tools it needs.' },
-      { title: 'Parallel supervision', detail: 'Run work concurrently and degrade gracefully when one branch fails.' },
-      { title: 'Long-lived approval', detail: 'Pause a workflow for three days waiting on a human, then resume exactly where it stopped.' },
-    ],
-    outcomes: [
-      'Separate semantic decisions (the model) from execution (the harness)',
-      'Make an agent crash-recoverable with durable state',
-      'Sandbox untrusted, model-generated code',
-      'Support human approval that outlives the process',
-    ],
-  },
-  {
-    n: 4,
-    slug: 'week-4-the-chat-interface',
+    n: 6,
+    slug: 'week-6-chat-interface-and-tools',
     part: 'Build the Clone',
-    title: 'The Chat Interface',
+    title: 'The Chat Interface & Tools',
     subtitle: 'The product begins',
-    hours: '~6 hours, hands-on',
-    ship: 'mycode v0.1 — a streaming chat agent',
+    hours: '~8 hours, hands-on',
+    ship: 'mycode v0.1 — a streaming coding agent that edits your files safely',
     summary:
-      'The capstone begins. Build a streaming terminal REPL with slash commands, safe interrupts and a live cost meter — the interface layer that makes an agent feel like a product.',
+      'The capstone begins. Build a streaming terminal REPL with slash commands, safe interrupts and a live cost meter, then give it the six tools that make a coding agent — read, write, edit, bash, glob, grep — and the permission system that makes it safe to live with.',
     intro: [
-      'Weeks 1–3 gave you every primitive: the agent loop, tools, evals, streaming, RAG, durable execution, sandboxing, human approval. Starting now, you stop building exercises and start building a product — a working clone of a professional AI coding agent, one subsystem per week.',
-      'By Week 12 it reads codebases, edits files, runs commands, plans, remembers, previews artifacts, traces itself, and orchestrates sub-agents. It goes in your portfolio, not in a folder of course exercises.',
-      'And we are not designing in the dark. This course uses the actual Claude Code source as a reference implementation. Each week, after building our own version of a subsystem, we open the real thing and study the decisions a production team made.',
-      'Why start with the interface? Because the interface is the product. An agent that thinks brilliantly but dumps a wall of text after forty silent seconds feels broken.',
+      'Weeks 1–5 gave you every primitive: the agent loop, workflow patterns, a production harness, background agents, and evals. Starting now, you stop building exercises and start building a product — a working clone of a professional AI coding agent, one subsystem per week.',
+      'By Week 12 it reads codebases, edits files, runs commands, plans, remembers, previews artifacts, traces itself, and orchestrates sub-agents. It goes in your portfolio, not in a folder of course exercises. And we are not designing in the dark: each week, after building our own version of a subsystem, we open the real Claude Code source and study the decisions a production team made.',
+      'We start with the interface, because the interface is the product. An agent that thinks brilliantly but dumps a wall of text after forty silent seconds feels broken. Then we cross the line that separates a toy from a tool: the agent stops talking about your code and starts changing it.',
+      'A tool is a contract, not a function. The model never sees your code — it sees a name, a description that says when to use the tool, and a schema of arguments. And the result is the teacher: when a tool fails, you return the error to the model as data, and a good model fixes its next call.',
     ],
-    topics: ['Streaming terminal REPL', 'Slash commands', 'Safe interrupts', 'A live cost meter', 'Inside Claude Code: the real REPL'],
+    topics: ['Streaming terminal REPL', 'Slash commands & safe interrupts', 'A live cost meter', 'Read · Write · Edit · Bash · Glob · Grep', 'The permission system', 'Fixing a real bug end-to-end'],
     parts: [
       { title: 'The REPL skeleton', detail: 'A read-eval-print loop that feels instant and never blocks on a long model call.' },
       { title: 'Streaming output', detail: 'Tokens as they arrive, so the machine visibly thinks out loud.' },
-      { title: 'Slash commands', detail: 'An escape hatch for everything that is not a model turn.' },
-      { title: 'Safe interrupts', detail: 'Ctrl-C that cancels the turn without corrupting the conversation state.' },
+      { title: 'Slash commands & safe interrupts', detail: 'An escape hatch for everything that is not a model turn, and Ctrl-C that cancels the turn without corrupting the conversation.' },
       { title: 'The cost meter', detail: 'Live token and dollar accounting, because the bill is a feature.' },
-    ],
-    outcomes: [
-      'Build a responsive streaming terminal interface',
-      'Handle cancellation without losing conversation state',
-      'Track and display real-time token cost',
-    ],
-  },
-  {
-    n: 5,
-    slug: 'week-5-tools-that-touch-code',
-    part: 'Build the Clone',
-    title: 'Tools That Touch Code',
-    subtitle: 'Give the agent hands',
-    hours: '~6 hours, hands-on',
-    ship: 'A coding agent that edits your files — safely',
-    summary:
-      'A chatbot talks about your code; an agent changes it. Add the six tools that make a coding agent — read, write, edit, bash, glob, grep — plus the permission system that makes it safe to live with.',
-    intro: [
-      'Last week you built an interface: a streaming REPL that talks. This week you cross the line that separates a toy from a tool.',
-      'The mechanism is function calling — you describe tools to the model, it responds with structured requests to use them, you run them and feed the results back, and you loop until it is done. That loop, plus six well-designed tools, plus a permission gate, is a coding agent.',
-      'A tool is a contract, not a function. The model never sees your code — it sees a name, a description that says when to use the tool, and a schema of arguments. Ninety percent of "the model uses tools badly" is actually "my tool descriptions are vague."',
-      'The result is the teacher. When a tool fails, you do not crash — you return the error to the model as data, and a good model reads it and fixes its next call.',
-    ],
-    topics: ['Read · Write · Edit · Bash', 'Glob & Grep search', 'The permission system', 'Tool error design', 'Fixing a real bug end-to-end'],
-    parts: [
       { title: 'Read & Write', detail: 'The two simplest tools, and the path-safety rules that keep them inside the project.' },
       { title: 'Edit', detail: 'Exact-match replacement — why it beats "rewrite the file" for reliability and cost.' },
-      { title: 'Glob & Grep', detail: 'Fast, exact, free search. The right first move before anything semantic.' },
-      { title: 'Bash', detail: 'The most powerful and most dangerous tool, and how to scope it.' },
+      { title: 'Glob, Grep & Bash', detail: 'Fast, exact, free search first; then the most powerful and most dangerous tool, and how to scope it.' },
       { title: 'The permission system', detail: 'Allow, deny, ask — and remembering the answer for the rest of the session.' },
       { title: 'Fix a real bug', detail: 'End-to-end milestone: the agent finds, fixes and verifies an actual bug in a real repo.' },
     ],
     outcomes: [
-      'Write tool descriptions a model uses correctly the first time',
-      'Design tool errors that let the model self-correct',
+      'Build a responsive streaming terminal interface with safe cancellation',
+      'Write tool descriptions and errors a model uses correctly',
       'Build a permission system you would actually trust',
     ],
   },
   {
-    n: 6,
-    slug: 'week-6-context-and-prompt-engineering',
+    n: 7,
+    slug: 'week-7-context-and-prompt-engineering',
     part: 'Build the Clone',
     title: 'Context & Prompt Engineering',
     subtitle: 'Own the context window',
@@ -214,8 +259,8 @@ export const WEEKS: Week[] = [
     ],
   },
   {
-    n: 7,
-    slug: 'week-7-rag-and-vector-databases',
+    n: 8,
+    slug: 'week-8-rag-and-vector-databases',
     part: 'Build the Clone',
     title: 'RAG + Vector Databases',
     subtitle: 'Give the agent a map',
@@ -224,7 +269,7 @@ export const WEEKS: Week[] = [
     summary:
       'Grep finds exact strings; it cannot answer "where do we handle rate limiting?" when the code says throttle. Build a vector database from scratch — chunking, embeddings, cosine similarity, incremental re-indexing — and wire it in as a tool.',
     intro: [
-      'Week 5 gave your agent grep and glob — fast, exact, free. They are the right first tool for most searches. But they share one blind spot: they match text, not meaning.',
+      'Week 6 gave your agent grep and glob — fast, exact, free. They are the right first tool for most searches. But they share one blind spot: they match text, not meaning.',
       'Ask "where do we decide if a user can retry a payment?" and grep needs you to already know the code says retry and not reattempt, backoff, or idempotency_key. When you do not know the words, you need search by concept.',
       'This week you build the whole pipeline yourself — chunker, embedder, vector store, and an incremental indexer — because a "vector database" sounds like infrastructure you rent and is actually a JSON file and a loop.',
       'The most important judgment this week is knowing when not to use RAG. Known symbol or string → grep. Vague "where/how do we…" question → semantic search.',
@@ -245,63 +290,35 @@ export const WEEKS: Week[] = [
     ],
   },
   {
-    n: 8,
-    slug: 'week-8-planning-and-agent-loops',
+    n: 9,
+    slug: 'week-9-planning-and-memory',
     part: 'Build the Clone',
-    title: 'Planning & Agent Loops',
-    subtitle: 'Think before you act',
-    hours: '~6 hours, hands-on',
-    ship: 'An agent that plans, then executes',
+    title: 'Planning & Memory',
+    subtitle: 'Think before you act, never lose your place',
+    hours: '~8 hours, hands-on',
+    ship: 'An agent that plans, executes, and remembers across days',
     summary:
-      'An agent with tools but no plan overreaches on some tasks and quits early on others. Add a read-only plan mode, a todo list the agent maintains, feature lists the harness verifies, and a maker/checker loop.',
+      'An agent with tools but no plan overreaches on some tasks and quits early on others, and forgets everything when the terminal closes. Add plan mode, a todo list the agent maintains, a harness-owned definition of done, resumable sessions, persistent memory and a clean handoff file.',
     intro: [
-      'Give a capable model a vague task — "add user authentication" — and watch one of two things happen. It overreaches: two hours later there are twelve files, eight hundred lines, and nothing works end to end. Or it under-finishes: it declares victory when the code "looks done," before anything was actually run.',
-      'These are two faces of the same problem — the agent has no externalized plan and no honest definition of done, so it optimizes for looking productive instead of being finished.',
-      'Planning is the cure, and it is not one feature but four, each attacking a different part of the problem.',
-      'This week is about restraint, not power. Every tool so far made the agent more capable; this week makes it more disciplined — which, counterintuitively, makes it far more useful.',
+      'Give a capable model a vague task — "add user authentication" — and watch it either overreach (twelve files, eight hundred lines, nothing works end to end) or under-finish (it declares victory when the code "looks done"). Both come from the same gap: no externalized plan and no honest definition of done.',
+      'The first half of the week is about restraint: a read-only plan mode, a todo list with one task in progress, feature lists the harness verifies, and a maker/checker loop where the worker never grades its own homework.',
+      'The second half is about memory. Real work spans days, and the agent needs three kinds, each with its own lifetime: the session you can resume tomorrow, durable facts about you that follow it across projects, and a handoff that says where the work stands in this repo.',
+      'All of it uses the same trick you have used since Week 6: the conversation is just data, so plans and memory are just files. No database, no service — inspectable, portable, and crash-proof.',
     ],
-    topics: ['Plan mode', 'Todo lists the agent maintains', 'Feature lists & scope control', 'Loop engineering', 'Maker/checker separation'],
+    topics: ['Plan mode', 'Todo lists the agent maintains', 'Feature lists & maker/checker', 'Resumable sessions', 'Persistent memory & handoffs'],
     parts: [
       { title: 'The todo list', detail: 'One task in progress, always — externalized so it cannot drift.' },
       { title: 'Plan mode', detail: 'Read-only exploration that proposes but cannot touch your code until you approve.' },
-      { title: 'Feature lists', detail: 'The harness, not the model, owns what "done" means — verification-gated state.' },
-      { title: 'Loop engineering', detail: 'When to keep going, when to stop, and how to tell the difference.' },
+      { title: 'Feature lists & loop engineering', detail: 'The harness, not the model, owns what "done" means, and decides when to keep going and when to stop.' },
       { title: 'Maker/checker', detail: 'The worker never grades its own homework.' },
-    ],
-    outcomes: [
-      'Separate planning from execution with an approval gate',
-      'Stop scope creep with externalized task state',
-      'Define "done" in the harness rather than trusting the model',
-    ],
-  },
-  {
-    n: 9,
-    slug: 'week-9-memory-and-sessions',
-    part: 'Build the Clone',
-    title: 'Memory & Sessions',
-    subtitle: 'Never lose your place',
-    hours: '~6 hours, hands-on',
-    ship: 'An agent that remembers across days',
-    summary:
-      'Close the terminal and a normal agent forgets everything. Add resumable session transcripts, persistent cross-project memory, and a handoff file so a fresh session continues exactly where the last one stopped.',
-    intro: [
-      'An agent that forgets everything when the terminal closes is a goldfish with tools. Real work spans days and projects, and the agent needs to remember three different things, each with its own lifetime.',
-      'The session — this specific conversation, so you can close your laptop and resume tomorrow. User memory — durable facts about you that follow the agent across every project. The workspace handoff — where the work stands in this repo, so the next session starts without re-discovering everything.',
-      'All three are the same trick you have used since Week 4: the conversation is just data, so memory is just files. No database, no service — a JSONL transcript, a directory of markdown facts, and a PROGRESS.md.',
-      'Durable state lives in plain files on disk, written as it happens. That makes memory inspectable, portable, and crash-proof.',
-    ],
-    topics: ['Resumable sessions', 'Persistent cross-session memory', 'Workspace management', 'Clean handoffs'],
-    parts: [
-      { title: 'Sessions', detail: 'A durable transcript — one line per message, saved live as it happens.' },
-      { title: 'Resume', detail: 'Pick a session back up days later with full fidelity.' },
+      { title: 'Sessions & resume', detail: 'A durable transcript, one line per message, saved live — picked back up days later with full fidelity.' },
       { title: 'User memory', detail: 'Durable facts about you, scoped across projects.' },
-      { title: 'Workspace state', detail: 'Where the work stands in this repo, right now.' },
       { title: 'The handoff', detail: 'A PROGRESS.md that lets a fresh session continue without a re-brief.' },
     ],
     outcomes: [
-      'Make agent sessions durable and resumable',
-      'Design memory with the right lifetime for each kind of fact',
-      'Hand work off cleanly between sessions',
+      'Separate planning from execution with an approval gate',
+      'Define "done" in the harness rather than trusting the model',
+      'Make sessions durable and memory scoped to the right lifetime',
     ],
   },
   {
@@ -382,7 +399,7 @@ export const WEEKS: Week[] = [
       { title: 'The Task tool', detail: 'Delegation as a first-class tool the main agent can call.' },
       { title: 'Parallel orchestration', detail: 'Independent work runs concurrently and results merge cleanly.' },
       { title: 'Small focused agents', detail: 'Why narrower scope beats a bigger prompt.' },
-      { title: 'Capstone assembly', detail: 'Everything from Weeks 4–12, integrated and shipped.' },
+      { title: 'Capstone assembly', detail: 'Everything from Weeks 6–12, integrated and shipped.' },
     ],
     outcomes: [
       'Decompose work across specialized sub-agents',
@@ -393,3 +410,6 @@ export const WEEKS: Week[] = [
 ];
 
 export const getWeek = (slug: string) => WEEKS.find((w) => w.slug === slug);
+
+/** "Week 7", or the week's own label if it has one. */
+export const weekLabel = (w: Week) => w.label ?? `Week ${w.n}`;

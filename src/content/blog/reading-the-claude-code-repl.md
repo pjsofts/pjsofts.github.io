@@ -154,7 +154,7 @@ Two more things in `command.ts` worth noticing. `load: () => Promise<Module>` �
 context?: 'inline' | 'fork'
 ```
 
-A slash command that can run as a **sub-agent with its own context window**. Park that — it's the Week 12 problem showing up in a Week 4 type definition.
+A slash command that can run as a **sub-agent with its own context window**. Park that — it's the Week 12 problem showing up in a Week 6 type definition.
 
 ## 3. Interrupts, part one: the abort tree
 
@@ -382,4 +382,4 @@ Go write the 150 lines. Come back for the other 4,850 when a user finds them for
 
 ---
 
-*Building the streaming REPL — slash commands, safe interrupts and a live cost meter — is [Week 4](/curriculum/week-4-the-chat-interface) of the AI Engineering mentorship, where the capstone starts and every week after this adds one subsystem to the same agent.*
+*Building the streaming REPL — slash commands, safe interrupts and a live cost meter — is [Week 6](/curriculum/week-6-chat-interface-and-tools) of the AI Engineering mentorship, where the capstone starts and every week after this adds one subsystem to the same agent.*

@@ -356,4 +356,4 @@ Don't open `src/screens/REPL.tsx`. It's 5,005 lines and it will teach you nothin
 
 ---
 
-*Building the six tools, the guards and the permission gate yourself — then reading the production version beside your own — is [Week 5](/curriculum/week-5-tools-that-touch-code) of the AI Engineering mentorship. The interface layer got [the same treatment](/blog/reading-the-claude-code-repl/) in Week 4.*
+*Building the six tools, the guards and the permission gate yourself — then reading the production version beside your own — is [Week 6](/curriculum/week-6-chat-interface-and-tools) of the AI Engineering mentorship. The interface layer, built earlier that same week, got [the same treatment](/blog/reading-the-claude-code-repl/).*

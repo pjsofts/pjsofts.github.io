@@ -251,4 +251,4 @@ Nearly two years and several model generations later, the patterns haven't chang
 
 *Source: Erik Schluntz and Barry Zhang, [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents), Anthropic, December 2024. Quotations are from the original. Code samples are mine.*
 
-*The five workflows and the agent loop are [Week 8](/curriculum/week-8-planning-and-agent-loops) of the AI Engineering mentorship, and orchestrator–workers at scale is [Week 12](/curriculum/week-12-multi-agent-orchestration).*
+*The five workflows and the agent loop are [Week 9](/curriculum/week-9-planning-and-memory) of the AI Engineering mentorship, and orchestrator–workers at scale is [Week 12](/curriculum/week-12-multi-agent-orchestration).*

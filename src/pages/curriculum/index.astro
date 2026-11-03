@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE } from '../../data/site';
-import { WEEKS } from '../../data/weeks';
+import { WEEKS, weekLabel } from '../../data/weeks';
 
 const foundations = WEEKS.filter((w) => w.part === 'Foundations');
 const clone = WEEKS.filter((w) => w.part === 'Build the Clone');
@@ -13,7 +13,7 @@ const schema = {
   itemListElement: WEEKS.map((w) => ({
     '@type': 'ListItem',
     position: w.n,
-    name: `Week ${w.n} — ${w.title}`,
+    name: `${weekLabel(w)} — ${w.title}`,
     url: `${SITE.url}/curriculum/${w.slug}`,
   })),
 };
@@ -22,7 +22,7 @@ const schema = {
 <BaseLayout
   theme="paper"
   title="12-Week AI Engineering Curriculum — Full Week-by-Week Walkthrough"
-  description="The complete 12-week AI engineering curriculum: agent loops, tool calling, evals, a production runtime, RAG and vector databases, context engineering, planning, memory, sandboxing, tracing and multi-agent orchestration."
+  description="The complete 12-week AI engineering curriculum: agent loops, workflow patterns, a production harness, background agents, evals, RAG and vector databases, context engineering, planning, memory, sandboxing, tracing and multi-agent orchestration."
   canonical="/curriculum"
   schema={[schema]}
 >
@@ -32,8 +32,8 @@ const schema = {
       <h1>Twelve weeks,<br />one real product</h1>
       <p class="sub">
         Every week is implemented hands-on in real code, in your choice of Python or
-        TypeScript. The first three weeks build the fundamentals every AI engineer needs;
-        the next nine assemble them into a working clone of a professional AI coding agent.
+        TypeScript. The first five weeks build the fundamentals every AI engineer needs;
+        the next seven assemble them into a working clone of a professional AI coding agent.
       </p>
     </div>
   </section>
@@ -41,18 +41,18 @@ const schema = {
   <section>
     <div class="wrap">
       <div class="part-intro">
-        <span class="pill pill-violet">Part I · Weeks 1–3</span>
+        <span class="pill pill-violet">Part I · Weeks 1–5</span>
         <h2>Foundations</h2>
         <p>
-          The primitives of modern AI engineering: the agent loop, evaluation, and a
-          production-grade runtime. Three weeks that most courses never reach.
+          The primitives of modern AI engineering: the agent loop, workflow patterns, a
+          production harness, background agents, and evaluation. Five weeks that most courses never reach.
         </p>
       </div>
       <div class="grid g2">
         {foundations.map((w) => (
           <a class="card wcard" href={`/curriculum/${w.slug}`}>
             <div class="wtop">
-              <span class="wnum">Week {w.n}</span>
+              <span class="wnum">{weekLabel(w)}</span>
               <span class="whrs">{w.hours}</span>
             </div>
             <h3>{w.title}</h3>
@@ -67,7 +67,7 @@ const schema = {
       </div>
 
       <div class="part-intro second">
-        <span class="pill pill-violet">Part II · Weeks 4–12</span>
+        <span class="pill pill-violet">Part II · Weeks 6–12</span>
         <h2>Build the Clone</h2>
         <p>
           One subsystem per week. Each week your tool — <code>mycode</code> — gains a real
@@ -79,7 +79,7 @@ const schema = {
         {clone.map((w) => (
           <a class="card wcard" href={`/curriculum/${w.slug}`}>
             <div class="wtop">
-              <span class="wnum">Week {w.n}</span>
+              <span class="wnum">{weekLabel(w)}</span>
               <span class="whrs">{w.hours}</span>
             </div>
             <h3>{w.title}</h3>

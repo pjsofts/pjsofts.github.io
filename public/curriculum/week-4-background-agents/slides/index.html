@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Background agents with Inngest — Slides</title>
+<link rel="icon" href="logo-mark.png">
+<style>
+@font-face { font-family: "Space Grotesk"; font-weight: 400 700; font-display: swap; src: url("fonts/space-grotesk.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 100 900; font-display: swap; src: url("fonts/inter.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 100 800; font-display: swap; src: url("fonts/jetbrains-mono.woff2") format("woff2"); }
+
+/* The same brand as the course site: the studio. Brick white, denim navy, chair red, sticky-note yellow. */
+:root {
+  --paper: #f5f6f3; --paper-2: #e6e9e8; --card: #ffffff;
+  --ink: #1d2a44; --ink-soft: #4b5568;
+  --violet: #d42f26; --violet-deep: #a8231c; --violet-wash: #fbe6e4;
+  --gold: #f6d64a; --gold-deep: #8a5a26; --gold-wash: #fdf3c4;
+  --teal: #0f8f80; --teal-wash: #ddf3ef;
+  --rose: #c2416b;
+  --term-green: #7ddca4;
+  --rule: rgba(29, 42, 68, 0.12);
+  --display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { overflow: hidden; background: #0b0918; font-family: var(--sans); color: var(--ink); }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.03em; line-height: 1.02; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+code, .mono { font-family: var(--mono); }
+
+.viewport { position: fixed; inset: 0 0 52px 0; display: grid; place-items: center; }
+.stage { width: 1280px; height: 720px; position: relative; transform: scale(var(--s, 1)); flex: none; }
+
+/* ---------------- a slide ---------------- */
+.slide { position: absolute; inset: 0; display: none; flex-direction: column; padding: 60px 84px 80px; background: var(--paper); overflow: hidden; box-shadow: 0 40px 80px -40px rgba(0,0,0,.8); }
+.slide.on { display: flex; }
+.slide.ink { background: var(--ink); color: #d9d3f5; }
+
+.lbl { display: inline-flex; align-items: center; gap: .6ch; font: 600 14px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--violet-deep); }
+.lbl::before { content: ""; width: 22px; height: 2px; background: var(--violet); }
+.lbl.gold { color: var(--gold-deep); } .lbl.gold::before { background: var(--gold-deep); }
+.hd { margin-bottom: 30px; }
+.hd h2 { margin-top: 14px; font-size: 52px; }
+.hd-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.demo { flex: none; margin-top: 2px; font: 600 15px var(--mono); padding: 7px 13px; border-radius: 8px; background: var(--ink); color: var(--gold); letter-spacing: .02em; }
+
+.sfoot { position: absolute; left: 84px; right: 84px; bottom: 26px; display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--rule); font: 13px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.sfoot .brand { display: inline-flex; gap: 10px; align-items: center; color: var(--violet-deep); }
+.sfoot img { width: 20px; height: 20px; border-radius: 5px; }
+.ink .sfoot { border-top-color: rgba(233,228,255,.14); color: #8e87b8; }
+.ink .sfoot .brand { color: #c3bce8; }
+
+.note { margin-top: auto; padding: 15px 22px; font-size: 21px; line-height: 1.45; background: var(--gold-wash); border-left: 4px solid var(--gold); border-radius: 3px; }
+.note b { font-weight: 650; }
+
+/* title */
+.s-title { justify-content: center; }
+.blob { position: absolute; border-radius: 50%; }
+.blob.v { display: none; }
+.blob.g { display: none; }
+.title-body { position: relative; }
+.s-title h1 { margin-top: 26px; font-size: 100px; line-height: .98; }
+.s-title { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='68'%3E%3Cg stroke='%231d2a44' stroke-opacity='.06' fill='none'%3E%3Cpath d='M0 .5H96M0 34.5H96M.5 0V34M48.5 34V68'/%3E%3C/g%3E%3C/svg%3E"); background-size: 96px 68px; }
+.s-title .lbl.gold { padding: 7px 12px; background: var(--gold); color: var(--ink); border-radius: 2px; transform: rotate(-1.5deg); box-shadow: 0 6px 10px -6px rgba(29,42,68,.45); }
+.s-title .lbl.gold::before { display: none; }
+.mark-gold { background: linear-gradient(transparent 62%, var(--gold) 62%, var(--gold) 94%, transparent 94%); padding: 0 .06em; }
+.title-sub { margin-top: 28px; font-size: 27px; max-width: 36ch; color: var(--ink-soft); line-height: 1.4; }
+.title-by { display: flex; align-items: center; gap: 18px; margin-top: 50px; }
+.title-by img { width: 52px; height: 52px; border-radius: 12px; }
+.title-by strong { display: block; font: 700 26px var(--display); }
+.title-by span { font: 15px var(--mono); color: var(--ink-soft); }
+
+/* section / statement / end */
+.mid { margin: auto 0; }
+.sec-n { font: 600 30px var(--mono); color: var(--gold); letter-spacing: .1em; }
+.s-section .mid::before { content: ""; display: block; width: 96px; height: 6px; background: var(--gold); margin-bottom: 40px; }
+.s-section h2 { margin-top: 18px; font-size: 100px; color: #fff; }
+.s-section p { margin-top: 26px; font-size: 30px; color: #a49dd0; }
+.stmt { font: 700 66px/1.08 var(--display); letter-spacing: -0.03em; color: #fff; max-width: 21ch; text-wrap: balance; }
+.stmt-sub { margin-top: 34px; font-size: 28px; line-height: 1.4; color: #a49dd0; max-width: 50ch; padding-left: 22px; border-left: 4px solid var(--gold); }
+.end-body h2 { font-size: 84px; color: #fff; }
+.end-body p { margin-top: 22px; font-size: 26px; color: #a49dd0; max-width: 46ch; line-height: 1.45; }
+.end-body img { width: 130px; height: 130px; border-radius: 16px; margin-bottom: 30px; }
+
+/* agenda */
+.agenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+.agenda li { display: grid; grid-template-columns: 56px 380px 1fr; align-items: baseline; gap: 18px; padding: 13px 22px; background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--violet); border-radius: 10px; }
+.agenda .n { font: 600 21px var(--mono); color: var(--violet-deep); }
+.agenda .t { font: 700 26px var(--display); letter-spacing: -0.02em; }
+.agenda .l { font-size: 18px; color: var(--ink-soft); }
+
+/* points */
+.pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.pts li { display: grid; grid-template-columns: 52px 1fr; gap: 12px; font-size: 25px; line-height: 1.38; color: var(--ink-soft); }
+.pts .n { font: 600 20px var(--mono); color: var(--violet); padding-top: 4px; }
+.pts strong { display: block; color: var(--ink); font: 700 1em var(--display); letter-spacing: -0.01em; }
+.pts .rest { font-size: .88em; }
+
+/* compare */
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-bottom: 24px; }
+.col { padding: 24px 28px; border-radius: 12px; border: 1px solid var(--rule); }
+.col h3 { font-size: 28px; margin-bottom: 14px; }
+.col ul { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
+.col li { font-size: 21px; line-height: 1.38; color: var(--ink-soft); }
+.col.violet { background: var(--violet-wash); border-color: rgba(109,75,208,.28); }
+.col.gold { background: var(--gold-wash); border-color: rgba(201,163,56,.4); }
+.col.ink { background: var(--ink); border-color: var(--ink); }
+.col.ink h3 { color: #fff; } .col.ink li { color: #c3bce8; }
+.col pre { margin: 12px 0 0; font: 16px/1.5 var(--mono); white-space: pre-wrap; }
+.col.ink pre { color: var(--gold); }
+
+/* code */
+.code-grid { display: grid; grid-template-columns: .66fr 1.34fr; gap: 42px; align-items: center; flex: 1; min-height: 0; }
+.code-copy h2 { margin-top: 14px; font-size: 46px; }
+.code-copy p { margin-top: 20px; font-size: 21px; line-height: 1.5; color: var(--ink-soft); }
+.code-copy .demo { display: inline-block; margin-top: 22px; }
+.term { font-variant-ligatures: none; background: var(--ink); border-radius: 14px; overflow: hidden; font-family: var(--mono); box-shadow: 0 2px 4px rgba(29,42,68,.06), 0 14px 26px -16px rgba(29,42,68,.4); }
+.term-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: #100d24; border-bottom: 1px solid rgba(233,228,255,.12); }
+.term-bar i { width: 11px; height: 11px; border-radius: 50%; background: #3b3566; }
+.term-bar i:first-child { background: var(--gold); }
+.term-bar span { margin-left: auto; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #6f68a3; }
+.term-body { padding: 18px 22px 22px; color: #e9e4ff; font-size: 16.5px; line-height: 1.58; }
+.term-body .l { display: block; white-space: pre; min-height: 1.58em; }
+.term .k { color: #b49bff; } .term .s { color: var(--term-green); } .term .c { color: #8c85bd; font-style: italic; } .term .hl { background: rgba(232,198,90,.16); box-shadow: -22px 0 0 rgba(232,198,90,.16), 22px 0 0 rgba(232,198,90,.16); }
+
+/* table */
+.tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 21px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+.tbl thead th { font-size: 14px; letter-spacing: .12em; text-transform: uppercase; padding: 13px 20px; background: var(--ink); color: #fff; text-align: left; }
+.tbl tbody th { font: 700 22px var(--display); text-align: left; padding: 13px 20px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.tbl td { padding: 13px 20px; color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+.tbl tbody tr:last-child > * { border-bottom: 0; }
+.tbl .big { font: 700 26px var(--display); color: var(--ink); }
+.tbl .hot { color: var(--rose); font-weight: 650; }
+
+/* pipeline */
+.lane { display: grid; grid-template-columns: 150px repeat(4, 1fr); gap: 14px; align-items: center; margin-bottom: 18px; }
+.lane-name { font: 600 14px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--violet-deep); }
+.lane-name small { display: block; margin-top: 4px; font: 14px var(--sans); letter-spacing: 0; text-transform: none; color: var(--ink-soft); }
+.box { position: relative; padding: 16px 16px; border-radius: 12px; background: var(--card); border: 2px solid var(--rule); min-height: 104px; }
+.box b { display: block; font: 700 22px var(--display); }
+.box span { display: block; margin-top: 4px; font-size: 16px; color: var(--ink-soft); line-height: 1.35; }
+.box.api { border-color: var(--teal); background: var(--teal-wash); }
+.box.db { border-color: var(--rose); }
+.box.llm { border-color: var(--violet); background: var(--violet-wash); }
+.box:not(:last-child)::after { content: "→"; position: absolute; right: -16px; top: 50%; transform: translateY(-50%); font: 700 20px var(--display); color: var(--ink-soft); }
+
+/* checklist */
+.check { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 30px; }
+.check li { display: grid; grid-template-columns: 30px 1fr; font-size: 20px; line-height: 1.4; color: var(--ink); }
+.check li::before { content: "☐"; color: var(--violet); font-size: 22px; line-height: 1.25; }
+
+/* controls */
+.controls { position: fixed; left: 0; right: 0; bottom: 0; height: 52px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 18px; font: 13px var(--mono); color: #a49dd0; }
+.mid-ctl { display: flex; gap: 14px; align-items: center; }
+.right-ctl { justify-self: end; display: flex; gap: 8px; }
+.controls button { font: inherit; color: #e9e4ff; background: rgba(233,228,255,.08); border: 1px solid rgba(233,228,255,.16); border-radius: 6px; padding: 5px 11px; cursor: pointer; }
+.controls button:hover { border-color: var(--gold); color: var(--gold); }
+.progress { position: fixed; left: 0; right: 0; bottom: 52px; height: 3px; background: rgba(233,228,255,.08); }
+.progress i { display: block; height: 100%; width: 0; background: var(--gold); transition: width .2s; }
+:fullscreen .controls, :fullscreen .progress { opacity: 0; } :fullscreen .controls:hover { opacity: 1; } :fullscreen .viewport { inset: 0; }
+
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  html, body { height: auto; overflow: visible; background: none; }
+  .viewport { position: static; display: block; }
+  .stage { transform: none; height: auto; }
+  .slide { display: flex !important; position: relative; width: 1280px; height: 720px; box-shadow: none; break-after: page; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .controls, .progress { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="viewport"><div class="stage" id="stage"></div></div>
+<nav class="controls">
+  <span>Background agents · with Inngest</span>
+  <div class="mid-ctl"><button data-go="prev">←</button><span id="counter"></span><button data-go="next">→</button></div>
+  <div class="right-ctl"><button data-go="full">⛶ F</button><button data-go="print">PDF</button></div>
+</nav>
+<div class="progress"><i id="bar"></i></div>
+
+<script>
+// ------------------------------------------------------------------ the deck
+// Each slide is one object. `demo` adds a tag saying which step of the
+// visualizer (python server.py → http://127.0.0.1:8767) to switch to.
+const P1 = "01 · A goal and a loop", P2 = "02 · Durable steps", P3 = "03 · Wait for the world",
+      P4 = "04 · A person approves", P5 = "05 · Safe retries", P6 = "06 · Ask for help";
+
+const SLIDES = [
+  { t: "title" },
+  { t: "statement", text: "A chat agent is an interface. A background agent is a lifecycle.",
+    sub: "Nobody is watching. The work has to survive the tab closing, the process dying, and the world changing while it waits." },
+  { t: "agenda" },
+  { t: "compare", lbl: "The difference", title: "Chat agent vs background agent", cols: [
+    { h: "Chat agent", tone: "violet", items: ["You start it, and you watch it", "Runs for seconds", "Something breaks? You press retry", "You are the safety check"] },
+    { h: "Background agent", tone: "gold", items: ["An event starts it, at 3 a.m.", "Runs for minutes, hours, days", "A crash must not lose work, or do it twice", "Safety must be in the code"] },
+  ], note: "Same model, same tools. What changes is <b>everything around the loop</b>. That is what we build today." },
+  { t: "system" },
+  { t: "points", lbl: "Three questions", title: "Ask these at every line", points: [
+    ["What if the process dies here?", "Is the work saved, or lost? Will it be done twice?"],
+    ["What if the world changed while we waited?", "Is what we know still true? Look again before acting."],
+    ["Who is allowed to decide this?", "The model, the code, a person, or the service itself?"],
+  ] },
+
+  // ---------------------------------------------------------------- 01
+  { t: "section", n: "01", title: "A goal and a loop", sub: "Look, pick one action, run it, look again" },
+  { t: "compare", lbl: P1, title: "A rule, or a goal?", cols: [
+    { h: "A rule (a workflow)", tone: "violet", items: ["Fixes the problems you predicted", "Cheap, fast, predictable", "Useless for a fault nobody wrote a rule for"],
+      pre: "if release == \"v2\":\n    rollback()" },
+    { h: "A goal (an agent)", tone: "gold", items: ["Reads logs and changes, then picks a fix", "Handles faults you didn't predict", "Needs limits: it can be wrong"],
+      pre: "GOAL = \"Checkout is healthy again:\n        error rate under 5%.\"" },
+  ], note: "If a fixed rule describes the whole fix, <b>write a workflow, not an agent</b>. The model earns its place when the next step is uncertain." },
+  { t: "code", lbl: P1, title: "The whole agent is one loop", demo: "Step 1", file: "agent/step1_goal_loop.py",
+    caption: "Every cycle: read checkout fresh, check the goal in code, let the model pick ONE action, run it, write down what happened. The alert only woke us up.",
+    code: `def incident_agent(ctx):
+    notes = []
+    for cycle in range(1, MAX_CYCLES + 1):
+        state = checkout.read_state()        # look: fresh, every cycle
+        if goal_met(state):
+            return "Fixed: checkout is healthy"
+
+        choice = decide(GOAL, state, notes)  # the model proposes ONE
+        action = choice["action"]
+        if POLICY[action] not in ("read", "write"):
+            return f"Stopped: '{action}' needs a person"
+
+        result = checkout.run_tool(action)   # the code runs it
+        notes.append(f"{action}: {result}")
+
+def goal_met(state):
+    return state["error_rate"] < 5`, hl: [4, 5, 16] },
+  { t: "code", lbl: P1, title: "The model proposes. A table decides.", demo: "Step 1", file: "agent/policy.py",
+    caption: "The model can only name an action. This table, not the prompt, says what happens next. Rewording the prompt can't change it.",
+    code: `POLICY = {
+    "read_logs":        "read",       # just looking: always fine
+    "read_changes":     "read",
+    "disable_feature":  "write",      # easy to undo: allowed
+    "rollback_release": "approval",   # risky: a person must say yes
+    "ask_human":        "help",       # the answer is information
+    "wait":             "wait",       # nothing safe to do: wait
+}`, hl: [5] },
+  { t: "points", lbl: P1, title: "Four rules of the loop", demo: "Step 1", points: [
+    ["Observe fresh", "Read the service at the start of every cycle. The alert is a doorbell, not the facts."],
+    ["One action per turn", "Small steps are easy to check, to approve, and to undo."],
+    ["The code checks the goal", "goal_met() decides when we are done. The model does not mark its own homework."],
+    ["Bound it", "MAX_CYCLES. A loop with no limit is a bill with no limit."],
+  ] },
+
+  // ---------------------------------------------------------------- 02
+  { t: "section", n: "02", title: "Durable steps", sub: "Survive a crash without redoing the work" },
+  { t: "statement", text: "What happens if the process dies on cycle 3?",
+    sub: "Step 1 starts over from zero: every LLM call is paid again, every action is decided again. Press K in the visualizer and watch." },
+  { t: "code", lbl: P2, title: "Wrap every piece of work in a step", demo: "Step 2", file: "agent/step2_durable_steps.py",
+    caption: "ctx.step.run(id, function, *args) runs the function once and Inngest saves the result. The cycle number makes every id unique. step.sleep is a timer Inngest holds, not us.",
+    code: `for cycle in range(1, MAX_CYCLES + 1):
+    state = ctx.step.run(f"observe-{cycle}", checkout.read_state)
+    if goal_met(state):
+        return "Fixed: checkout is healthy"
+
+    choice = ctx.step.run(f"decide-{cycle}", decide,
+                          GOAL, state, notes)
+    action = choice["action"]
+    ...
+    result = ctx.step.run(f"act-{cycle}", checkout.run_tool, action)
+    notes.append(f"{action}: {result}")
+
+    if POLICY[action] == "write":
+        ctx.step.sleep(f"settle-{cycle}", timedelta(seconds=10))`, hl: [2, 6, 10, 14] },
+  { t: "table", lbl: P2, title: "How Inngest runs it", demo: "Step 2", head: ["", "What happens"], rows: [
+    ["First run", "observe-1 runs → saved · decide-1 runs → saved · act-1 runs → saved · …"],
+    ["💥 Crash", "during settle-2. The journal has 6 saved steps."],
+    ["Inngest calls again", "the function starts <b>from the top</b>"],
+    ["observe-1 … act-2", "<span class='big'>↺</span> already saved: return the result, <b>don’t run</b>"],
+    ["settle-2", "the timer kept going while we were dead · then observe-3 runs for real"],
+  ], note: "No stack is restored. The function runs again, and saved steps answer instantly. <b>2 LLM calls, not 4.</b>" },
+  { t: "code", lbl: P2, title: "What step.run does, in five lines", demo: "Step 2", file: "local_inngest.py (simplified)",
+    caption: "This is the whole trick. Inngest keeps a journal of step id → result. The visualizer runs a small stand-in like this one, so we can watch every line.",
+    code: `def run(self, step_id, handler, *args):
+    if step_id in self.journal:          # finished before?
+        return self.journal[step_id]     # hand back the saved result
+    result = handler(*args)              # first time: run it
+    self.journal[step_id] = result       # and save it
+    return result`, hl: [2, 3] },
+  { t: "points", lbl: P2, title: "Rules for code with steps", points: [
+    ["Unique step ids", "observe-1, observe-2, … A fixed id inside a loop makes the journal ambiguous."],
+    ["Return plain JSON", "Dicts, lists, strings, numbers. The result is saved and sent back later."],
+    ["Work goes inside steps", "Code between steps runs again on every replay. Keep it cheap and side-effect free."],
+    ["Same inputs, same path", "Rebuild state (like notes) only from step results, so the replay takes the same path."],
+  ] },
+
+  // ---------------------------------------------------------------- 03
+  { t: "section", n: "03", title: "Wait for the world", sub: "Sleep until something changes, for free" },
+  { t: "compare", lbl: P3, title: "The gateway is down. It isn’t ours.", demo: "Step 3", cols: [
+    { h: "time.sleep() and poll", tone: "violet", items: ["Holds a process open for hours", "Dies with the process", "Checks every minute, mostly for nothing"] },
+    { h: "step.wait_for_event()", tone: "gold", items: ["The process can exit; Inngest waits", "Survives crashes and deploys", "Wakes up the moment the event arrives"] },
+  ], note: "The model can’t fix someone else’s service. The honest action is <b>wait</b>, and waiting must be cheap." },
+  { t: "code", lbl: P3, title: "Wait, then look again", demo: "Step 3", file: "agent/step3_wait_for_event.py",
+    caption: "Sleep until checkout/recovered arrives, or two minutes pass. Either way: continue, which means observe again. The event never decides anything by itself.",
+    code: `if kind == "wait":
+    event = ctx.step.wait_for_event(
+        f"wait-{cycle}",
+        event="checkout/recovered",
+        timeout=timedelta(minutes=2))
+    notes.append("wait: " + ("woke up" if event else "timed out"))
+    continue          # either way, look again`, hl: [2, 7] },
+  { t: "points", lbl: P3, title: "An event is a doorbell, not the truth", demo: "Step 3", points: [
+    ["Always look again", "The event says something MAY have changed. Only read_state() says what did."],
+    ["Always set a timeout", "An event sent before the wait started is missed. The timeout catches what the doorbell didn’t."],
+    ["One run per incident", "singleton=… on the function: three alerts for checkout, still one agent."],
+  ], note: "Try it: 🔧 fixes the gateway and rings the bell. 🤫 fixes it silently: the timeout still finds out." },
+
+  // ---------------------------------------------------------------- 04
+  { t: "section", n: "04", title: "A person approves", sub: "The risky action waits for a yes" },
+  { t: "code", lbl: P4, title: "Ask, then sleep until the answer", demo: "Step 4", file: "agent/step4_human_approval.py",
+    caption: "Write the question to the inbox (a step, so it is asked once). Then sleep until an inbox/answered event for THIS request arrives, or ten minutes pass.",
+    code: `def ask_person(ctx, cycle, kind, text):
+    request_id = ctx.step.run(
+        f"ask-{cycle}", inbox.ask, ctx.run_id, kind, text)
+
+    event = ctx.step.wait_for_event(
+        f"answer-{cycle}",
+        event="inbox/answered",
+        if_exp=f"async.data.request_id == '{request_id}'",
+        timeout=timedelta(minutes=10))
+
+    return event.data if event else None`, hl: [5, 8] },
+  { t: "code", lbl: P4, title: "A yes can go stale", demo: "Step 4", file: "agent/step4_human_approval.py",
+    caption: "The yes was for checkout at the version we showed. Look again: if the version moved while we waited, drop the yes and decide again. Press 🚀 before you approve to see it.",
+    code: `if kind == "approval":
+    answer = ask_person(ctx, cycle, "approval", question)
+    if answer is None:
+        return "Stopped: nobody answered. Silence is not a yes."
+    if not answer["approved"]:
+        return "Stopped: a person said no."
+
+    fresh = ctx.step.run(f"recheck-{cycle}", checkout.read_state)
+    if fresh["version"] != state["version"]:
+        notes.append("approved, but checkout changed")
+        continue           # look again, decide again, ask again`, hl: [8, 9] },
+  { t: "table", lbl: P4, title: "Four ways the answer can go", demo: "Step 4", head: ["The person…", "The agent…"], rows: [
+    ["says yes", "looks again · same version → rolls back"],
+    ["says no", "stops, and reports it"],
+    ["says nothing for 10 min", "stops: <span class='hot'>silence is not a yes</span>"],
+    ["says yes, but checkout changed", "drops the yes, decides again, asks again"],
+  ], note: "Gate only the risky actions. A person asked to approve forty things an hour approves the forty-first <b>without reading it</b>." },
+
+  // ---------------------------------------------------------------- 05
+  { t: "section", n: "05", title: "Safe retries", sub: "A retry must be the same request, not a new one" },
+  { t: "compare", lbl: P5, title: "The reply got lost", demo: "Step 2 → Step 5", cols: [
+    { h: "What happened", tone: "ink", items: ["Checkout turned the feature off", "The reply never reached the agent", "Inngest retries the act step"],
+      pre: "ConnectionError: the change WAS made" },
+    { h: "Did it happen?", tone: "gold", items: ["No id: checkout can’t tell. It does it <b>again</b>", "Same id: checkout says “already done”", "For a payment, “again” means charging twice"] },
+  ] },
+  { t: "code", lbl: P5, title: "The same intent gets the same id", demo: "Step 5", file: "agent/step5_safe_retries.py + agent/checkout.py",
+    caption: "Build the id from what the action IS: this run, this cycle, this action. Every retry, and every replay after a crash, rebuilds the exact same id. The service keeps a list of ids it has done.",
+    code: `# the agent
+action_id = f"{ctx.run_id}:{cycle}:{action}"
+result = ctx.step.run(f"act-{cycle}",
+                      checkout.run_tool, action, action_id)
+
+
+# the service
+def change_service(name, action_id=None):
+    state = load()
+    if action_id in state["done"]:
+        return state["done"][action_id]   # a retry: no second effect
+    ...                                   # make the change
+    state["done"][action_id] = result`, hl: [2, 10, 11] },
+  { t: "table", lbl: P5, title: "Same input: feature lose-reply", demo: "Step 2 vs 5", head: ["", "Step 2 · no id", "Step 5 · action_id"], rows: [
+    ["Feature turned off", "<span class='hot'>2 times</span>", "<span class='big'>1 time</span>"],
+    ["Checkout version", "3", "2"],
+    ["Can the agent prove its own action worked?", "no", "yes"],
+  ], note: "A random id (uuid4()) is as bad as no id: <b>every retry looks like a new request</b>." },
+  { t: "statement", text: "Durability and safe retries are the same idea, from two ends.",
+    sub: "The id is only stable because the decision was saved as a step. Replay rebuilds the same cycle and the same action, so it rebuilds the same id." },
+
+  // ---------------------------------------------------------------- 06
+  { t: "section", n: "06", title: "Ask for help", sub: "An answer is information, not permission" },
+  { t: "code", lbl: P6, title: "Ask, then decide again", demo: "Step 6", file: "agent/step6_ask_for_help.py",
+    caption: "Same inbox, same wait. The difference is one word: continue. Nothing runs because a person said something. The agent looks at checkout again.",
+    code: `elif kind == "help":
+    answer = ask_person(ctx, cycle, "help", choice["question"])
+    reply = answer["reply"] if answer else "(nobody answered)"
+    notes.append(f"ask_human: I asked... The answer: {reply}")
+    continue     # not proof: look again, decide again`, hl: [5] },
+  { t: "compare", lbl: P6, title: "Approval vs answer", demo: "Step 6", cols: [
+    { h: "Approval", tone: "violet", items: ["Is about one exact action", "At one exact version", "Yes → that action runs (after a re-check)"] },
+    { h: "Answer to a question", tone: "gold", items: ["Is information for the next decision", "“The payments team is on it”", "Nothing runs. Look again, decide again"] },
+  ], note: "Watch it in step 6: you answer, it looks again, and checkout is <b>still broken</b>. It refuses to believe you. Good." },
+  { t: "table", lbl: "The closing argument", title: "Who decides what", head: ["Who", "Decides"], rows: [
+    ["The model", "which action to propose next"],
+    ["policy.py", "what may run alone, what needs a person"],
+    ["A person", "yes or no, for one action, at one version"],
+    ["Checkout", "whether the change happens (and only once)"],
+    ["Inngest", "what already happened"],
+    ["goal_met()", "when we are done"],
+  ], note: "<b>Nobody can declare success alone.</b> That is what makes it safe to leave running at 3 a.m." },
+
+  // ---------------------------------------------------------------- wrap up
+  { t: "code", lbl: "Run it for real", title: "The same code, on Inngest", file: "three terminals",
+    caption: "The visualizer runs a small in-process stand-in so we can watch every line. app.py serves the exact same functions to the real Inngest Dev Server. Its dashboard shows every step.",
+    code: `# terminal 1: the Inngest Dev Server, dashboard at :8288
+npx inngest-cli@latest dev -u http://127.0.0.1:8000/api/inngest
+
+# terminal 2: serve one step (Ctrl-C it mid-run, then restart)
+python app.py 2
+
+# terminal 3: you are the world
+python world.py alert feature
+python world.py inbox
+python world.py approve req-1
+python world.py fix-gateway`, hl: [2, 5] },
+  { t: "points", lbl: "Practice", title: "Exercises", dense: true, points: [
+    ["Break the step ids", "Use \"observe\" without the cycle number. What does the replay do? Why?"],
+    ["Random ids", "Change action_id to uuid4() in step 5. Run feature lose-reply. Count the changes."],
+    ["A new fault", "Add a fault checkout can have (a bad config). Does the agent fix it without a new rule?"],
+    ["Escalate on timeout", "When nobody answers, send a notify/oncall event instead of just stopping."],
+    ["Cost limit", "Stop the run after N model calls, whatever MAX_CYCLES says."],
+  ] },
+  { t: "checklist" },
+  { t: "end" },
+];
+
+const AGENDA = [
+  ["01", "A goal and a loop", "observe → decide → act, with a goal in code"],
+  ["02", "Durable steps", "survive a crash without redoing work"],
+  ["03", "Wait for the world", "sleep until an event, then look again"],
+  ["04", "A person approves", "the risky action waits for a yes"],
+  ["05", "Safe retries", "the same intent gets the same id"],
+  ["06", "Ask for help", "an answer is information, not permission"],
+];
+
+const CHECKLIST = [
+  "An alert event starts one agent run per incident",
+  "Every cycle reads the service fresh; goal_met() is code",
+  "Every model call and action is a ctx.step with a unique id",
+  "Kill the process mid-run: it resumes, no LLM call repeated",
+  "“wait” uses step.wait_for_event with a timeout, then looks again",
+  "Risky actions wait for a person; a stale yes is dropped",
+  "Every change carries an action_id; a retry never does it twice",
+  "Questions go to the same inbox; an answer never runs anything",
+];
+
+// ------------------------------------------------------------------ rendering
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const KW = /\b(def|return|for|in|if|elif|not|or|and|is|None|import|from|else|while|lambda|class|continue)\b/g;
+
+function highlight(code, hl = []) {
+  return code.split("\n").map((line, i) => {
+    let body = line, comment = "";
+    const hash = line.search(/#(?![^"]*"[^"]*$)/);
+    if (hash >= 0) { body = line.slice(0, hash); comment = line.slice(hash); }
+    let html = esc(body).replace(/("""|"[^"]*"|'[^']*')/g, "\u0000$1\u0001");
+    html = html.split(/(\u0000[^\u0001]*\u0001)/).map((part) =>
+      part.startsWith("\u0000") ? `<span class="s">${part.slice(1, -1)}</span>` : part.replace(KW, '<span class="k">$1</span>')).join("");
+    if (comment) html += `<span class="c">${esc(comment)}</span>`;
+    return `<span class="l${hl.includes(i + 1) ? " hl" : ""}">${html}</span>`;
+  }).join("");
+}
+
+// shrink a code block just enough that its longest line fits (mono ≈ 0.6em per character)
+const codeSize = (code) => Math.min(16.5, Math.floor(640 / (0.61 * Math.max(...code.split("\n").map((l) => l.length))) * 10) / 10);
+const demoTag = (s) => s.demo ? `<span class="demo">▶ Demo · ${s.demo}</span>` : "";
+const head = (s) => `<header class="hd"><div class="hd-row"><span class="lbl">${s.lbl}</span>${demoTag(s)}</div><h2>${s.title}</h2></header>`;
+const note = (s) => s.note ? `<p class="note">${s.note}</p>` : "";
+
+const RENDER = {
+  title: () => `<span class="blob v"></span><span class="blob g"></span>
+    <div class="title-body">
+      <span class="lbl gold">AI Engineering · Week 4</span>
+      <h1>Agents that work<br><span class="mark-gold">while you sleep.</span></h1>
+      <p class="title-sub">A durable incident agent in plain Python with Inngest: a goal loop, steps that survive crashes, waiting for events, human approval, safe retries, and asking for help.</p>
+      <div class="title-by"><img src="logo-mark.png" alt=""><div><strong>Pouria Jahandideh</strong><span>pjsofts.github.io · AI Engineering</span></div></div>
+    </div>`,
+  statement: (s) => `<div class="mid"><p class="stmt">${s.text}</p>${s.sub ? `<p class="stmt-sub">${s.sub}</p>` : ""}</div>`,
+  section: (s) => `<div class="mid"><span class="sec-n">${s.n}</span><h2>${s.title}</h2><p>${s.sub}</p></div>`,
+  agenda: () => `<header class="hd"><span class="lbl">Today</span><h2>Six steps, one agent</h2></header>
+    <ol class="agenda">${AGENDA.map(([n, t, l]) => `<li><span class="n">${n}</span><span class="t">${t}</span><span class="l">${l}</span></li>`).join("")}</ol>`,
+  points: (s) => `${head(s)}<ol class="pts">${s.points.map(([b, r], i) =>
+      `<li style="${s.dense ? "font-size:22px" : ""}"><span class="n">${String(i + 1).padStart(2, "0")}</span><span><strong>${b}</strong> <span class="rest">${r}</span></span></li>`).join("")}</ol>${note(s)}`,
+  compare: (s) => `${head(s)}<div class="cmp">${s.cols.map((c) =>
+      `<div class="col ${c.tone}"><h3>${c.h}</h3><ul>${c.items.map((i) => `<li>${i}</li>`).join("")}</ul>${c.pre ? `<pre>${esc(c.pre)}</pre>` : ""}</div>`).join("")}</div>${note(s)}`,
+  code: (s) => `<div class="code-grid">
+      <div class="code-copy"><span class="lbl">${s.lbl}</span><h2>${s.title}</h2><p>${s.caption}</p>${demoTag(s)}</div>
+      <div class="term"><div class="term-bar"><i></i><i></i><i></i><span>${s.file}</span></div><div class="term-body" style="font-size:${codeSize(s.code)}px">${highlight(s.code, s.hl)}</div></div>
+    </div>`,
+  table: (s) => `${head(s)}<table class="tbl"><thead><tr>${s.head.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
+    <tbody>${s.rows.map((r) => `<tr>${r.map((c, j) => j === 0 ? `<th>${c}</th>` : `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>${note(s)}`,
+  system: () => `<header class="hd"><div class="hd-row"><span class="lbl">Today’s system</span><span class="demo">▶ Demo · Step 1</span></div><h2>Checkout is failing at 3 a.m.</h2></header>
+    <div class="lane"><div class="lane-name">Wake up<small>an event starts a run</small></div>
+      <div class="box db"><b>Alert</b><span>event checkout/alert: “error rate 42%”</span></div>
+      <div class="box api"><b>Inngest</b><span>starts the run, saves every step</span></div>
+      <div class="box llm"><b>incident_agent()</b><span>our Python: look, decide, act</span></div>
+      <div class="box"><b>Checkout</b><span>the service: state in a JSON file</span></div></div>
+    <div class="lane"><div class="lane-name">Pause, resume<small>no process kept open</small></div>
+      <div class="box"><b>step.sleep / wait</b><span>the function returns; Inngest holds the timer</span></div>
+      <div class="box db"><b>The world</b><span>a person answers, the gateway comes back</span></div>
+      <div class="box api"><b>An event</b><span>inbox/answered · checkout/recovered</span></div>
+      <div class="box llm"><b>Called again</b><span>saved steps return instantly</span></div></div>
+    <p class="note">Three ways checkout breaks: a bad <b>feature</b> (agent can fix), a bad <b>release</b> (needs a person’s yes), a down <b>gateway</b> (not ours: wait or ask).</p>`,
+  checklist: () => `<header class="hd"><span class="lbl">Project · Milestone</span><h2>An agent you can leave running</h2></header>
+    <ul class="check">${CHECKLIST.map((c) => `<li>${c}</li>`).join("")}</ul>
+    <p class="note"><b>Stretch:</b> a cost limit per run · escalate when nobody answers · an inbox page · a second service with its own faults.</p>`,
+  end: () => `<div class="mid end-body"><img src="logo.png" alt=""><h2>Questions?</h2>
+    <p>Now run it for real: <code>python app.py 2</code>, the Inngest Dev Server, and kill it yourself.</p></div>`,
+};
+
+const stage = document.getElementById("stage");
+const INK = new Set(["statement", "section", "end"]);
+SLIDES.forEach((s, i) => {
+  const a = document.createElement("article");
+  a.className = `slide s-${s.t}${INK.has(s.t) ? " ink" : ""}`;
+  a.innerHTML = RENDER[s.t](s) + (s.t === "title" ? "" :
+    `<footer class="sfoot"><span class="brand"><img src="logo-mark.png" alt="">Pouria Jahandideh · Week 4 · Background agents</span><span>${String(i + 1).padStart(2, "0")} / ${SLIDES.length}</span></footer>`);
+  stage.append(a);
+});
+
+// ------------------------------------------------------------------ navigation
+const slides = [...document.querySelectorAll(".slide")];
+const N = slides.length;
+let cur = 0;
+const fromHash = () => { const n = parseInt(location.hash.slice(1), 10); return Number.isFinite(n) ? Math.min(Math.max(n - 1, 0), N - 1) : 0; };
+function show(i) {
+  cur = Math.min(Math.max(i, 0), N - 1);
+  slides.forEach((s, j) => s.classList.toggle("on", j === cur));
+  document.getElementById("counter").textContent = `${cur + 1} / ${N}`;
+  document.getElementById("bar").style.width = `${((cur + 1) / N) * 100}%`;
+  history.replaceState(null, "", `#${cur + 1}`);
+}
+function fit() { document.documentElement.style.setProperty("--s", Math.min(innerWidth / 1280, (innerHeight - 52) / 720)); }
+function full() { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); }
+document.addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (["ArrowRight", "PageDown", " ", "l"].includes(k)) show(cur + 1);
+  else if (["ArrowLeft", "PageUp", "h"].includes(k)) show(cur - 1);
+  else if (k === "Home") show(0);
+  else if (k === "End") show(N - 1);
+  else if (k === "f" || k === "F") full();
+  else return;
+  e.preventDefault();
+});
+document.querySelectorAll("[data-go]").forEach((b) => b.onclick = () => {
+  const go = b.dataset.go;
+  if (go === "next") show(cur + 1); else if (go === "prev") show(cur - 1); else if (go === "full") full(); else window.print();
+});
+addEventListener("resize", fit);
+addEventListener("hashchange", () => show(fromHash()));
+fit();
+show(fromHash());
+</script>
+</body>
+</html>

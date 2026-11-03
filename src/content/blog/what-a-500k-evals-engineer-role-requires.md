@@ -79,10 +79,10 @@ Concretely, if this is the kind of role you want:
 - **Practice the interpretation.** For every result, write the one sentence a decision-maker would need. If you can't, your eval isn't done.
 - **Learn just enough statistics** to talk honestly about significance and noise. You don't need a stats degree; you need to stop being fooled by a single lucky run.
 
-That progression — measurement first, then reliability and scale, then communication — is deliberately the arc of two full weeks in the mentorship: [evals and discipline](/curriculum/week-2-evals-and-discipline) early, then [evals, tracing, and reliability](/curriculum/week-11-evals-tracing-reliability) once your agent is real. Not because we're trying to place people at Anthropic, but because this posting is simply the market pricing a skill honestly — and it's a skill you can start earning today.
+That progression — measurement first, then reliability and scale, then communication — is deliberately the arc of two full weeks in the mentorship: [evals and discipline](/curriculum/week-5-evals-and-discipline) early, then [evals, tracing, and reliability](/curriculum/week-11-evals-tracing-reliability) once your agent is real. Not because we're trying to place people at Anthropic, but because this posting is simply the market pricing a skill honestly — and it's a skill you can start earning today.
 
 The takeaway isn't "go apply for the $850K job." It's that the industry is now paying frontier-engineer money for **rigorous measurement**, and the qualifications to get there are fundamentals, not magic. Build the boring thing well. The market has told you what it's worth.
 
 ---
 
-*Evals are the spine of the [AI Engineering mentorship](/curriculum) — you build a working eval harness in Week 2 and a production-grade tracing-and-reliability layer in Week 11. Salary figures and qualifications quoted from Anthropic's public job posting for Research Engineer, Model Evaluations.*
+*Evals are the spine of the [AI Engineering mentorship](/curriculum) — you build a working eval harness in Week 5 and a production-grade tracing-and-reliability layer in Week 11. Salary figures and qualifications quoted from Anthropic's public job posting for Research Engineer, Model Evaluations.*

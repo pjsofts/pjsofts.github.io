@@ -78,4 +78,4 @@ That's where reliability is won or lost.
 
 ---
 
-*Tool design is the whole of [Week 5](/curriculum/week-5-tools-that-touch-code) in the AI Engineering mentorship — six tools, a permission system, and the error-message design that lets an agent recover from its own mistakes.*
+*Tool design is the whole of [Week 6](/curriculum/week-6-chat-interface-and-tools) in the AI Engineering mentorship — six tools, a permission system, and the error-message design that lets an agent recover from its own mistakes.*

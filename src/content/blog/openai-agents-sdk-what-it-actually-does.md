@@ -59,7 +59,7 @@ const agent = new Agent({
 });
 ```
 
-Notice what a "tool" is here: **a normal function plus a schema**. In Python the `@function_tool` decorator reads your type hints and docstring to build the JSON schema the model sees. In TypeScript you hand it a [Zod](https://zod.dev) schema and an `execute` function. This is the exact thing you'd otherwise write by hand — a name, a description, a parameter schema, and the code that runs — just with the boilerplate generated for you. If you've [designed tools for an agent](/curriculum/week-5-tools-that-touch-code) before, nothing here is new; it's the same contract, less typing.
+Notice what a "tool" is here: **a normal function plus a schema**. In Python the `@function_tool` decorator reads your type hints and docstring to build the JSON schema the model sees. In TypeScript you hand it a [Zod](https://zod.dev) schema and an `execute` function. This is the exact thing you'd otherwise write by hand — a name, a description, a parameter schema, and the code that runs — just with the boilerplate generated for you. If you've [designed tools for an agent](/curriculum/week-6-chat-interface-and-tools) before, nothing here is new; it's the same contract, less typing.
 
 ## Running it — the loop you didn't have to write
 
@@ -124,7 +124,7 @@ By hand, this is a pile of `if` statements scattered around your loop and a besp
 
 ## Sessions, state, and the memory question
 
-The SDK gives you "the same options as the Responses API" for conversation state — manual history, response chaining, the Conversations API — **plus SDK sessions and resumable run state**. In plain terms: you can let the SDK track the running conversation for you across turns instead of threading the history list through every call yourself. It's the framework's answer to the [memory and session](/curriculum/week-9-memory-and-sessions) plumbing every real agent eventually needs.
+The SDK gives you "the same options as the Responses API" for conversation state — manual history, response chaining, the Conversations API — **plus SDK sessions and resumable run state**. In plain terms: you can let the SDK track the running conversation for you across turns instead of threading the history list through every call yourself. It's the framework's answer to the [memory and session](/curriculum/week-9-planning-and-memory) plumbing every real agent eventually needs.
 
 ## Tracing: the part you'll appreciate at 2 a.m.
 
@@ -141,4 +141,4 @@ The SDK isn't magic and it isn't a crutch. It's a set of sensible defaults for t
 
 ---
 
-*Building the agent loop from scratch — then reading production frameworks like the OpenAI Agents SDK against it — is the arc of the [AI Engineering mentorship](/curriculum). You write [the loop](/curriculum/week-8-planning-and-agent-loops) and [the tools](/curriculum/week-5-tools-that-touch-code) yourself, so the frameworks become choices instead of mysteries.*
+*Building the agent loop from scratch — then reading production frameworks like the OpenAI Agents SDK against it — is the arc of the [AI Engineering mentorship](/curriculum). You write [the loop](/curriculum/week-9-planning-and-memory) and [the tools](/curriculum/week-6-chat-interface-and-tools) yourself, so the frameworks become choices instead of mysteries.*

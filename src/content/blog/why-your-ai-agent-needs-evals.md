@@ -124,4 +124,4 @@ That's a real eval suite. Everything after that is refinement.
 
 ---
 
-*Evals are the spine of [Week 2](/curriculum/week-2-evals-and-discipline) in the AI Engineering mentorship — golden datasets, scorers, a baseline, and then an entire half-week of measured improvements.*
+*Evals are the spine of [Week 5](/curriculum/week-5-evals-and-discipline) in the AI Engineering mentorship — golden datasets, scorers, a baseline, and then an entire half-week of measured improvements.*

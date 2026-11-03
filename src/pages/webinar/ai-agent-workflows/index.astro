@@ -336,8 +336,8 @@ const faqs = [
     align-items: center;
   }
   .blob { position: absolute; border-radius: 50%; z-index: 0; }
-  .blob-violet { width: 520px; height: 520px; background: var(--violet-wash); right: -160px; top: -190px; }
-  .blob-gold { width: 260px; height: 260px; background: var(--gold-wash); left: -120px; bottom: -120px; }
+  .blob-violet { display: none; }
+  .blob-gold { display: none; }
   .hero-grid > * { position: relative; z-index: 1; }
 
   h1.display-1 {
@@ -417,12 +417,12 @@ const faqs = [
     gap: 2rem;
     align-items: start;
     padding: 1.6rem 1.7rem;
-    background: #fdfbf6;
+    background: #fff;
     border: 1px solid var(--rule);
     border-left: 3px solid var(--violet);
     border-radius: var(--r);
     box-shadow: var(--lift);
-    --topo-ground: #fdfbf6;
+    --topo-ground: #ffffff;
   }
   .mod-hd { display: flex; gap: 1rem; align-items: baseline; }
   .mod-n { font-family: var(--mono); font-weight: 600; font-size: 1.15rem; color: var(--violet-deep); }

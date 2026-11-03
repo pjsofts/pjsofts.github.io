@@ -156,7 +156,7 @@ const marquee = [
       <div class="hero-term">
         <div class="term">
           <div class="term-bar">
-            <i></i><i></i><i></i><span>mycode — week 5</span>
+            <i></i><i></i><i></i><span>mycode — week 6</span>
           </div>
           <div class="term-body">
             <span class="l"><span class="u">›</span> fix the failing test in utils.ts</span>
@@ -173,7 +173,7 @@ const marquee = [
             <span class="l"><span class="u">└─</span> [y]es · [a]lways · [N]o <span class="cursor">▋</span></span>
           </div>
         </div>
-        <p class="term-note">Week 5, your own tool, your own permission gate.</p>
+        <p class="term-note">Week 6, your own tool, your own permission gate.</p>
       </div>
     </div>
   </section>
@@ -185,6 +185,27 @@ const marquee = [
       <span aria-hidden="true">{marquee.map((m) => (<><b>{m}</b><i>✳</i></>))}</span>
     </div>
   </div>
+
+  <!-- ===================== STUDIO ===================== -->
+  <!-- The room the site's colours come from: brick, pinboard, red chair, low sun. -->
+  <section class="studio" aria-label="The studio">
+    <div class="wrap">
+      <figure class="studio-fig">
+        <img
+          src="/studio-1800.jpg"
+          srcset="/studio-900.jpg 900w, /studio-1800.jpg 1800w"
+          sizes="(max-width: 900px) 100vw, 1100px"
+          width="1800" height="1350"
+          loading="lazy" decoding="async"
+          alt="The studio: a whitewashed brick wall, a steel pinboard covered in prints and sticky notes, a red chair and blue poufs on a wooden floor in low sunlight."
+        />
+        <figcaption>
+          <span class="studio-note">The studio</span>
+          Prints on the pinboard, code on the screen. This is where the course is built.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
 
   <!-- ===================== PROBLEM ===================== -->
   <section id="course">
@@ -250,7 +271,7 @@ const marquee = [
         <span class="lbl">The roadmap</span>
         <h2 class="display-2">Twelve weeks, one real product</h2>
         <p class="lede">
-          Three weeks of fundamentals most courses never reach, then nine that assemble
+          Five weeks of fundamentals most courses never reach, then seven that assemble
           them into a working clone of a professional coding agent.
         </p>
       </div>
@@ -481,19 +502,9 @@ const marquee = [
     gap: 3.5rem;
     align-items: center;
   }
-  /* Two shapes bleeding off the edges, so the page has a horizon instead of a
-     gradient. Flat brand colour, no blur, no glow. */
+  /* The hero sits on the brick wall from brand.css; no decorative shapes. */
   .blob { position: absolute; border-radius: 50%; z-index: 0; }
-  .blob-violet {
-    width: 520px; height: 520px;
-    background: var(--violet-wash);
-    right: -160px; top: -190px;
-  }
-  .blob-gold {
-    width: 260px; height: 260px;
-    background: var(--gold-wash);
-    left: -120px; bottom: -120px;
-  }
+  .blob-violet, .blob-gold { display: none; }
   .hero-grid > * { position: relative; z-index: 1; }
 
   h1.display-1 {
@@ -638,14 +649,14 @@ const marquee = [
     border: 1px solid var(--rule);
     border-left: 3px solid var(--violet);
     border-radius: var(--r);
-    background: #fdfbf6;
+    background: #fff;
     text-decoration: none;
     transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
   }
   .wk:hover {
     transform: translateY(-2px);
     box-shadow: var(--lift-hover);
-    border-left-color: var(--gold-deep);
+    border-left-color: var(--violet-deep);
     text-decoration: none;
   }
   .wk-n {
@@ -837,5 +848,29 @@ const marquee = [
     .stats dt { font-size: 1.9rem; }
     .hero-term { transform: none; }
     .blob-violet { width: 320px; height: 320px; right: -140px; top: -120px; }
+  }
+
+  /* ---------------- studio photo ---------------- */
+  .studio { padding: 3.5rem 0 0.5rem !important; }
+  .studio-fig { position: relative; margin: 0; }
+  .studio-fig img {
+    display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 62%;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(29, 42, 68, 0.08), 0 30px 60px -30px rgba(29, 42, 68, 0.55);
+  }
+  .studio-fig figcaption {
+    position: absolute; left: 1.4rem; bottom: 1.4rem; max-width: 34ch;
+    padding: 0.8rem 1rem; border-radius: 4px;
+    background: rgba(245, 246, 243, 0.94); color: var(--ink); font-size: 0.95rem; line-height: 1.45;
+    box-shadow: 0 10px 24px -14px rgba(29, 42, 68, 0.6);
+  }
+  .studio-fig .studio-note {
+    display: table; margin: 0 0 0.5rem; padding: 0.2rem 0.55rem; border-radius: 2px;
+    background: var(--gold); font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; transform: rotate(-2deg);
+  }
+  @media (max-width: 700px) {
+    .studio-fig img { aspect-ratio: 4 / 3; }
+    .studio-fig figcaption { position: static; margin-top: 0.8rem; max-width: none; box-shadow: none; padding: 0; background: none; }
   }
 </style>

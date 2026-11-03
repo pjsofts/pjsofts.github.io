@@ -168,4 +168,4 @@ Once you see it that way, "add web search" stops being a feature and becomes a d
 
 ---
 
-*On-demand retrieval — both web search and RAG — is the spine of [Week 7](/curriculum/week-7-rag-and-vector-databases) in the AI Engineering mentorship: vector stores, embeddings, and giving an agent the judgment to fetch a fact instead of inventing one.*
+*On-demand retrieval — both web search and RAG — is the spine of [Week 8](/curriculum/week-8-rag-and-vector-databases) in the AI Engineering mentorship: vector stores, embeddings, and giving an agent the judgment to fetch a fact instead of inventing one.*

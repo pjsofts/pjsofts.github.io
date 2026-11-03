@@ -99,4 +99,4 @@ That reframe changes the questions you ask. Not *"why did the model forget?"* bu
 
 ---
 
-*Context engineering gets a full week — [Week 6](/curriculum/week-6-context-and-prompt-engineering) — in the AI Engineering mentorship, including AGENTS.md discovery and a compaction implementation you evaluate.*
+*Context engineering gets a full week — [Week 7](/curriculum/week-7-context-and-prompt-engineering) — in the AI Engineering mentorship, including AGENTS.md discovery and a compaction implementation you evaluate.*

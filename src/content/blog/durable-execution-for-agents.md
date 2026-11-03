@@ -219,4 +219,4 @@ The failure this prevents isn't exotic. It's Tuesday afternoon, a routine deploy
 
 ---
 
-*The hand-rolled durable engine, the DBOS rewrite, and the crash-and-recover demo are built in [Week 3](/curriculum/week-3-the-runtime-harness) of the AI Engineering mentorship — where the harness stops being a script and starts being a runtime.*
+*The hand-rolled durable engine, the DBOS rewrite, and the crash-and-recover demo are built in [Week 3](/curriculum/week-3-harness-engineering) of the AI Engineering mentorship — where the harness stops being a script and starts being a runtime.*

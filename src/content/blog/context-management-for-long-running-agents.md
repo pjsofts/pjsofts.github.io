@@ -40,7 +40,7 @@ Rule of thumb: **if the agent generated something it will need later but not nex
 Writing things down is only half of it; the other half is being disciplined about what you read *back*. The failure mode here is loading everything "just in case."
 
 - Don't dump an entire 2,000-line file into context to change one function. Read the function.
-- Don't paste a whole search index. Retrieve the handful of chunks that match, and only those. (This is what [RAG](/curriculum/week-7-rag-and-vector-databases) is *for* — selection under a token budget, not a magic knowledge upgrade.)
+- Don't paste a whole search index. Retrieve the handful of chunks that match, and only those. (This is what [RAG](/curriculum/week-8-rag-and-vector-databases) is *for* — selection under a token budget, not a magic knowledge upgrade.)
 - Don't reload the memory store wholesale. Recall the records relevant to the current task.
 
 Selection is where a token budget stops being theoretical. Decide what fraction of the window each source is *allowed* to claim, and enforce it. A single greedy tool return that grabs 40% of the budget is a bug, even when it "works," because it silently evicts whatever the agent needed to remember.
@@ -94,4 +94,4 @@ The answer is that you stop treating the window as an append-only log and start 
 
 ---
 
-*This pairs with [context engineering](/blog/context-engineering-for-agents), which covers assembling a single request well. Managing context across a long, stateful session — compaction, memory, and sub-agent isolation — is built and evaluated in [Week 9](/curriculum/week-9-memory-and-sessions) of the AI Engineering mentorship.*
+*This pairs with [context engineering](/blog/context-engineering-for-agents), which covers assembling a single request well. Managing context across a long, stateful session — compaction, memory, and sub-agent isolation — is built and evaluated in [Week 9](/curriculum/week-9-planning-and-memory) of the AI Engineering mentorship.*

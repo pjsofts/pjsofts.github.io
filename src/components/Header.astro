@@ -71,9 +71,11 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
 
   /* ---- the paper ground ----
      On the landing page the header is stationery, not chrome: paper, a hard
-     ink rule under it, and the CTA as a gold pill you could print. */
+     ink rule under it, and the CTA as a violet pill. */
   :global(html[data-theme='paper']) .site-header {
-    background: rgba(247, 243, 234, 0.9);
+    background: rgba(245, 246, 243, 0.88);
+    backdrop-filter: saturate(1.6) blur(12px);
+    -webkit-backdrop-filter: saturate(1.6) blur(12px);
     border-bottom: 1px solid var(--rule);
   }
   :global(html[data-theme='paper']) .brand-txt {
@@ -91,10 +93,10 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
   :global(html[data-theme='paper']) .nav a.on { color: var(--ink); }
   :global(html[data-theme='paper']) .nav a.on { color: var(--violet-deep); }
   :global(html[data-theme='paper']) .nav-cta {
-    background: var(--gold) !important;
-    border: 1px solid var(--gold-deep) !important;
+    background: var(--violet) !important;
+    border: 1px solid var(--violet-deep) !important;
     box-shadow: var(--lift);
-    color: var(--ink) !important;
+    color: #fff !important;
     border-radius: 8px;
   }
   :global(html[data-theme='paper']) .burger span { background: var(--ink); }
