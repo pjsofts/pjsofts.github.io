@@ -1,0 +1,622 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Mark from '../../components/Mark.astro';
+import { SITE } from '../../data/site';
+
+// ---- the facts about the group; edit here ----
+const GROUP = {
+  title: 'Job Search Group',
+  slug: 'job-search-group',
+  weeks: 12,
+  perWeek: 100,
+  day: 'Monday',
+  start: '19:00',
+  end: '22:00',
+  tz: 'Tehran time',
+  where: 'Online · live',
+  join: { label: 'Message me to join', href: SITE.instructor.linkedin },
+  webinar: { title: 'Job Hunting in the Age of AI', href: '/webinar/job-hunting-ai/' },
+};
+const hours = 3;
+
+// The loop every week runs on.
+const loop = [
+  ['Apply', `${GROUP.perWeek} applications during the week, all in your lane, every one logged in your tracker. Targeted, not sprayed.`],
+  ['Report', 'On Monday everyone shares their numbers: applications, replies, screens, interviews. We look at where each funnel leaks and why.'],
+  ['Prepare', 'Anyone with an interview coming up gets prepped by the group: company research, the questions to expect, and a mock round.'],
+] as const;
+
+// What a Monday looks like.
+const monday = [
+  ['19:00', 'Numbers round', 'Everyone reports the week: sent, replies, screens, interviews.'],
+  ['19:45', 'Reviews', 'Resumes, LinkedIn profiles and applications that are not getting replies.'],
+  ['20:30', 'Interview prep', 'Mock interviews and prep for the interviews members have this week.'],
+  ['21:30', 'Next week', 'Everyone sets their plan and targets for the next 100.'],
+] as const;
+
+const PHASES = [
+  {
+    n: '01', title: 'Set up', who: 'Weeks 1–3 · the machine and the first 300',
+    weeks: [
+      ['Week 1', 'Pick one lane, set up the tracker, fix the resume, send the first 100.'],
+      ['Week 2', 'LinkedIn, GitHub and portfolio telling the same story. Next 100.'],
+      ['Week 3', 'A resume scored against real job descriptions. First read of the numbers.'],
+    ],
+    out: 'A lane, a scored resume, a tracker and 300 applications sent.',
+  },
+  {
+    n: '02', title: 'Tune the funnel', who: 'Weeks 4–6 · more replies from the same effort',
+    weeks: [
+      ['Week 4', 'Read your funnel: where do applications die, and what to change.'],
+      ['Week 5', 'Referrals and direct outreach to recruiters and engineers.'],
+      ['Week 6', 'Channel math: double down on what replies, drop what does not.'],
+    ],
+    out: 'A higher reply rate and the channels that work for you.',
+  },
+  {
+    n: '03', title: 'Interview season', who: 'Weeks 7–9 · turning screens into offers',
+    weeks: [
+      ['Week 7', 'Recruiter and AI screens: your story, your numbers, every line defended.'],
+      ['Week 8', 'Technical rounds: coding, system design and take-homes, with mocks.'],
+      ['Week 9', 'Behavioural and final rounds, plus postmortems on every rejection.'],
+    ],
+    out: 'Mock interviews done and a prep kit for every company.',
+  },
+  {
+    n: '04', title: 'Close', who: 'Weeks 10–12 · offers and what comes after',
+    weeks: [
+      ['Week 10', 'Offers: comparing them side by side and what to ask before you sign.'],
+      ['Week 11', 'Negotiation: a counter you can say out loud, and when to walk away.'],
+      ['Week 12', 'Your full funnel review and a plan to keep going on your own.'],
+    ],
+    out: '1,200 applications, a measured funnel and a negotiation plan.',
+  },
+] as const;
+
+const marquee = ['100 applications a week', 'Every Monday', 'Funnel tracking', 'Resume reviews', 'Mock interviews', 'Referrals', 'Postmortems', 'Offers & negotiation', '12 weeks together'];
+
+const faqs = [
+  {
+    q: 'Is 100 applications a week realistic?',
+    a: 'Yes, once the system is set up in the first weeks: one lane, one resume per lane, a tracker, and a routine. They are targeted applications, not mass auto-apply. The numbers you report every Monday are what make the next 100 better.',
+  },
+  {
+    q: 'Who is it for?',
+    a: 'Developers who are actively looking: new grads, career changers, people who were laid off, and anyone sending applications and hearing nothing back.',
+  },
+  {
+    q: 'What if I get a job before week 12?',
+    a: 'That is the goal. You can stay to help the others with interview prep and negotiation, or leave with our congratulations.',
+  },
+  {
+    q: 'What if I miss a Monday?',
+    a: 'Post your numbers in the Telegram group and catch up the next week. The weekly target still counts.',
+  },
+  {
+    q: 'How do I join?',
+    a: 'Message me on LinkedIn or by email. I will send you the details and add you to the group.',
+  },
+];
+
+const schedule = `${GROUP.day}s · ${GROUP.start}–${GROUP.end} ${GROUP.tz}`;
+const courseSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: `${GROUP.title} — ${GROUP.weeks}-week job search support group`,
+  description: `A ${GROUP.weeks}-week live job search group: ${GROUP.perWeek} applications a week, a report every Monday, and interview prep together.`,
+  provider: { '@type': 'Person', name: SITE.instructor.name, url: SITE.url },
+  url: `${SITE.url}/${GROUP.slug}/`,
+};
+---
+
+<BaseLayout
+  title={`${GROUP.title} — ${GROUP.weeks}-Week Job Search Support Group`}
+  description={`A ${GROUP.weeks}-week live job search support group with ${SITE.instructor.name}: ${GROUP.perWeek} applications a week, report every Monday, and prepare for interviews together. ${schedule}.`}
+  canonical={`/${GROUP.slug}`}
+  theme="paper"
+  schema={[courseSchema]}
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <span class="blob blob-violet" aria-hidden="true"></span>
+    <span class="blob blob-gold" aria-hidden="true"></span>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="lbl lbl-gold">{GROUP.weeks}-week support group · {GROUP.where}</span>
+        <h1 class="display-1">
+          Apply, report, prepare.<br />
+          <span class="mark-gold">Together, every week.</span>
+        </h1>
+        <p class="hero-sub">
+          Job hunting alone is slow and lonely. In this group we each send {GROUP.perWeek}{' '}
+          applications a week, meet every Monday to report the numbers and fix what is not
+          working, and prepare for each other's interviews until the offers come in.
+        </p>
+        <div class="hero-cta">
+          <a class="b b-ink" href={GROUP.join.href} target="_blank" rel="noopener">{GROUP.join.label} →</a>
+          <a class="b b-plain" href="#plan">See the 12 weeks</a>
+        </div>
+        <dl class="stats">
+          <div><dt>{GROUP.weeks}</dt><dd>weeks</dd></div>
+          <div><dt>{GROUP.perWeek}</dt><dd>applications / week</dd></div>
+          <div><dt>{hours}h</dt><dd>every Monday</dd></div>
+          <div><dt>1,200</dt><dd>applications total</dd></div>
+        </dl>
+      </div>
+      <div class="hero-term">
+        <div class="term">
+          <div class="term-bar"><i></i><i></i><i></i><span>group --info</span></div>
+          <div class="term-body">
+            <span class="l"><span class="u">›</span> group --info {GROUP.slug}</span>
+            <span class="l"></span>
+            <span class="l"><span class="d">title  </span> {GROUP.title}</span>
+            <span class="l"><span class="d">length </span> <span class="v">{GROUP.weeks} weeks</span></span>
+            <span class="l"><span class="d">when   </span> {GROUP.day}s</span>
+            <span class="l"><span class="d">time   </span> {GROUP.start} – {GROUP.end} {GROUP.tz}</span>
+            <span class="l"><span class="d">where  </span> {GROUP.where}</span>
+            <span class="l"><span class="d">target </span> <span class="g">{GROUP.perWeek} applications / week</span></span>
+            <span class="l"><span class="d">host   </span> {SITE.instructor.name}</span>
+            <span class="l"></span>
+            <span class="l"><span class="u">›</span> group --join</span>
+            <span class="l"><span class="g">✔</span> message me → added to the Telegram group</span>
+            <span class="l"><span class="u">›</span> <span class="cursor">▋</span></span>
+          </div>
+        </div>
+        <p class="term-note">{schedule}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MARQUEE ===================== -->
+  <div class="band">
+    <div class="band-track">
+      <span>{marquee.map((m) => (<><b>{m}</b><i aria-hidden="true">✳</i></>))}</span>
+      <span aria-hidden="true">{marquee.map((m) => (<><b>{m}</b><i>✳</i></>))}</span>
+    </div>
+  </div>
+
+  <!-- ===================== THE LOOP ===================== -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="lbl">The weekly loop</span>
+        <h2 class="display-2">Three things, every week, for {GROUP.weeks} weeks</h2>
+        <p class="lede">
+          Most job searches stall because nobody is counting and nobody is watching. Here
+          everyone counts, everyone reports, and nobody walks into an interview unprepared.
+        </p>
+      </div>
+      <ol class="dial">
+        {loop.map(([t, b], i) => (
+          <li class="k k-flat">
+            <span class="dial-n">0{i + 1}</span>
+            <h3>{t}</h3>
+            <p>{b}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== MONDAY ===================== -->
+  <section class="s-ink">
+    <div class="wrap slides-grid">
+      <div>
+        <span class="lbl">Every Monday</span>
+        <h2 class="display-2">Three hours, live, together</h2>
+        <p>
+          {GROUP.start} to {GROUP.end} {GROUP.tz}, online. Bring your numbers, your stuck
+          applications and your upcoming interviews. Between Mondays the Telegram group keeps
+          everyone moving.
+        </p>
+        <div class="hero-cta">
+          <a class="b b-primary" href={GROUP.join.href} target="_blank" rel="noopener">{GROUP.join.label} →</a>
+        </div>
+      </div>
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>monday --agenda</span></div>
+        <div class="term-body">
+          <span class="l"><span class="u">›</span> monday --agenda</span>
+          <span class="l"></span>
+          {monday.map(([time, title, line]) => (
+            <span class="l"><span class="d">{time} </span> <span class="v">{title}</span> <span class="d">· {line}</span></span>
+          ))}
+          <span class="l"><span class="d">{GROUP.end} </span> <span class="g">✔ done, see you next Monday</span></span>
+          <span class="l"><span class="u">›</span> <span class="cursor">▋</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE 12 WEEKS ===================== -->
+  <section id="plan" class="s-paper2">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="lbl lbl-violet">The plan</span>
+        <h2 class="display-2">{GROUP.weeks} weeks, four phases</h2>
+        <p class="lede">
+          The {GROUP.perWeek} applications never stop. What changes is the focus of each
+          Monday, from setting up the machine to closing the offer.
+        </p>
+      </div>
+      <div class="mods">
+        {PHASES.map((p) => (
+          <article class="mod">
+            <header class="mod-hd">
+              <span class="mod-n">{p.n}</span>
+              <div>
+                <h3>{p.title}</h3>
+                <p class="mod-who">{p.who}</p>
+              </div>
+            </header>
+            <ol class="topics">
+              {p.weeks.map(([t, l]) => (
+                <li>
+                  <span class="tp-t">{t}</span>
+                  <span class="tp-l">{l}</span>
+                </li>
+              ))}
+            </ol>
+            <div class="mod-out">
+              <span class="lbl lbl-gold">You leave with</span>
+              <p>{p.out}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW TO JOIN ===================== -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="lbl">How to join</span>
+        <h2 class="display-2">Three steps, all of them short</h2>
+      </div>
+      <ol class="steps">
+        <li class="k k-flat">
+          <span class="step-n">01</span>
+          <h3>Message me</h3>
+          <p>
+            On <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn</a> or
+            at <a href={`mailto:${SITE.instructor.email}?subject=${encodeURIComponent(GROUP.title)}`}>{SITE.instructor.email}</a>.
+            Tell me the role you are looking for.
+          </p>
+        </li>
+        <li class="k k-flat">
+          <span class="step-n">02</span>
+          <h3>Join the Telegram group</h3>
+          <p>I send you the details and add you to the group. The live link and weekly reminders go out there.</p>
+        </li>
+        <li class="k k-flat">
+          <span class="step-n">03</span>
+          <h3>Show up on Monday</h3>
+          <p>{GROUP.start}–{GROUP.end} {GROUP.tz}, live, with your first numbers.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== HOST ===================== -->
+  <section class="s-paper2">
+    <div class="wrap inst">
+      <div class="inst-photo">
+        <img src="/headshot.jpg" alt={`${SITE.instructor.name}, host`} width="300" height="300" loading="lazy" />
+        <span class="inst-badge"><Mark size={22} variant="bare" /> host</span>
+      </div>
+      <div class="inst-copy">
+        <span class="lbl">Who is hosting</span>
+        <h2 class="display-2">{SITE.instructor.name}</h2>
+        <p class="inst-role">{SITE.instructor.role}</p>
+        <p>
+          I lead an engineering team and mentor developers through the 12-week{' '}
+          <a href="/">AI Engineering</a> program. I also run a{' '}
+          <a href="https://t.me/pjmentoring" target="_blank" rel="noopener">Telegram channel of job alerts</a>.
+          This group is where we run the job search system together, week after week, until it works.
+        </p>
+        <div class="hero-cta">
+          <a class="b b-plain" href="/resume">Résumé</a>
+          <a class="b b-plain" href="/jobs">Jobs</a>
+          <a class="b b-plain" href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section id="faq">
+    <div class="wrap two-col">
+      <div class="col-head">
+        <span class="lbl">Questions</span>
+        <h2 class="display-2">Before you ask</h2>
+      </div>
+      <div class="col-body faqs">
+        {faqs.map((f) => (
+          <details class="faq">
+            <summary>{f.q}<i aria-hidden="true"></i></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL ===================== -->
+  <section class="s-ink final">
+    <div class="wrap ctr">
+      <span class="lbl lbl-gold">{GROUP.weeks} weeks · {schedule}</span>
+      <h2 class="display-2">100 a week, every Monday,<br />until the offer.</h2>
+      <p>Send me one line and I will add you to the group.</p>
+      <a class="b b-primary" href={GROUP.join.href} target="_blank" rel="noopener">{GROUP.join.label} →</a>
+      <p class="fine">
+        Not sure yet? Start with the free webinar,{' '}<a href={GROUP.webinar.href}>{GROUP.webinar.title}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------------- hero ---------------- */
+  /* Same furniture as the course landing page, so the two read as one site. */
+  .hero { position: relative; padding: 4.5rem 0 4rem; overflow: hidden; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+  .blob { position: absolute; border-radius: 50%; z-index: 0; }
+  .blob-violet { display: none; }
+  .blob-gold { display: none; }
+  .hero-grid > * { position: relative; z-index: 1; }
+
+  h1.display-1 {
+    margin: 1.4rem 0 0;
+    font-size: clamp(2.5rem, 5.4vw, 4.3rem);
+    text-wrap: pretty;
+  }
+  .mark-gold {
+    display: inline;
+    background: linear-gradient(transparent 62%, var(--gold) 62%, var(--gold) 94%, transparent 94%);
+    padding: 0 0.08em;
+  }
+  .hero-sub { font-size: 1.16rem; max-width: 52ch; margin: 1.5rem 0 0; color: var(--ink-soft); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2rem; }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.2rem;
+    margin: 2.8rem 0 0;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  .stats dt { font-family: var(--display); font-weight: 700; font-size: 2.4rem; line-height: 1; color: var(--violet-deep); }
+  .stats dd {
+    margin: 0.35rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hero-term { transform: rotate(1.1deg); }
+  .term .cursor { color: var(--gold); animation: blink 1.1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .term-note {
+    margin: 1rem 0 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .band-track b { font-weight: 500; color: #e9e4ff; }
+  .band-track i { font-style: normal; color: var(--gold); }
+
+  /* ---------------- section furniture ---------------- */
+  .sec-head { max-width: 62ch; margin-bottom: 2.8rem; }
+  .sec-head h2 { margin: 1rem 0 0; }
+  .sec-head .lede { margin-top: 1rem; }
+  .lede { font-size: 1.1rem; color: var(--ink-soft); max-width: 60ch; }
+
+  /* ---------------- the dial ---------------- */
+  .dial {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.15rem;
+  }
+  .dial li { display: flex; flex-direction: column; }
+  .dial-n { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.16em; color: var(--gold-deep); }
+  .dial h3 { font-size: 1.3rem; margin: 0.5rem 0 0.4rem; }
+  .dial p { font-size: 0.95rem; margin: 0 0 1.2rem; }
+  .dial :global(.dial-topo) { margin-top: auto; }
+
+  /* ---------------- agenda ---------------- */
+  .s-paper2 { --topo-ground: var(--paper-2); }
+  .mods { display: grid; gap: 1.15rem; }
+  .mod {
+    display: grid;
+    grid-template-columns: 0.8fr 1.3fr 0.9fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 1.6rem 1.7rem;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--violet);
+    border-radius: var(--r);
+    box-shadow: var(--lift);
+    --topo-ground: #ffffff;
+  }
+  .mod-hd { display: flex; gap: 1rem; align-items: baseline; }
+  .mod-n { font-family: var(--mono); font-weight: 600; font-size: 1.15rem; color: var(--violet-deep); }
+  .mod h3 { font-size: 1.35rem; margin: 0; }
+  .mod-who {
+    margin: 0.45rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    color: var(--gold-deep);
+  }
+  .topics { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+  .topics li { display: grid; gap: 0.1rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--rule); }
+  .topics li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .tp-t { font-weight: 600; color: var(--ink); }
+  .tp-l { font-size: 0.9rem; color: var(--ink-soft); }
+  .mod-topo { align-self: center; }
+
+  /* ---------------- slides teaser ---------------- */
+  .slides-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .slides-grid h2 { margin: 1rem 0 0.8rem; }
+  kbd {
+    font-family: var(--mono);
+    font-size: 0.8em;
+    padding: 0.05em 0.4em;
+    border: 1px solid rgba(233, 228, 255, 0.3);
+    border-radius: 4px;
+    color: #fff;
+  }
+  .deck-peek { display: block; text-decoration: none; transform: rotate(-1deg); transition: transform 0.16s ease; }
+  .deck-peek:hover { transform: rotate(0deg) translateY(-3px); text-decoration: none; }
+  .peek-slide {
+    aspect-ratio: 16 / 9;
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7);
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-bottom: 4px solid var(--gold);
+  }
+  /* Not .lbl: the ink band recolours every .lbl gold, and this is a paper slide. */
+  .peek-lbl {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--violet-deep);
+  }
+  .peek-title { font-family: var(--display); font-weight: 700; font-size: 1.8rem; color: var(--ink); letter-spacing: -0.03em; line-height: 1; }
+  .peek-slide :global(.topo) { flex: 1; min-height: 0; }
+  .peek-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---------------- join ---------------- */
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; }
+  .step-n { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.16em; color: var(--gold-deep); }
+  .steps h3 { font-size: 1.15rem; margin: 0.6rem 0 0.45rem; }
+  .steps p { font-size: 0.95rem; margin: 0; }
+
+  /* ---------------- host ---------------- */
+  .inst { display: grid; grid-template-columns: 300px 1fr; gap: 3rem; align-items: start; }
+  .inst-photo { position: relative; }
+  .inst-photo img {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    box-shadow: var(--lift-2);
+    object-fit: cover;
+    aspect-ratio: 1;
+  }
+  .inst-badge {
+    position: absolute;
+    left: -12px;
+    bottom: -14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gold);
+    border: 1px solid var(--gold-deep);
+    border-radius: 999px;
+    padding: 0.4rem 0.95rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    box-shadow: var(--lift-2);
+  }
+  .inst-copy h2 { margin: 0.9rem 0 0.4rem; }
+  .inst-role { font-family: var(--mono); font-size: 0.82rem; color: var(--violet-deep); margin-bottom: 1.2rem; }
+
+  /* ---------------- faq ---------------- */
+  .two-col { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 3.5rem; }
+  .col-head h2 { margin-top: 1rem; position: sticky; top: 100px; }
+  .faqs { display: grid; }
+  .faq { border-bottom: 1px solid var(--rule); }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 0;
+    cursor: pointer;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.08rem;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary i { flex: none; width: 22px; height: 22px; border: 1.5px solid var(--rule-strong); border-radius: 50%; position: relative; }
+  .faq summary i::before,
+  .faq summary i::after {
+    content: "";
+    position: absolute;
+    inset: 50% 4px auto 4px;
+    height: 2px;
+    background: var(--ink);
+    transform: translateY(-50%);
+  }
+  .faq summary i::after { transform: translateY(-50%) rotate(90deg); transition: transform 0.18s ease; }
+  .faq[open] summary i::after { transform: translateY(-50%) rotate(0deg); }
+  .faq p { padding: 0 0 1.3rem; margin: 0; max-width: 68ch; }
+
+  /* ---------------- final ---------------- */
+  .final { text-align: center; }
+  .final h2 { margin-top: 1.2rem; }
+  .final p { max-width: 54ch; margin: 1.2rem auto 2rem; font-size: 1.06rem; }
+  .final .fine { font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.06em; margin-top: 1.6rem; color: #8e87b8; }
+  .final .fine a { color: var(--gold); }
+  .ctr { text-align: center; }
+
+  /* ---------------- responsive ---------------- */
+  @media (max-width: 1000px) {
+    .hero-grid, .two-col, .inst, .slides-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .col-head h2 { position: static; }
+    .mod { grid-template-columns: 1fr 1fr; }
+    .mod-hd { grid-column: 1 / -1; }
+    .inst { max-width: 520px; }
+  }
+  @media (max-width: 760px) {
+    .dial, .steps, .mod { grid-template-columns: 1fr; }
+    .mod { gap: 1.2rem; padding: 1.3rem; }
+  }
+  @media (max-width: 640px) {
+    .stats { gap: 1.4rem 2rem; }
+    .stats dt { font-size: 1.9rem; }
+    .hero-term, .deck-peek { transform: none; }
+    .blob-violet { width: 320px; height: 320px; right: -140px; top: -120px; }
+  }
+
+  .mod-out { align-self: start; border: 1px dashed var(--rule-strong); border-radius: 10px; padding: 1rem 1.1rem; background: var(--paper); }
+  .mod-out .lbl { display: block; margin-bottom: .5rem; }
+  .mod-out p { margin: 0; font-size: .92rem; color: var(--ink); }
+  .s-ink .term-body .l { white-space: normal; }
+</style>
