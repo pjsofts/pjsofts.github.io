@@ -38,8 +38,17 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
+        <h4>Open source</h4>
+        <a href="https://pjsofts.github.io/pj-voice/">PJ Voice: AI phone agent</a>
+        <a href="https://github.com/pjsofts/ai-agent-workflows" target="_blank" rel="noopener">AI Agent Workflows ↗</a>
+        <a href="https://bioliams.github.io/" target="_blank" rel="noopener">BioLIMS ↗</a>
+        <a href="https://pouriajahandideh.com/">All my work ↗</a>
+      </div>
+
+      <div>
         <h4>Instructor</h4>
         <a href="/resume">Résumé &amp; experience</a>
+        <a href="https://pouriajahandideh.com/">pouriajahandideh.com ↗</a>
         <a href={SITE.instructor.linkedin} target="_blank" rel="noopener me">LinkedIn ↗</a>
         <a href={SITE.org.linkedin} target="_blank" rel="noopener">Daily lessons on LinkedIn ↗</a>
         <a href={SITE.telegram.href} target="_blank" rel="noopener">Telegram — job alerts ↗</a>
@@ -56,7 +65,7 @@ const year = new Date().getFullYear();
 
 <style>
   .ftr { border-top: 1px solid var(--line); background: var(--ink-800); padding: 3.2rem 0 1.8rem; margin-top: 3rem; }
-  .ftr-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 2.2rem; }
+  .ftr-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; gap: 2rem; }
   .fbrand { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; }
   .fbrand img { border-radius: 9px; object-fit: cover; }
   .fb-name { font-weight: 800; font-size: .8rem; letter-spacing: .17em; }
@@ -70,7 +79,7 @@ const year = new Date().getFullYear();
     border-top: 1px solid var(--line); margin-top: 2.4rem; padding-top: 1.3rem;
     font-size: .8rem; color: var(--fg-dimmer);
   }
-  @media (max-width: 780px) {
+  @media (max-width: 980px) {
     .ftr-grid { grid-template-columns: 1fr 1fr; gap: 1.8rem; }
   }
   @media (max-width: 460px) {
