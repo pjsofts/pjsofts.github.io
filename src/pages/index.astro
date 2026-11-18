@@ -20,9 +20,13 @@ const courseSchema = {
   '@type': 'Course',
   name: 'AI Engineering — Build a Claude Code Clone From Scratch',
   description: SITE.description,
-  provider: { '@type': 'Person', name: SITE.instructor.name, url: SITE.url },
-  url: SITE.url,
+  provider: { '@id': `${SITE.url}/#org` },
+  url: `${SITE.url}/`,
+  image: `${SITE.url}/og-default.png`,
   inLanguage: 'en',
+  educationalLevel: 'Intermediate',
+  coursePrerequisites: 'Working knowledge of Python or TypeScript and experience calling an HTTP API.',
+  offers: { '@type': 'Offer', category: 'Paid', url: SITE.cta.href },
   teaches: [
     'Agent loops and tool calling',
     'Evals and golden datasets',
@@ -33,9 +37,10 @@ const courseSchema = {
   ],
   hasCourseInstance: {
     '@type': 'CourseInstance',
-    courseMode: 'online',
-    courseWorkload: 'P6H',
-    instructor: { '@type': 'Person', name: SITE.instructor.name },
+    courseMode: 'Online',
+    courseWorkload: 'PT72H',
+    courseSchedule: { '@type': 'Schedule', repeatFrequency: 'Weekly', repeatCount: 12, duration: 'PT6H' },
+    instructor: { '@id': `${SITE.url}/#instructor` },
   },
 };
 
@@ -110,7 +115,7 @@ const marquee = [
 ---
 
 <BaseLayout
-  title="AI Engineering — Build a Claude Code Clone From Scratch | 12-Week Mentorship"
+  title="AI Engineering Course — Build an AI Agent From Scratch | 12 Weeks Online"
   description={SITE.description}
   canonical="/"
   theme="paper"

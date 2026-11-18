@@ -10,6 +10,13 @@ export const SITE = {
     linkedin: 'https://www.linkedin.com/in/pouria-jahandideh/',
     email: 'pjsofts@gmail.com',
     location: 'Yerevan, Armenia · Remote',
+    jobTitle: 'AI Engineer',
+  },
+  /** The LinkedIn company page that posts the daily lessons. */
+  org: {
+    name: 'Pouria Jahandideh Mentoring',
+    linkedin: 'https://www.linkedin.com/company/pouria-jahandideh-mentoring/',
+    logo: 'https://pjsofts.github.io/logo-mark.png',
   },
   /** Telegram channel where the job board is posted. */
   telegram: {
