@@ -121,6 +121,13 @@ const marquee = [
   theme="paper"
   schema={[courseSchema, faqSchema]}
 >
+  <!-- ===================== ANNOUNCEMENT ===================== -->
+  <a class="announce" href="/webinar/job-hunting-ai/">
+    <span class="announce-tag">Free webinar</span>
+    <span class="announce-txt"><b>Job Hunting in the Age of AI</b> · Thu 26 Nov · 10:00 Tehran time</span>
+    <span class="announce-go">Save your seat →</span>
+  </a>
+
   <!-- ===================== HERO ===================== -->
   <section class="hero">
     <span class="blob blob-violet" aria-hidden="true"></span>
@@ -452,6 +459,7 @@ const marquee = [
         </div>
         <div class="hero-cta">
           <a class="b b-plain" href="/jobs">See the full board →</a>
+          <a class="b b-plain" href="/webinar/job-hunting-ai/">Free job hunting webinar →</a>
           <a class="b b-plain" href={SITE.telegram.href} target="_blank" rel="noopener">
             Job alerts on Telegram ↗
           </a>
@@ -495,6 +503,19 @@ const marquee = [
 </BaseLayout>
 
 <style>
+  .announce {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .5rem 1rem;
+    padding: .7rem 1.2rem; background: var(--ink); color: #e9e4ff; text-decoration: none;
+    font-size: .92rem; text-align: center; border-bottom: 1px solid var(--gold);
+  }
+  .announce:hover { text-decoration: none; }
+  .announce b { color: #fff; font-weight: 600; }
+  .announce-tag {
+    background: var(--gold); color: var(--ink); font-family: var(--mono); font-size: .7rem;
+    letter-spacing: .14em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 4px; font-weight: 700;
+  }
+  .announce-go { color: var(--gold); font-weight: 600; }
+  .announce:hover .announce-go { text-decoration: underline; }
   /* ---------------- hero ---------------- */
   .hero {
     position: relative;
