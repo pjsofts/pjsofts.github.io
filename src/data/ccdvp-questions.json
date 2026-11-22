@@ -1,0 +1,643 @@
+[
+ {
+  "id": "D1-01",
+  "domain": 1,
+  "stem": "A research supervisor agent dispatches five parallel workers to analyze vendor contracts. Workers routinely return 6,000-word transcripts of everything they read, and the supervisor's final reports have started omitting findings from the first workers to finish. What change most directly addresses the problem?",
+  "options": {
+   "A": "Move the supervisor to a model with a larger context window so all worker output fits.",
+   "B": "Define a structured return contract for workers (findings, evidence references, status) with a length limit, so the supervisor receives compressed results.",
+   "C": "Run the workers sequentially so the supervisor can summarize each transcript before the next starts.",
+   "D": "Give the workers the supervisor's full conversation history so they know what the supervisor already has."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "The value of subagents is context isolation: each returns a compressed result. Unbounded free-text returns flood the supervisor's context. A larger window (A) postpones the problem and raises cost; sequential runs (C) give up parallelism without fixing the contract; sharing full history (D) defeats isolation."
+ },
+ {
+  "id": "D1-02",
+  "domain": 1,
+  "stem": "A long-running billing agent crashed after it called the payment tool but before it saved its checkpoint. On restart it resumed from the previous checkpoint and charged the customer twice. Which TWO changes prevent this class of failure?",
+  "select": 2,
+  "options": {
+   "A": "Pass an idempotency key derived from the run ID and step number to the payment tool.",
+   "B": "Checkpoint less often so the agent restarts from a cleaner state.",
+   "C": "Journal side effects (intent recorded before the call, confirmation after) and on resume check unconfirmed intents instead of re-executing them.",
+   "D": "Restart failed runs from the beginning so state is never inconsistent.",
+   "E": "Tell the model in the system prompt never to charge a customer twice."
+  },
+  "answer": [
+   "A",
+   "C"
+  ],
+  "explanation": "Durable execution needs idempotent side effects and a side-effect journal, so a replay after a crash can't repeat an external action. Checkpointing less (B) or restarting from scratch (D) make duplication more likely; a prompt instruction (E) cannot see the crash."
+ },
+ {
+  "id": "D1-03",
+  "domain": 1,
+  "stem": "Three months of traces from a production 'agentic' invoice processor show that 96% of runs call the same four tools in the same order, and the remaining 4% fail or need a human. Cost per invoice is 5x the team's target. What is the best architectural move?",
+  "options": {
+   "A": "Add a planning subagent so the agent can reason about the 4% of unusual invoices.",
+   "B": "Convert the common path into a deterministic workflow, and route the unusual cases to a bounded agentic step or a human.",
+   "C": "Switch to a larger model so the agent plans the four steps more reliably.",
+   "D": "Keep the agent and enable more aggressive prompt caching to reduce cost."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Production data shows a fixed path, so the model doesn't need to decide the next step. A workflow for the common path is cheaper, faster and testable; the tail gets a bounded agentic step. Caching (D) helps but leaves the architecture mismatch."
+ },
+ {
+  "id": "D1-04",
+  "domain": 1,
+  "stem": "An operations agent's cost per session doubled after the team began injecting an updated escalation policy by rewriting the top-level system prompt partway through long conversations. Quality is fine. What should they do?",
+  "options": {
+   "A": "Stop prompt caching for these sessions since the prefix changes anyway.",
+   "B": "Append the new instruction as a mid-conversation system message instead of editing the top-level system prompt, keeping the cached prefix intact.",
+   "C": "Restart the conversation with a new system prompt whenever the policy changes.",
+   "D": "Move the escalation policy into a tool description."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Caching is a prefix match; editing the system prompt invalidates the cache for the whole history. Appending an operator instruction later in the messages (supported on newer models) keeps the prefix stable. Changing tool definitions (D) also busts the cache."
+ },
+ {
+  "id": "D1-05",
+  "domain": 1,
+  "stem": "A coding agent has access to 400 internal tools via several MCP servers. Requests carry roughly 90k tokens of tool definitions, and the model sometimes picks a similarly named wrong tool. Which approach best addresses both cost and tool selection?",
+  "options": {
+   "A": "Compact the conversation history more aggressively.",
+   "B": "Use tool search with deferred loading so only relevant tool definitions enter the context.",
+   "C": "Shorten every tool description to one line to reduce tokens.",
+   "D": "Split the agent into 400 single-tool subagents."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Large tool catalogs belong out of the context window; tool search loads definitions on demand, cutting tokens and the distractor set. Compaction (A) targets history, not tool definitions; one-line descriptions (C) make selection worse."
+ },
+ {
+  "id": "D2-01",
+  "domain": 2,
+  "stem": "A document Q&A service retries every non-successful call three times on the primary model, then falls back to a secondary model. Traces show a mix of HTTP 429 errors, HTTP 400 invalid_request_error responses, responses ending with stop_reason 'max_tokens', and responses ending with stop_reason 'refusal'. Which handling is correct?",
+  "options": {
+   "A": "Retry all four with longer exponential backoff, since transient issues resolve over time.",
+   "B": "Back off and retry 429s; fix the request for 400s without retrying; raise the output budget or continue generation for max_tokens; route refusals to a safety-handling path.",
+   "C": "Send all four to the secondary model immediately, since it is less loaded.",
+   "D": "Treat all four as fatal and return an error to the user so problems are visible."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Each condition is a different failure class. Only rate limits and transient server errors benefit from backoff-and-retry. A 400 repeats identically, a length stop reproduces the truncation, and a refusal is a policy outcome (arriving as HTTP 200) that needs its own path."
+ },
+ {
+  "id": "D2-02",
+  "domain": 2,
+  "stem": "A team adds failover from the first-party Claude API to the same model on a cloud platform. During a regional incident, the failover path returns HTTP 200 responses, but downstream JSON parsing fails for one product. What is the most likely cause?",
+  "options": {
+   "A": "The cloud platform's model is a different size.",
+   "B": "The request relies on a feature or beta parameter that isn't available on the fallback platform, so the fallback silently lacks it.",
+   "C": "Cloud platforms don't support streaming.",
+   "D": "The prompt cache was cold on the fallback platform."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Feature parity isn't guaranteed across platforms. A fallback that drops a feature the request relies on (such as a structured-output or beta capability) produces wrong-shaped results rather than errors. Test each fallback path. A cold cache (D) affects cost and latency, not correctness."
+ },
+ {
+  "id": "D2-03",
+  "domain": 2,
+  "stem": "A nightly pipeline classifies 3 million support tickets with a 6k-token instruction prefix and short outputs. It repeatedly hits rate limits, and nobody needs results before morning. Which TWO changes best address throughput and cost?",
+  "select": 2,
+  "options": {
+   "A": "Move the job to the Message Batches API.",
+   "B": "Enable prompt caching on the shared instruction prefix.",
+   "C": "Increase the client's max_retries to 20.",
+   "D": "Switch to streaming responses.",
+   "E": "Run the job across more worker processes."
+  },
+  "answer": [
+   "A",
+   "B"
+  ],
+  "explanation": "Latency-insensitive bulk work fits the Batches API (asynchronous, about half price). A large shared prefix is ideal for caching, which cuts input cost and usually reduces pressure on input-token limits. More retries (C) or workers (E) push harder against the same limit; streaming (D) doesn't change throughput."
+ },
+ {
+  "id": "D2-04",
+  "domain": 2,
+  "stem": "In a multi-tenant SaaS product, one enterprise tenant's bulk import causes p95 latency for all other tenants to triple. What is the most appropriate fix?",
+  "options": {
+   "A": "Raise the organization-wide rate limit with the provider.",
+   "B": "Enforce per-tenant quotas and fair queuing in the gateway, with lower priority for bulk work.",
+   "C": "Switch every tenant to a smaller, faster model.",
+   "D": "Add more retries for the other tenants' requests."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "This is a noisy-neighbor problem. Per-tenant quotas, fair queuing and priority classes isolate tenants. A higher global limit (A) helps until the next spike; retries (D) add load."
+ },
+ {
+  "id": "D2-05",
+  "domain": 2,
+  "stem": "A support assistant answers policy questions with RAG. Evaluation shows the correct policy chunk appears in the top-50 retrieved candidates for 97% of questions but in the top-3 passed to the model only 55% of the time. What is the most targeted improvement?",
+  "options": {
+   "A": "Re-chunk and re-embed the corpus with a new embedding model.",
+   "B": "Add a reranking stage over the top-50 candidates before selecting the context.",
+   "C": "Increase the model's effort level.",
+   "D": "Instruct the model to say 'I don't know' more often."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Recall@50 is high, so retrieval finds the right chunk; ranking fails to put it near the top. A reranker targets that stage. Re-embedding (A) addresses a recall problem that isn't present."
+ },
+ {
+  "id": "D2-06",
+  "domain": 2,
+  "stem": "A team is migrating a production agent to a newer Claude model. Which rollout plan best manages risk?",
+  "options": {
+   "A": "Switch the model ID in config and watch error rates for a day.",
+   "B": "Run the regression suite plus tests targeting documented breaking changes, re-baseline token counts, shadow live traffic, then canary with automatic rollback on SLO or quality breach.",
+   "C": "Ask the new model to review its own outputs for a week before switching.",
+   "D": "Migrate during a low-traffic weekend to minimize impact."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Model migrations change behavior and token counts. Progressive delivery (offline evals, shadow, canary, automated rollback) is the expected practice. Error rates alone (A) miss quality regressions."
+ },
+ {
+  "id": "D2-07",
+  "domain": 2,
+  "stem": "An engineer renames a tool parameter from 'customer_id' to 'account_id' in an MCP server used by several production agents and deploys it directly. Agents start calling the tool with the old parameter name. What practice would have prevented this?",
+  "options": {
+   "A": "Telling the agents in their system prompts to read tool schemas carefully.",
+   "B": "Treating tool schemas as versioned contracts: support both shapes during migration (or version the tool), run evals against the change, and roll out progressively.",
+   "C": "Disabling prompt caching so agents always see the newest schema.",
+   "D": "Using local stdio transport instead of remote MCP."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Tool names and schemas are an API contract with the model and with cached or configured clients. Version them, support a transition, eval the change, and roll it out gradually like any other breaking change."
+ },
+ {
+  "id": "D3-01",
+  "domain": 3,
+  "stem": "A healthcare customer is under a zero-data-retention arrangement. The platform team wants to debug agent failures for that tenant. What instrumentation approach is appropriate?",
+  "options": {
+   "A": "Capture full prompts and completions in traces but delete them after 30 days.",
+   "B": "Capture metadata only (token counts, stop reasons, latencies, tool names and statuses, content hashes), or content redacted before export, with content capture configurable per tenant.",
+   "C": "Disable all tracing for the tenant.",
+   "D": "Store prompts in traces encrypted with the tenant's key."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Your own telemetry must not keep what the retention agreement excludes. Metadata-only or pre-redacted capture keeps debuggability. Disabling tracing entirely (C) throws away safe, useful signals."
+ },
+ {
+  "id": "D3-02",
+  "domain": 3,
+  "stem": "After a prompt update, input cost per request rose 4x while traffic and output length stayed flat. Traces show cache_read_input_tokens dropped to near zero. What is the most likely cause?",
+  "options": {
+   "A": "The model provider changed pricing.",
+   "B": "The new prompt version put a volatile value (timestamp, request ID, or unsorted data) into the cached prefix.",
+   "C": "Users are sending longer questions.",
+   "D": "The output token limit was raised."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Caching is a byte-exact prefix match. A per-request value early in the prompt invalidates every request's cache. Output limits (D) don't affect input cost."
+ },
+ {
+  "id": "D3-03",
+  "domain": 3,
+  "stem": "An agent platform keeps 1% of traces using head-based random sampling. Engineers can rarely find a captured example of a failure that affects 0.5% of tasks. What sampling change helps most while keeping unbiased rate estimates?",
+  "options": {
+   "A": "Increase head sampling to 5%.",
+   "B": "Use tail-based sampling that keeps all errored, slow and expensive traces, plus a small uniform random sample for baseline rates.",
+   "C": "Sample only errored traces.",
+   "D": "Keep all traces for one day per week."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Tail-based sampling keeps the rare failures you need to debug. The uniform baseline keeps rate and distribution estimates unbiased. Errors-only sampling (C) gives no baseline to compare cohorts against."
+ },
+ {
+  "id": "D3-04",
+  "domain": 3,
+  "stem": "A team's LLM service has SLOs on availability and latency, both green, yet escalations to human agents rose 30% over two weeks. What is missing from their monitoring?",
+  "options": {
+   "A": "A higher availability target.",
+   "B": "Quality SLIs, such as sampled task success or groundedness judged on live traffic, with release annotations on dashboards.",
+   "C": "More detailed CPU and memory metrics.",
+   "D": "Shorter log retention."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "A service can be up and fast while giving wrong answers. LLM services need quality SLIs alongside the classic ones, and annotations to line up regressions with releases."
+ },
+ {
+  "id": "D3-05",
+  "domain": 3,
+  "stem": "Overall task failure is 3%, which looks acceptable. Which analysis is most likely to surface a systemic issue hidden in that number?",
+  "options": {
+   "A": "Reading the 20 most recent failed traces in detail.",
+   "B": "Failure-cohort analysis: compute failure rates by dimension (tool version, model, tenant, input size, prompt version) and combinations, and rank by lift over the baseline.",
+   "C": "Raising the alert threshold to 5%.",
+   "D": "Comparing this week's average latency to last week's."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Systemic issues show up as over-represented cohorts (e.g., 40% failure for one tool version on long inputs). A handful of recent traces (A) can't quantify a pattern."
+ },
+ {
+  "id": "D4-01",
+  "domain": 4,
+  "stem": "An agent looped, calling the same database tool 15 times before hitting its step limit. The trace shows the tool returned a detailed error ('column created_at does not exist; did you mean created_on?') but the model received the tool result content 'Error'. Where is the problem's origin?",
+  "options": {
+   "A": "Model output: the model fails to recover from errors.",
+   "B": "Agent harness: it discards the error detail the model needed to correct its call.",
+   "C": "Tool: the database schema is wrong.",
+   "D": "Data: the column names are inconsistent."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "The tool produced an actionable error; the harness replaced it with a useless string. Following the hand-offs, the first divergence is in the harness. Return real errors (with is_error) so the model can recover."
+ },
+ {
+  "id": "D4-02",
+  "domain": 4,
+  "stem": "Users report that an extraction agent 'sometimes' misses the invoice total. Engineers can't reproduce it on a single attempt. What is the best next step?",
+  "options": {
+   "A": "Close the report as model non-determinism.",
+   "B": "Replay the recorded failing inputs many times (e.g., 20) with everything else held fixed, quantify the failure rate, then vary one factor at a time.",
+   "C": "Raise the temperature to explore more outputs.",
+   "D": "Immediately switch to a larger model."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Non-deterministic failures are reproduced statistically. A measured failure rate turns 'sometimes' into a bug you can isolate and verify a fix against."
+ },
+ {
+  "id": "D4-03",
+  "domain": 4,
+  "stem": "Twenty minutes after a prompt release, the customer-facing agent begins telling users that refunds are unavailable. Complaints are climbing. What should the incident commander do first?",
+  "options": {
+   "A": "Gather the team to determine root cause before changing anything.",
+   "B": "Roll back to the previous prompt version via the feature flag, confirm recovery, communicate status, then investigate.",
+   "C": "Add an instruction to the prompt stating that refunds are available.",
+   "D": "Switch to a different model."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Mitigate first with the fastest safe reversible action, which is rolling back the change that correlates with the regression. Hot-patching the prompt (C) is an untested change during an incident."
+ },
+ {
+  "id": "D4-04",
+  "domain": 4,
+  "stem": "After a model upgrade, the refusal rate for a security-operations assistant rose from 0.2% to 6%, concentrated in log-analysis requests from paying enterprise tenants. What is the best response?",
+  "options": {
+   "A": "Retry refused requests up to three times.",
+   "B": "Treat it as a false-positive refusal regression: analyze stop_details categories and the affected cohort, adjust context so the legitimate purpose is clear, evaluate a configured fallback, and add these cases to the regression suite.",
+   "C": "Roll back permanently and never upgrade.",
+   "D": "Remove the system prompt to reduce classifier triggers."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "A refusal is a failure class to diagnose, not a transient error to retry. Cohort and category analysis localizes it; fixes are validated and locked in with regression evals."
+ },
+ {
+  "id": "D4-05",
+  "domain": 4,
+  "stem": "A postmortem for an incident in which the agent gave stale pricing concluded: 'Prompt updated to emphasize checking the latest price list.' Which additions make this postmortem complete?",
+  "select": 2,
+  "options": {
+   "A": "Add the failing cases to the regression eval suite so a recurrence fails CI.",
+   "B": "Add monitoring that would have detected the issue before users did (e.g., a freshness check on the price index or a groundedness SLI).",
+   "C": "Name the engineer who shipped the change.",
+   "D": "Increase the model's effort level permanently.",
+   "E": "Add another sentence to the prompt about pricing accuracy."
+  },
+  "answer": [
+   "A",
+   "B"
+  ],
+  "explanation": "Good incident loops produce regression evals and monitoring coverage, in a blameless format. More prompt text (E) or effort (D) doesn't address detection or prevention."
+ },
+ {
+  "id": "D5-01",
+  "domain": 5,
+  "stem": "A team's prompt changes are gated by a golden set of 150 items. Over six months, every candidate scores 98-100%, yet production complaints persist. What is the most likely problem with the suite, and the fix?",
+  "options": {
+   "A": "The suite is contaminated; delete it and rely on online metrics.",
+   "B": "The suite is saturated and has coverage gaps; add harder cases mined from production failures and tag coverage against live traffic categories.",
+   "C": "The pass threshold is too strict; lower it.",
+   "D": "The judge model is too small; upgrade it."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "A suite everyone aces can't discriminate (saturation), and complaints in production suggest missing categories (coverage gaps). Refresh it from real failures."
+ },
+ {
+  "id": "D5-02",
+  "domain": 5,
+  "stem": "Before deploying an LLM judge to score summaries, the team has two humans label 200 items. The humans agree with each other only 58% of the time. What should the team do first?",
+  "options": {
+   "A": "Deploy the judge; it will be more consistent than humans.",
+   "B": "Improve the rubric (concrete criteria, anchored examples) until human inter-rater agreement is acceptable, then calibrate the judge against those labels.",
+   "C": "Average the two humans' labels and calibrate the judge against the average.",
+   "D": "Use a larger model as the judge."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "If humans can't agree, the rubric is ambiguous, and no judge can be calibrated against unreliable labels. Fix inter-rater reliability first."
+ },
+ {
+  "id": "D5-03",
+  "domain": 5,
+  "stem": "A pairwise judge selects the first-presented response in 71% of comparisons where human raters split about 50/50. Which mitigation directly addresses this?",
+  "options": {
+   "A": "Evaluate each pair in both orders and count only consistent verdicts (treating inconsistent ones as ties), then re-measure agreement with humans.",
+   "B": "Always present the production response first.",
+   "C": "Add 'be unbiased' to the judge prompt.",
+   "D": "Ask the judge for longer rationales."
+  },
+  "answer": [
+   "A"
+  ],
+  "explanation": "Position bias is controlled by swapping or randomizing order. Fixing the order (B) bakes the bias in, and instructions (C) don't reliably remove it. Re-measure against humans afterward."
+ },
+ {
+  "id": "D5-04",
+  "domain": 5,
+  "stem": "Which metric set best fits an agent that resolves IT tickets by changing configuration in an internal system?",
+  "options": {
+   "A": "BLEU and ROUGE against reference resolutions.",
+   "B": "Task success verified by end-state checks, steps and cost per successful task, forbidden-action rate, and human-intervention rate.",
+   "C": "Average response length and user sentiment.",
+   "D": "Exact-match accuracy on the agent's final message."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Agentic tasks are judged by outcomes in the environment and by trajectory properties (safety, efficiency), not text overlap."
+ },
+ {
+  "id": "D5-05",
+  "domain": 5,
+  "stem": "A team's offline gate compares a candidate prompt's score today with the production prompt's score recorded three months ago. Results swing unpredictably. What should they change?",
+  "options": {
+   "A": "Raise the pass threshold.",
+   "B": "Run the baseline and candidate together, in the same harness, on the same items (paired), with repeated runs and confidence intervals.",
+   "C": "Switch from pairwise to absolute scoring.",
+   "D": "Remove the hardest items to reduce variance."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Stale baselines confound the comparison with model, judge, data and harness changes. Paired, same-time comparisons with noise estimates are the reliable gate."
+ },
+ {
+  "id": "D6-01",
+  "domain": 6,
+  "stem": "A team proposes routing 80% of support traffic from Opus to Haiku to cut costs, based on per-request token prices. What should they measure before committing?",
+  "options": {
+   "A": "Haiku's per-request latency only.",
+   "B": "Cost per completed task, including extra turns, escalations, retries and human rework, on a representative eval and then an A/B test.",
+   "C": "Whether Haiku's outputs are shorter.",
+   "D": "The number of requests per minute Haiku can handle."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Per-request price is misleading. A cheaper model that fails more often costs more per resolved task. Also measure the simpler alternative (the larger model at lower effort) and remember caches are per model."
+ },
+ {
+  "id": "D6-02",
+  "domain": 6,
+  "stem": "A chat product's users complain the assistant 'feels slow'. Measurements show total response time of 9 s, with the first visible token at 8.5 s on long-document prompts that are identical across a user's session. Which TWO levers address the complaint most directly?",
+  "select": 2,
+  "options": {
+   "A": "Stream the response to the UI.",
+   "B": "Cache the long document prefix so it isn't reprocessed on each turn.",
+   "C": "Move the workload to the Message Batches API.",
+   "D": "Increase max_tokens.",
+   "E": "Add a second model to verify answers."
+  },
+  "answer": [
+   "A",
+   "B"
+  ],
+  "explanation": "The pain is time-to-first-token. Caching removes reprocessing of the long stable prefix; streaming shows output as soon as it starts. Batch (C) makes latency worse."
+ },
+ {
+  "id": "D6-03",
+  "domain": 6,
+  "stem": "A 10-step agent must finish within 30 seconds end-to-end; it currently takes 55 s. Each step calls 2-4 independent read-only tools sequentially. Which change most directly cuts total latency?",
+  "options": {
+   "A": "Stream model output.",
+   "B": "Execute independent tool calls in parallel and return all results in a single message.",
+   "C": "Increase the effort level so the agent plans better.",
+   "D": "Lengthen the system prompt with more examples."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Total agent latency is the critical path of model turns plus tool execution. Parallelizing independent tools shortens it; streaming only improves perceived first-token time."
+ },
+ {
+  "id": "D6-04",
+  "domain": 6,
+  "stem": "Finance asks for per-customer spend control on a multi-tenant AI feature. What design meets this?",
+  "options": {
+   "A": "A single organization-level spend alert.",
+   "B": "Tag every request with tenant ID for attribution; enforce per-tenant budgets in the gateway with a soft limit that alerts and a hard limit that degrades (cheaper model or lower effort) or rejects.",
+   "C": "Ask the model to keep answers short for expensive customers.",
+   "D": "Review the monthly invoice and bill customers retroactively."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Budget enforcement is deterministic and per tenant, built on attribution. Organization-level alerts (A) can't isolate tenants."
+ },
+ {
+  "id": "D7-01",
+  "domain": 7,
+  "stem": "A sales agent reads inbound emails, can query the customer database, and can post messages to external webhooks. A red team shows an email can make it post another customer's data to an attacker-controlled webhook. The system prompt already forbids following instructions in emails. Which control most directly closes this path?",
+  "options": {
+   "A": "A more detailed system prompt listing known injection phrases.",
+   "B": "Restrict webhook destinations to an allowlist (or require human approval for posts), and scope database queries to the customer tied to the email thread.",
+   "C": "Log all webhook posts for weekly review.",
+   "D": "Lower the effort level so the agent is less likely to follow multi-step instructions."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Private data plus untrusted input plus external communication is the high-risk combination. Break a leg deterministically, outside the model. Logging (C) detects but doesn't prevent; prompts (A) aren't a boundary."
+ },
+ {
+  "id": "D7-02",
+  "domain": 7,
+  "stem": "A DevOps agent can run shell commands in production to restart services. Leadership wants to prevent destructive operations. Which TWO controls provide deterministic enforcement?",
+  "select": 2,
+  "options": {
+   "A": "A pre-tool-use hook that denies commands matching destructive patterns and requires human approval for anything outside an allowlist of restart commands.",
+   "B": "Credentials scoped so the agent's identity can only restart services, not delete data or change infrastructure.",
+   "C": "A system prompt instructing the agent to be careful.",
+   "D": "Using the most capable model available.",
+   "E": "A dashboard of commands the agent ran."
+  },
+  "answer": [
+   "A",
+   "B"
+  ],
+  "explanation": "Hooks and scoped credentials enforce policy regardless of model behavior. Prompts, model choice and dashboards don't prevent a destructive command."
+ },
+ {
+  "id": "D7-03",
+  "domain": 7,
+  "stem": "A team wants to adopt a popular third-party MCP server for their production agent. Which practices form a secure configuration? Select THREE.",
+  "select": 3,
+  "options": {
+   "A": "Add the server to an approved allowlist and pin its version.",
+   "B": "Review its tool descriptions and watch for definitions that change after approval.",
+   "C": "Run it with minimal scopes and credentials, sandboxed where possible.",
+   "D": "Grant it the agent's full credentials so all tools work.",
+   "E": "Trust its outputs as instructions since it is a widely used server."
+  },
+  "answer": [
+   "A",
+   "B",
+   "C"
+  ],
+  "explanation": "Third-party servers are a supply-chain and tool-poisoning risk. Allowlist, pin, review, least privilege and sandboxing apply. Tool outputs are untrusted data."
+ },
+ {
+  "id": "D7-04",
+  "domain": 7,
+  "stem": "CI pipelines currently use a long-lived Claude API key stored as a repository secret, shared across 40 repositories. What is the best improvement?",
+  "options": {
+   "A": "Rotate the key every 90 days.",
+   "B": "Use workload identity federation: CI's OIDC token is exchanged for short-lived credentials bound to a per-workload service account with least-privilege scope.",
+   "C": "Store the key in the agent's system prompt so it isn't in the repository.",
+   "D": "Give each developer their own key to use in CI."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Workload identity federation replaces static keys with short-lived, auditable, scoped credentials. Rotation (A) helps but leaves a long-lived shared secret. Secrets never belong in model context (C)."
+ },
+ {
+  "id": "D7-05",
+  "domain": 7,
+  "stem": "A personal-assistant agent writes 'useful facts' it learns from web pages into persistent memory, and reads that memory in future sessions. What risk does this create, and what's the best mitigation?",
+  "options": {
+   "A": "Cost growth; compress memories.",
+   "B": "Memory poisoning: injected content persists and steers future sessions. Mitigate with provenance on writes, no direct writes from untrusted content, review or expiry of memories, and treating memory as untrusted input.",
+   "C": "Latency; cache the memory file.",
+   "D": "None, since memory is internal to the agent."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Persistent memory turns a one-time injection into a lasting one. Control what may be written, track where it came from, and expire or review it."
+ },
+ {
+  "id": "D8-01",
+  "domain": 8,
+  "stem": "A team runs eight coding agents in parallel to migrate a monorepo's packages to a new logging library. Agents keep overwriting each other's changes, and merges conflict heavily on the root lockfile. Which TWO changes help most?",
+  "select": 2,
+  "options": {
+   "A": "Run each agent in its own git worktree on its own branch.",
+   "B": "Serialize lockfile changes (regenerate it once after merging the package branches) and merge small foundational changes first.",
+   "C": "Run all agents in one checkout but tell them to coordinate in a shared notes file.",
+   "D": "Give each agent the full monorepo task so it understands the context.",
+   "E": "Increase the agents' effort level."
+  },
+  "answer": [
+   "A",
+   "B"
+  ],
+  "explanation": "Isolation (worktrees) stops agents from clobbering each other; hotspot files like lockfiles need serialization or regeneration with a deliberate merge order."
+ },
+ {
+  "id": "D8-02",
+  "domain": 8,
+  "stem": "Agent-generated PRs now outnumber human reviewers' capacity 5:1. The team wants AI code review to block merges. What is the right introduction path?",
+  "options": {
+   "A": "Enable blocking AI review immediately on all PRs, since it is faster than humans.",
+   "B": "Run the AI reviewer in shadow mode, calibrate its precision and recall per category against human review and escaped defects, then let it gate only in categories where it is well calibrated, keeping risk-based human review.",
+   "C": "Have the authoring agent review its own PR before merging.",
+   "D": "Remove human review for agent PRs, since agents run tests."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Like an LLM judge, an AI reviewer earns gating authority through calibration. Shadow mode measures it without risk; category-level gating avoids noisy blocks."
+ },
+ {
+  "id": "D8-03",
+  "domain": 8,
+  "stem": "An event-driven agent is triggered on every failed CI run to investigate and propose a fix. During a flaky-infrastructure afternoon, it spawned 230 runs, opened 40 duplicate PRs, and spent $1,900. Which design elements were missing? Select THREE.",
+  "select": 3,
+  "options": {
+   "A": "Deduplication by failure signature, so one investigation runs per distinct failure.",
+   "B": "Per-run and per-day budgets (tokens, dollars, concurrency).",
+   "C": "Escalation rules: when the failure looks infrastructural or confidence is low, notify a human instead of opening a PR.",
+   "D": "A larger model.",
+   "E": "Permission to push fixes directly to main to avoid PR spam."
+  },
+  "answer": [
+   "A",
+   "B",
+   "C"
+  ],
+  "explanation": "Unattended responders need idempotency or dedupe, budgets, and escalation. Pushing to main (E) removes a safety layer; model size (D) is irrelevant."
+ },
+ {
+  "id": "D8-04",
+  "domain": 8,
+  "stem": "An enterprise is rolling out a coding agent to 2,000 engineers. Security requires that no one can connect unapproved MCP servers or disable command restrictions, and finance needs spend per team. What configuration approach fits?",
+  "options": {
+   "A": "A shared wiki page of recommended settings.",
+   "B": "Org-managed settings that users can't override (permission rules, MCP allowlist), telemetry export with team attribution, and routing through an LLM gateway.",
+   "C": "Each team writes its own CLAUDE.md with security guidance.",
+   "D": "Block the agent until it can be configured per user by IT."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Managed policies enforce non-overridable controls; telemetry and a gateway provide attribution and governance. Project instructions (C) guide behavior but don't enforce security."
+ },
+ {
+  "id": "D8-05",
+  "domain": 8,
+  "stem": "Fleet telemetry shows 60% of last night's 50 parallel agent runs failed in the first five minutes with similar errors across unrelated tasks. What is the most likely cause to check first?",
+  "options": {
+   "A": "Each task was too hard for the model.",
+   "B": "A shared cause, such as a broken main branch, a missing dependency or environment problem, or an ambiguous shared instruction.",
+   "C": "The agents' effort level was too low.",
+   "D": "Random model non-determinism."
+  },
+  "answer": [
+   "B"
+  ],
+  "explanation": "Correlated failures across unrelated tasks point to something they share (base branch, environment, shared config), not to per-task difficulty."
+ }
+]

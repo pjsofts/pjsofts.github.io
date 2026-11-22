@@ -1,0 +1,174 @@
+---
+// Interactive practice quiz. Options are shuffled in the browser on every load,
+// and explanation letter references like "(A)" are remapped to what is shown.
+import type { Question } from '../data/certification';
+
+interface Props {
+  questions: Question[];
+  /** Domain names for the filter; omit to hide the filter. */
+  domains?: { n: number; title: string; weight: number }[];
+  heading?: string;
+}
+const { questions, domains, heading = 'Practice questions' } = Astro.props;
+---
+
+<div class="cq" data-cq>
+  <div class="cq-top">
+    <h2>{heading}</h2>
+    <div class="cq-controls">
+      {domains && (
+        <select data-filter aria-label="Filter by domain">
+          <option value="all">All domains</option>
+          <option value="mock">Mock exam (30, weighted)</option>
+          {domains.map((d) => <option value={d.n}>Domain {d.n} · {d.title}</option>)}
+        </select>
+      )}
+      <button class="btn btn-ghost cq-restart" type="button" data-restart>Restart</button>
+    </div>
+  </div>
+  <p class="cq-score" data-score aria-live="polite"></p>
+  <ol class="cq-list" data-list></ol>
+  <script type="application/json" data-bank set:html={JSON.stringify(questions)} />
+  <script type="application/json" data-weights set:html={JSON.stringify(domains ?? [])} />
+</div>
+
+<script>
+  type Q = {
+    id: string; domain: number; stem: string; select?: number;
+    options: Record<string, string>; answer: string[]; explanation: string;
+  };
+
+  const shuffle = <T,>(a: T[]) => {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+  const esc = (s: string) =>
+    s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+  document.querySelectorAll<HTMLElement>('[data-cq]').forEach((root) => {
+    const bank: Q[] = JSON.parse(root.querySelector('[data-bank]')!.textContent!);
+    const weights: { n: number; weight: number }[] = JSON.parse(root.querySelector('[data-weights]')!.textContent!);
+    const list = root.querySelector<HTMLOListElement>('[data-list]')!;
+    const scoreEl = root.querySelector<HTMLElement>('[data-score]')!;
+    const filter = root.querySelector<HTMLSelectElement>('[data-filter]');
+    let answered = 0, right = 0, total = 0;
+
+    const pickMock = () => {
+      const out: Q[] = [];
+      for (const w of weights) {
+        const pool = shuffle(bank.filter((q) => q.domain === w.n));
+        out.push(...pool.slice(0, Math.max(1, Math.round((w.weight / 100) * 30))));
+      }
+      return shuffle(out);
+    };
+
+    const updateScore = () => {
+      scoreEl.textContent = answered
+        ? `Score: ${right} / ${answered} answered (${Math.round((100 * right) / answered)}%) · ${total - answered} left`
+        : `${total} questions. Pick your answer${''}, then check it.`;
+    };
+
+    const render = () => {
+      const mode = filter?.value ?? 'all';
+      const qs =
+        mode === 'mock' ? pickMock()
+        : mode === 'all' ? shuffle([...bank])
+        : shuffle(bank.filter((q) => String(q.domain) === mode));
+      answered = right = 0;
+      total = qs.length;
+      list.innerHTML = '';
+      qs.forEach((q, qi) => {
+        const need = q.select ?? 1;
+        const letters = 'ABCDEFG';
+        const shown = shuffle(Object.entries(q.options)).map(([orig, text], i) => ({ orig, text, letter: letters[i] }));
+        const toShown = Object.fromEntries(shown.map((o) => [o.orig, o.letter]));
+        const type = need > 1 ? 'checkbox' : 'radio';
+        const li = document.createElement('li');
+        li.className = 'cq-q';
+        li.innerHTML = `
+          <div class="cq-meta">Domain ${q.domain} · ${q.id}${need > 1 ? ` · <b>select ${need}</b>` : ''}</div>
+          <p class="cq-stem">${esc(q.stem)}</p>
+          <div class="cq-opts">${shown.map((o) => `
+            <label class="cq-opt" data-orig="${o.orig}">
+              <input type="${type}" name="q${qi}" value="${o.orig}" />
+              <span class="cq-l">${o.letter}</span><span>${esc(o.text)}</span>
+            </label>`).join('')}
+          </div>
+          <button class="btn btn-primary cq-check" type="button">Check answer</button>
+          <div class="cq-why" hidden></div>`;
+        const btn = li.querySelector<HTMLButtonElement>('.cq-check')!;
+        btn.addEventListener('click', () => {
+          const picked = [...li.querySelectorAll<HTMLInputElement>('input:checked')].map((i) => i.value).sort();
+          if (picked.length !== need) {
+            btn.textContent = `Select ${need} option${need > 1 ? 's' : ''}`;
+            return;
+          }
+          const ok = picked.join() === [...q.answer].sort().join();
+          answered++; if (ok) right++;
+          li.querySelectorAll<HTMLLabelElement>('.cq-opt').forEach((l) => {
+            const o = l.dataset.orig!;
+            l.classList.toggle('is-right', q.answer.includes(o));
+            l.classList.toggle('is-wrong', picked.includes(o) && !q.answer.includes(o));
+            l.querySelector('input')!.disabled = true;
+          });
+          const why = li.querySelector<HTMLElement>('.cq-why')!;
+          const expl = q.explanation.replace(/\(([A-G])\)/g, (_, l) => `(${toShown[l] ?? l})`);
+          const correct = q.answer.map((a) => toShown[a]).sort().join(', ');
+          why.innerHTML = `<b>${ok ? '✓ Correct.' : `✗ The answer is ${correct}.`}</b> ${esc(expl)}`;
+          why.hidden = false;
+          li.classList.add(ok ? 'done-ok' : 'done-bad');
+          btn.remove();
+          updateScore();
+        });
+        list.appendChild(li);
+      });
+      updateScore();
+    };
+
+    filter?.addEventListener('change', render);
+    root.querySelector('[data-restart]')!.addEventListener('click', render);
+    render();
+  });
+</script>
+
+<style>
+  .cq-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+  .cq-top h2 { margin: 0; }
+  .cq-controls { display: flex; gap: .6rem; align-items: center; min-width: 0; max-width: 100%; }
+  .cq-controls select {
+    font: inherit; font-size: .9rem; padding: .55rem .7rem; border-radius: 8px;
+    border: 1px solid var(--rule, var(--line)); background: #fff; color: var(--ink, #111);
+    min-width: 0; width: 100%; max-width: 340px; text-overflow: ellipsis;
+  }
+  .cq-restart { font-size: .85rem; }
+  .cq-score { margin: 1rem 0 0; font-family: var(--mono); font-size: .85rem; color: var(--violet-deep, var(--gold)); }
+  .cq-list { list-style: none; padding: 0; margin: 1.2rem 0 0; display: flex; flex-direction: column; gap: 1.2rem; }
+  :global(.cq-q) {
+    background: #fff; border: 1px solid var(--rule, var(--line)); border-radius: var(--r, 12px);
+    padding: 1.3rem 1.3rem 1.2rem; box-shadow: var(--lift, none);
+  }
+  :global(.cq-q.done-ok) { border-color: rgba(31, 138, 76, .55); }
+  :global(.cq-q.done-bad) { border-color: rgba(190, 50, 50, .55); }
+  :global(.cq-meta) { font-family: var(--mono); font-size: .74rem; color: var(--ink-soft, var(--fg-dimmer)); margin-bottom: .5rem; }
+  :global(.cq-meta b) { color: var(--violet-deep, var(--gold)); }
+  :global(.cq-stem) { color: var(--ink, var(--fg)); font-weight: 500; margin-bottom: .9rem; }
+  :global(.cq-opts) { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1rem; }
+  :global(.cq-opt) {
+    display: flex; gap: .6rem; align-items: flex-start; cursor: pointer;
+    padding: .6rem .75rem; border: 1px solid var(--rule, var(--line)); border-radius: 8px;
+    font-size: .95rem; color: var(--ink-soft, var(--fg-dim)); line-height: 1.45;
+  }
+  :global(.cq-opt:hover) { border-color: var(--violet, var(--line-str)); }
+  :global(.cq-opt input) { margin-top: .25rem; accent-color: var(--violet); flex: none; }
+  :global(.cq-l) { font-family: var(--mono); font-weight: 700; color: var(--violet-deep, var(--gold)); flex: none; }
+  :global(.cq-opt.is-right) { background: rgba(31, 138, 76, .09); border-color: rgba(31, 138, 76, .6); color: var(--ink, var(--fg)); }
+  :global(.cq-opt.is-wrong) { background: rgba(190, 50, 50, .08); border-color: rgba(190, 50, 50, .55); }
+  :global(.cq-why) {
+    font-size: .93rem; line-height: 1.55; color: var(--ink-soft, var(--fg-dim));
+    border-left: 3px solid var(--violet); padding: .2rem 0 .2rem .9rem; margin-top: .2rem;
+  }
+  :global(.cq-why b) { color: var(--ink, var(--fg)); }
+</style>

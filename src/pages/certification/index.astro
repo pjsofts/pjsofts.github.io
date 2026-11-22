@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import { CERT, QUESTIONS } from '../../data/certification';
+import { getCollection } from 'astro:content';
+
+const domains = (await getCollection('certification')).sort((a, b) => a.data.domain - b.data.domain);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: `${CERT.name} (${CERT.code}): free study guide`,
+  description:
+    'A free, hands-on study guide for the Claude Certified Developer – Professional exam: notes for all eight blueprint domains, runnable labs, and practice questions.',
+  url: `${SITE.url}/certification/`,
+  provider: { '@id': `${SITE.url}/#org` },
+  instructor: { '@id': `${SITE.url}/#instructor` },
+  inLanguage: 'en',
+  isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD', category: 'Free' },
+  hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'Online', courseWorkload: 'PT24H' },
+  teaches: domains.map((d) => d.data.title),
+};
+---
+
+<BaseLayout
+  theme="paper"
+  title={`${CERT.name} (${CERT.code}) — Free Study Guide`}
+  description="Prepare for the Claude Certified Developer – Professional exam: notes for all 8 blueprint domains, runnable labs that need no API key, and scenario practice questions."
+  canonical="/certification"
+  schema={[schema]}
+>
+  <section class="pg-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <span>Certification</span></nav>
+      <span class="pill pill-gold">Free study guide · {CERT.code}</span>
+      <h1>{CERT.name}</h1>
+      <p class="lede">
+        The exam doesn't test whether you can call the API. It tests whether you can <b>run</b> Claude
+        systems in production: trace them, gate releases with evals, debug multi-agent failures, control
+        cost, and harden tool-using agents against hostile input. This guide teaches all eight domains
+        with notes, labs you can run in a minute, and {QUESTIONS.length} practice questions.
+      </p>
+      <div class="hero-btns">
+        <a class="btn btn-primary" href={`/certification/${domains[0].id}/`}>Start with Domain 1 →</a>
+        <a class="btn btn-ghost" href="/certification/practice/">Take the practice quiz</a>
+        <a class="btn btn-ghost" href={CERT.repo} target="_blank" rel="noopener">Labs on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">The blueprint</div>
+      <h2>Eight domains, weighted</h2>
+      <p class="sub">Domains 1 and 2 are over a third of the exam. Start there.</p>
+      <ol class="domains">
+        {domains.map((d) => (
+          <li>
+            <a class="dcard" href={`/certification/${d.id}/`}>
+              <span class="dn">{String(d.data.domain).padStart(2, '0')}</span>
+              <span class="dbody">
+                <b>{d.data.title}</b>
+                <span>{d.data.description}</span>
+                <span class="bar" aria-hidden="true"><span style={`width:${d.data.weight * 4}%`}></span></span>
+              </span>
+              <span class="dw">{d.data.weight}%</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <div class="eyebrow">How to answer</div>
+          <h2>The thinking the exam rewards</h2>
+          <p class="sub">
+            Most wrong options are plausible actions taken for the wrong reason or at the wrong layer.
+            Run every question through these five checks.
+          </p>
+          <ol class="rules">
+            {CERT.rules.map((r) => (
+              <li><b>{r.t}.</b> {r.d}</li>
+            ))}
+          </ol>
+        </div>
+        <aside class="facts">
+          <h3>The exam at a glance</h3>
+          <dl>
+            {CERT.facts.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}
+          </dl>
+          <p class="fine">
+            Independent study aid, not affiliated with Anthropic. Questions are original, not from the
+            live exam. Read the official exam guide from the Anthropic Partner Academy.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">How to study</div>
+      <h2>Four weeks, about six hours a week</h2>
+      <div class="grid g2 weeks">
+        <div class="card"><h3>Week 1 · Architecture & integration</h3><p>Domains 1–2 (37%). Run the durable-agent, resilience and retrieval labs.</p></div>
+        <div class="card"><h3>Week 2 · Observe, debug, evaluate</h3><p>Domains 3–5 (34%). Find a bug in 5,000 traces; calibrate a biased judge.</p></div>
+        <div class="card"><h3>Week 3 · Cost, security, fleets</h3><p>Domains 6–8 (29%). Break a tool gateway with your own injection, then fix it.</p></div>
+        <div class="card"><h3>Week 4 · Consolidate</h3><p>Two timed mock exams, your weakest domains again, and the official sample questions.</p></div>
+      </div>
+      <p class="sub run">
+        Every lab is plain Python with no dependencies and a simulated model, so there's no API key and nothing to pay:
+        <code>python3 domains/01-agent-architecture/lab_durable_agent.py</code>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero { padding: 2.4rem 0 2.8rem; background: var(--paper-2); border-bottom: 1px solid var(--rule); }
+  .crumbs { font-size: .82rem; color: var(--ink-soft); margin-bottom: 1.3rem; }
+  .crumbs a { color: var(--violet-deep); }
+  .crumbs span { margin: 0 .35rem; }
+  .pg-hero h1 { margin: 1rem 0 .7rem; font-size: clamp(1.9rem, 4.6vw, 3rem); }
+  .lede { font-size: 1.08rem; color: var(--ink-soft); max-width: 760px; }
+  .lede b { color: var(--ink); }
+  .hero-btns { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.5rem; }
+  .sub { color: var(--ink-soft); max-width: 720px; }
+  .sub.run { margin-top: 1.6rem; }
+  .sub code { font-size: .85rem; overflow-wrap: anywhere; }
+
+  .domains { list-style: none; padding: 0; margin: 1.6rem 0 0; display: flex; flex-direction: column; gap: .7rem; }
+  .dcard {
+    display: flex; gap: 1.1rem; align-items: flex-start; text-decoration: none;
+    background: #fff; border: 1px solid var(--rule); border-radius: var(--r); padding: 1.1rem 1.2rem;
+    box-shadow: var(--lift); transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .dcard:hover { text-decoration: none; box-shadow: var(--lift-hover); transform: translateY(-2px); }
+  .dn { font-family: var(--mono); font-weight: 700; color: var(--violet-deep); padding-top: .15rem; flex: none; }
+  .dbody { display: flex; flex-direction: column; gap: .3rem; flex: 1; min-width: 0; }
+  .dbody b { color: var(--ink); font-size: 1.05rem; font-family: var(--display); }
+  .dbody > span { color: var(--ink-soft); font-size: .92rem; }
+  .bar { display: block; height: 6px; background: var(--paper-2); border-radius: 99px; margin-top: .35rem; max-width: 420px; }
+  .bar span { display: block; height: 100%; background: var(--violet); border-radius: 99px; }
+  .dw { font-family: var(--display); font-weight: 700; font-size: 1.4rem; color: var(--ink); flex: none; }
+
+  .cols { display: grid; grid-template-columns: 1fr 340px; gap: 3rem; align-items: start; }
+  .rules { padding-left: 1.3rem; margin-top: 1.2rem; color: var(--ink-soft); }
+  .rules li { margin-bottom: .8rem; }
+  .rules li::marker { color: var(--violet); font-weight: 700; }
+  .rules b { color: var(--ink); }
+  .facts { background: #fff; border: 1px solid var(--rule); border-radius: var(--r-lg); padding: 1.4rem; box-shadow: var(--lift-2); }
+  .facts h3 { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--violet-deep); margin-bottom: .9rem; font-family: var(--mono); }
+  .facts dl { display: grid; grid-template-columns: auto 1fr; gap: .5rem .9rem; margin: 0; font-size: .9rem; }
+  .facts dt { color: var(--ink-soft); }
+  .facts dd { margin: 0; color: var(--ink); font-weight: 500; }
+  .fine { font-size: .78rem; color: var(--ink-soft); margin: 1.1rem 0 0; }
+
+  .weeks { margin-top: 1.4rem; }
+  .weeks h3 { font-size: 1rem; margin-bottom: .4rem; }
+  .weeks p { font-size: .92rem; margin: 0; }
+
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; gap: 2rem; } }
+  @media (max-width: 560px) { .dw { font-size: 1.1rem; } .dcard { gap: .8rem; padding: 1rem; } }
+</style>

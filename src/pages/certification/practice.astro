@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CertQuiz from '../../components/CertQuiz.astro';
+import { CERT, QUESTIONS } from '../../data/certification';
+import { getCollection } from 'astro:content';
+
+const domains = (await getCollection('certification'))
+  .sort((a, b) => a.data.domain - b.data.domain)
+  .map((d) => ({ n: d.data.domain, title: d.data.title, weight: d.data.weight }));
+---
+
+<BaseLayout
+  theme="paper"
+  title={`${CERT.code} Practice Questions — Claude Certified Developer – Professional`}
+  description={`${QUESTIONS.length} original scenario questions for the Claude Certified Developer – Professional exam, with explanations, filterable by domain, plus a 30-item weighted mock exam.`}
+  canonical="/certification/practice"
+>
+  <section class="pg-hero">
+    <div class="wrap narrow">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span>/</span> <a href="/certification/">Certification</a> <span>/</span> <span class="cur">Practice</span>
+      </nav>
+      <h1>Practice questions</h1>
+      <p class="lede">
+        {QUESTIONS.length} original scenario questions in the exam's style, each with an explanation of why the
+        other options are wrong. Option order is shuffled on every load. On the real exam you have about
+        1 minute 40 seconds per item. Choose <b>Mock exam</b> for 30 questions weighted like the blueprint.
+      </p>
+    </div>
+  </section>
+  <section>
+    <div class="wrap narrow">
+      <CertQuiz questions={QUESTIONS} domains={domains} heading="Quiz" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg-hero { padding: 2.4rem 0 2.6rem; background: var(--paper-2); border-bottom: 1px solid var(--rule); }
+  .crumbs { font-size: .82rem; color: var(--ink-soft); margin-bottom: 1.2rem; }
+  .crumbs a { color: var(--violet-deep); }
+  .crumbs span { margin: 0 .35rem; }
+  .crumbs .cur { color: var(--ink); }
+  .pg-hero h1 { margin: .4rem 0 .6rem; font-size: clamp(1.8rem, 4.4vw, 2.7rem); }
+  .lede { color: var(--ink-soft); margin: 0; }
+  .lede b { color: var(--ink); }
+</style>
