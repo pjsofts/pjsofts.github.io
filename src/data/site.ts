@@ -36,6 +36,5 @@ export const NAV = [
   { label: 'Certification', href: '/certification' },
   { label: 'Webinar', href: '/webinar/job-hunting-ai' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Jobs', href: '/jobs' },
   { label: 'Instructor', href: '/resume' },
 ] as const;

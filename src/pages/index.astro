@@ -3,14 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Mark from '../components/Mark.astro';
 import { SITE } from '../data/site';
 import { WEEKS } from '../data/weeks';
-import { JOBS } from '../data/jobs';
-
-const latestJobs = JOBS.filter((j) => j.status === 'open')
-  .sort((a, b) => b.posted.localeCompare(a.posted))
-  .slice(0, 3);
-
-const jobDate = (d: string) =>
-  new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 
 const foundations = WEEKS.filter((w) => w.part === 'Foundations');
 const clone = WEEKS.filter((w) => w.part === 'Build the Clone');
@@ -432,42 +424,6 @@ const marquee = [
     </div>
   </section>
 
-  <!-- ===================== JOBS ===================== -->
-  {latestJobs.length > 0 && (
-    <section id="jobs">
-      <div class="wrap">
-        <div class="sec-head">
-          <span class="lbl">Hiring</span>
-          <h2 class="display-2">Roles worth a look</h2>
-          <p class="lede">
-            AI, ML and data positions I come across and think are worth sharing — written out
-            in full on the board, so they stay readable after the original post disappears.
-          </p>
-        </div>
-        <div class="jobs">
-          {latestJobs.map((j) => (
-            <a class="k job" href={`/jobs/${j.slug}`}>
-              <div class="job-hd">
-                <span class="job-logo">{j.company.charAt(0)}</span>
-                <time datetime={j.posted}>{jobDate(j.posted)}</time>
-              </div>
-              <h3>{j.title}</h3>
-              <p class="job-co">{j.company}</p>
-              <p class="job-meta">{j.arrangement}</p>
-            </a>
-          ))}
-        </div>
-        <div class="hero-cta">
-          <a class="b b-plain" href="/jobs">See the full board →</a>
-          <a class="b b-plain" href="/webinar/job-hunting-ai/">Free job hunting webinar →</a>
-          <a class="b b-plain" href={SITE.telegram.href} target="_blank" rel="noopener">
-            Job alerts on Telegram ↗
-          </a>
-        </div>
-      </div>
-    </section>
-  )}
-
   <!-- ===================== FAQ ===================== -->
   <section id="faq">
     <div class="wrap two-col">
@@ -791,26 +747,6 @@ const marquee = [
     margin-bottom: 1.2rem;
   }
 
-  /* ---------------- jobs ---------------- */
-  .jobs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; margin-bottom: 2rem; }
-  .job { text-decoration: none; display: block; }
-  .job:hover { text-decoration: none; }
-  .job-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.9rem; }
-  .job-logo {
-    width: 38px; height: 38px;
-    display: grid; place-items: center;
-    background: var(--violet);
-    color: #fff;
-    border: 0;
-    border-radius: 8px;
-    font-family: var(--display);
-    font-weight: 700;
-  }
-  .job-hd time { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-soft); }
-  .job h3 { font-size: 1.05rem; margin: 0 0 0.3rem; }
-  .job-co { color: var(--violet-deep); font-weight: 600; margin: 0 0 0.2rem; font-size: 0.92rem; }
-  .job-meta { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-soft); margin: 0; }
-
   /* ---------------- faq ---------------- */
   .faqs { display: grid; }
   .faq { border-bottom: 1px solid var(--rule); }
@@ -862,13 +798,13 @@ const marquee = [
   @media (max-width: 1000px) {
     .hero-grid, .two-col, .inst { grid-template-columns: 1fr; gap: 2.5rem; }
     .col-head h2 { position: static; }
-    .bento, .steps, .jobs { grid-template-columns: repeat(2, 1fr); }
+    .bento, .steps { grid-template-columns: repeat(2, 1fr); }
     .cap-wide { grid-column: span 2; grid-row: span 1; }
     .weeks { grid-template-columns: 1fr; }
     .inst { max-width: 520px; }
   }
   @media (max-width: 640px) {
-    .bento, .steps, .jobs, .fit { grid-template-columns: 1fr; }
+    .bento, .steps, .fit { grid-template-columns: 1fr; }
     .cap-wide { grid-column: span 1; grid-row: span 1; }
     .stats { gap: 1.4rem 2rem; }
     .stats dt { font-size: 1.9rem; }
