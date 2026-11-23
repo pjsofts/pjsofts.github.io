@@ -1,0 +1,774 @@
+---
+// The Design Engineer course page. A standalone page rather than BaseLayout:
+// it sells a different course to a different audience (designers), so it has
+// its own header and its own look, a design canvas instead of the studio handout.
+import '../../styles/fonts.css';
+import Mark from '../../components/Mark.astro';
+import { SITE } from '../../data/site';
+import { DE, DE_WEEKS, PHASES, DICTIONARY, DE_FAQ } from '../../data/design-engineer';
+
+const title = 'Design Engineer Course: From UI/UX Designer to Design Engineer in 10 Weeks';
+const canonical = DE.url;
+const ogImage = new URL('/og-default.png', SITE.url).toString();
+const phases = Object.entries(PHASES) as [keyof typeof PHASES, (typeof PHASES)[keyof typeof PHASES]][];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: DE.name,
+    description: DE.description,
+    url: canonical,
+    inLanguage: 'en',
+    provider: { '@type': 'EducationalOrganization', name: SITE.org.name, url: SITE.url, sameAs: [SITE.org.linkedin] },
+    instructor: { '@type': 'Person', name: SITE.instructor.name, url: `${SITE.url}/resume/` },
+    educationalLevel: 'Beginner to intermediate',
+    teaches: ['HTML', 'CSS', 'Design tokens', 'JavaScript', 'TypeScript', 'React', 'Tailwind CSS', 'Motion design', 'Accessibility', 'AI coding tools'],
+    syllabusSections: DE_WEEKS.map((w) => ({ '@type': 'Syllabus', name: `Week ${w.n}: ${w.title}`, description: w.summary })),
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'Online',
+      courseWorkload: `PT${DE.hours}H`,
+      courseSchedule: { '@type': 'Schedule', repeatFrequency: 'Weekly', repeatCount: DE.weeks, duration: `PT${DE.hours}H` },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: DE_FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+
+const tools = ['HTML', 'CSS Grid', 'Flexbox', 'Design tokens', 'OKLCH', 'TypeScript', 'React', 'Next.js', 'Tailwind CSS', 'Radix', 'shadcn/ui', 'Storybook', 'Motion', 'View Transitions', 'WCAG 2.2', 'Figma MCP', 'Claude Code', 'Cursor', 'Git', 'Vercel'];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={DE.description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={SITE.instructor.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={DE.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.org.name} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={DE.description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon-64.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f3f2ee" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="top">
+      <div class="wrap top-in">
+        <a class="brand" href="/design-engineer/" aria-label="Design Engineer course home">
+          <Mark size={30} />
+          <span>Design&nbsp;Engineer</span>
+        </a>
+        <nav class="top-nav" aria-label="Page">
+          <a href="#why">Why now</a>
+          <a href="#playground">Playground</a>
+          <a href="#syllabus">Syllabus</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a class="btn btn-ink btn-sm" href={SITE.cta.href} target="_blank" rel="noopener">Apply</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============ HERO: a frame on a canvas ============ -->
+      <section class="hero canvas">
+        <div class="wrap hero-in">
+          <div class="frame-label" aria-hidden="true"><span class="hash">#</span> Hero / <span class="fl-d">Desktop — 1440</span><span class="fl-m">Mobile — 390</span></div>
+          <div class="hero-frame">
+            <p class="chip"><span class="dot"></span> 10-week course · for UI/UX designers</p>
+            <h1 class="display">
+              Stop handing&nbsp;off.<br />
+              <span class="sel">
+                Start&nbsp;shipping.
+                <i class="h tl"></i><i class="h tr"></i><i class="h bl"></i><i class="h br"></i>
+                <span class="dim" aria-hidden="true">Fill × Hug</span>
+              </span>
+            </h1>
+            <p class="lede">
+              Become a <strong>design engineer</strong>: the designer who builds what they design.
+              Ten weeks from Figma to production, with HTML, CSS, React, Tailwind, motion,
+              accessibility and the AI tools teams use now. You finish with three shipped projects, not mockups.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-ink" href={SITE.cta.href} target="_blank" rel="noopener">Apply for the next cohort →</a>
+              <a class="btn btn-ghost" href="#syllabus">See the 10 weeks</a>
+            </div>
+            <dl class="facts">
+              <div><dt>10</dt><dd>weeks</dd></div>
+              <div><dt>~6h</dt><dd>per week</dd></div>
+              <div><dt>3</dt><dd>shipped projects</dd></div>
+              <div><dt>0</dt><dd>code needed to start</dd></div>
+            </dl>
+          </div>
+
+          <!-- the properties panel: Figma on top, CSS underneath -->
+          <aside class="panel" aria-label="Auto Layout is Flexbox">
+            <div class="panel-h">Auto layout</div>
+            <div class="panel-row"><span>Direction</span><b>→ Horizontal</b></div>
+            <div class="panel-row"><span>Gap</span><b>16</b></div>
+            <div class="panel-row"><span>Padding</span><b>24</b></div>
+            <div class="panel-row"><span>Align</span><b>Center</b></div>
+            <div class="panel-h panel-code-h">Is just</div>
+            <pre class="panel-code"><code><span class="k">display</span>: flex;
+<span class="k">flex-direction</span>: row;
+<span class="k">gap</span>: 16px;
+<span class="k">padding</span>: 24px;
+<span class="k">align-items</span>: center;</code></pre>
+          </aside>
+
+          <div class="cursor c-design" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path d="M1 1l6.5 16 2.3-6.7L16.5 8z" /></svg>
+            <span>You, week 1</span>
+          </div>
+          <div class="cursor c-eng" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path d="M1 1l6.5 16 2.3-6.7L16.5 8z" /></svg>
+            <span>You, week 10</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TOOL MARQUEE ============ -->
+      <div class="marquee" aria-label="What you will learn">
+        <div class="marquee-track">
+          {[...tools, ...tools].map((t, i) => <span aria-hidden={i >= tools.length ? 'true' : undefined}>{t}</span>)}
+        </div>
+      </div>
+
+      <!-- ============ WHY NOW ============ -->
+      <section id="why" class="sec">
+        <div class="wrap">
+          <p class="eyebrow">01 — Why now</p>
+          <h2 class="h2">The mockup is no longer the deliverable.</h2>
+          <p class="sub">
+            Pure UI roles are shrinking, and the titles are changing. Companies want designers who can
+            take an idea all the way to something people can click.
+          </p>
+
+          <div class="stats">
+            <article class="stat">
+              <p class="stat-n">−28%</p>
+              <p class="stat-t">Design job postings on Jobinja in one year, Aug 2025 → Aug 2026. Graphic designer roles fell 44%.</p>
+              <a class="src" href="/blog/where-did-the-frontend-jobs-go/">Our measurement →</a>
+            </article>
+            <article class="stat">
+              <p class="stat-n">“Design engineer”</p>
+              <p class="stat-t">“UI designer” and “UX designer” titles are fading in favour of product designer and design engineer, roles that expect a broader skill set.</p>
+              <a class="src" href="https://www.fastcompany.com/91543989/ai-in-design-design-jobs-2026" target="_blank" rel="noopener">Fast Company, 2026 →</a>
+            </article>
+            <article class="stat">
+              <p class="stat-n">Shipped &gt; mocked</p>
+              <p class="stat-t">Design engineer posts ask for React, TypeScript and Tailwind, design systems owned across Figma and code, AI coding tools, and “a portfolio of shipped products, not just mockups.”</p>
+              <a class="src" href="https://vercel.com/blog/design-engineering-at-vercel" target="_blank" rel="noopener">Design engineering at Vercel →</a>
+            </article>
+          </div>
+
+          <div class="role">
+            <div class="role-col">
+              <h3>UI/UX designer, 2022</h3>
+              <ul class="x">
+                <li>Designs in Figma, writes handoff specs</li>
+                <li>Waits for the sprint where it gets built</li>
+                <li>Files tickets when the build drifts</li>
+                <li>Prototype stops at click-through</li>
+              </ul>
+            </div>
+            <div class="role-arrow" aria-hidden="true">→</div>
+            <div class="role-col role-new">
+              <h3>Design engineer, now</h3>
+              <ul class="ok">
+                <li>Designs in Figma <em>and</em> in code</li>
+                <li>Ships the component, the motion, the polish</li>
+                <li>Owns the design system on both sides</li>
+                <li>Steers AI coding tools, and knows when they are wrong</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PLAYGROUND ============ -->
+      <section id="playground" class="sec sec-tint">
+        <div class="wrap">
+          <p class="eyebrow">02 — You already think in code</p>
+          <h2 class="h2">Your properties panel is CSS with a nicer face.</h2>
+          <p class="sub">Drag the sliders. Every change you would make in Figma is one line of code. By Week 3 you write these yourself.</p>
+
+          <div class="play">
+            <div class="play-controls" role="group" aria-label="Component properties">
+              <div class="panel-h">Properties</div>
+              <label>Radius <output id="o-radius">16</output><input id="radius" type="range" min="0" max="32" value="16" /></label>
+              <label>Padding <output id="o-pad">24</output><input id="pad" type="range" min="8" max="48" step="4" value="24" /></label>
+              <label>Hue <output id="o-hue">265</output><input id="hue" type="range" min="0" max="360" value="265" /></label>
+              <label>Shadow <output id="o-shadow">2</output><input id="shadow" type="range" min="0" max="4" value="2" /></label>
+              <label class="tog"><input id="dark" type="checkbox" /> Dark mode</label>
+            </div>
+
+            <div class="play-stage" id="stage">
+              <div class="pcard" id="pcard">
+                <div class="pcard-top">
+                  <span class="pav">DE</span>
+                  <div><b>Week 6 build</b><small>Design system · v1.0</small></div>
+                </div>
+                <p>Eight components, tokens and docs. Mapped one-to-one to Figma.</p>
+                <button type="button" class="pbtn">Ship it</button>
+              </div>
+            </div>
+
+            <div class="play-code">
+              <div class="tabs" role="tablist">
+                <button role="tab" aria-selected="true" data-tab="css">CSS</button>
+                <button role="tab" aria-selected="false" data-tab="tw">Tailwind</button>
+              </div>
+              <pre id="code-css"><code id="css-out"></code></pre>
+              <pre id="code-tw" hidden><code id="tw-out"></code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ DICTIONARY ============ -->
+      <section class="sec">
+        <div class="wrap">
+          <p class="eyebrow">03 — The translation</p>
+          <h2 class="h2">You are not starting from zero.</h2>
+          <p class="sub">Almost every idea you use in Figma has a twin in code. The course is built on that map.</p>
+          <ul class="dict">
+            {DICTIONARY.map(([f, c]) => (
+              <li><span class="dict-f">{f}</span><span class="dict-arrow" aria-hidden="true">→</span><code>{c}</code></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ SYLLABUS ============ -->
+      <section id="syllabus" class="sec sec-dark">
+        <div class="wrap">
+          <p class="eyebrow">04 — Syllabus</p>
+          <h2 class="h2">Ten weeks. Four phases. One portfolio.</h2>
+          <p class="sub">Each week starts from a Figma idea you know and ends with something deployed. Open any week for topics and the build.</p>
+
+          {phases.map(([key, p]) => (
+            <div class="phase">
+              <div class="phase-h">
+                <span class="phase-weeks">Weeks {p.weeks}</span>
+                <h3>{p.label}</h3>
+                <p>{p.blurb}</p>
+              </div>
+              <div class="layers">
+                {DE_WEEKS.filter((w) => w.phase === key).map((w) => (
+                  <details class="layer" id={`week-${w.n}`}>
+                    <summary>
+                      <span class="ln">{pad(w.n)}</span>
+                      <span class="lt">{w.title}</span>
+                      <span class="lmap"><span>{w.figma}</span><span class="arr">→</span><span class="lc">{w.code}</span></span>
+                      <span class="lchev" aria-hidden="true"></span>
+                    </summary>
+                    <div class="layer-body">
+                      <p class="lsum">{w.summary}</p>
+                      <div class="lgrid">
+                        <div>
+                          <h4>Topics</h4>
+                          <ul>{w.topics.map((t) => <li>{t}</li>)}</ul>
+                        </div>
+                        <div>
+                          <h4>The build</h4>
+                          <p>{w.build}</p>
+                          <h4>You ship</h4>
+                          <p class="ship">{w.ships}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ============ PORTFOLIO ============ -->
+      <section class="sec">
+        <div class="wrap">
+          <p class="eyebrow">05 — What you walk away with</p>
+          <h2 class="h2">Three projects a hiring manager can click.</h2>
+          <div class="ships">
+            <article class="shipcard">
+              <div class="shipart art-1" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <h3>A design system</h3>
+              <p>Tokens, eight accessible components and Storybook docs, mapped one-to-one to your Figma library.</p>
+              <span class="tag">Week 6</span>
+            </article>
+            <article class="shipcard">
+              <div class="shipart art-2" aria-hidden="true"><i></i><i></i><i></i></div>
+              <h3>A shipped product</h3>
+              <p>A real Next.js app you designed and built, deployed on its own URL, with motion and a clean audit.</p>
+              <span class="tag">Weeks 7–10</span>
+            </article>
+            <article class="shipcard">
+              <div class="shipart art-3" aria-hidden="true"><i></i><i></i></div>
+              <h3>A coded portfolio</h3>
+              <p>Your portfolio rebuilt in code, with case studies that show the design, the code and the decisions.</p>
+              <span class="tag">Week 10</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOW + FIT ============ -->
+      <section class="sec sec-tint">
+        <div class="wrap two">
+          <div>
+            <p class="eyebrow">06 — How a week goes</p>
+            <h2 class="h2 h2-sm">Learn it live. Build it yourself.</h2>
+            <ol class="steps">
+              <li><b>Live session.</b> The concept, from the Figma idea you know to the code that does it.</li>
+              <li><b>Workshop.</b> We build it together, step by step, and break it on purpose.</li>
+              <li><b>Your build.</b> The weekly project, on your own design. This is where it sticks.</li>
+              <li><b>Code review.</b> Feedback on your pull request, the way engineering teams do it.</li>
+            </ol>
+          </div>
+          <div class="fit">
+            <div class="fit-col">
+              <h3>This is for you if</h3>
+              <ul class="ok">
+                <li>You design in Figma and want to build what you design</li>
+                <li>You are tired of handoffs that come back wrong</li>
+                <li>You want roles that hiring managers still open</li>
+                <li>You can give it about six hours a week</li>
+              </ul>
+            </div>
+            <div class="fit-col">
+              <h3>It is not for you if</h3>
+              <ul class="x">
+                <li>You want backend or full-stack engineering</li>
+                <li>You want a certificate more than a portfolio</li>
+                <li>You hope AI will do the learning for you</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ INSTRUCTOR ============ -->
+      <section class="sec">
+        <div class="wrap mentor">
+          <img src="/headshot.jpg" width="120" height="120" alt={SITE.instructor.name} loading="lazy" />
+          <div>
+            <p class="eyebrow">07 — Your mentor</p>
+            <h2 class="h2 h2-sm">{SITE.instructor.name}</h2>
+            <p class="sub">
+              Engineering team lead with 10 years of building web products in React, Next.js, TypeScript
+              and Tailwind, most recently leading a cross-functional team of designers, developers and PMs.
+              He designed a Full Stack JavaScript course and has mentored hundreds of students. He also runs the{' '}
+              <a href="/">AI Engineering</a> mentorship.
+            </p>
+            <a class="link" href="/resume/">Full résumé →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FAQ ============ -->
+      <section id="faq" class="sec sec-tint">
+        <div class="wrap faq-wrap">
+          <p class="eyebrow">08 — Questions</p>
+          <h2 class="h2">Frequently asked</h2>
+          <div class="faq">
+            {DE_FAQ.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FINAL CTA ============ -->
+      <section class="final canvas">
+        <div class="wrap final-in">
+          <h2 class="display final-h">Design it.<br />Build it.<br /><span class="hl">Ship it.</span></h2>
+          <p class="lede">Cohorts are small so every build gets reviewed. Message me on LinkedIn for the next start date and the price.</p>
+          <a class="btn btn-ink" href={SITE.cta.href} target="_blank" rel="noopener">Apply on LinkedIn →</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-in">
+        <span>© {new Date().getFullYear()} {SITE.org.name}</span>
+        <nav aria-label="Footer">
+          <a href="/">AI Engineering course</a>
+          <a href="/blog/">Blog</a>
+          <a href={SITE.org.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+          <a href={SITE.telegram.href} target="_blank" rel="noopener">Telegram</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      // The playground: properties → CSS variables on the card, and the code that says so.
+      const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+      const card = document.getElementById('pcard') as HTMLElement;
+      const stage = document.getElementById('stage') as HTMLElement;
+      const shadows = ['none', '0 1px 2px rgb(0 0 0 / .08)', '0 4px 12px -2px rgb(0 0 0 / .12)', '0 12px 28px -6px rgb(0 0 0 / .2)', '0 24px 48px -12px rgb(0 0 0 / .3)'];
+      const twShadow = ['shadow-none', 'shadow-sm', 'shadow-md', 'shadow-lg', 'shadow-2xl'];
+      const twRadius = (r: number) => (r === 0 ? 'rounded-none' : `rounded-[${r}px]`);
+
+      function render() {
+        const r = +$('radius').value, p = +$('pad').value, h = +$('hue').value, s = +$('shadow').value, dark = $('dark').checked;
+        card.style.setProperty('--r', `${r}px`);
+        card.style.setProperty('--p', `${p}px`);
+        card.style.setProperty('--hue', String(h));
+        card.style.setProperty('--sh', shadows[s]);
+        stage.classList.toggle('is-dark', dark);
+        (document.getElementById('o-radius') as HTMLOutputElement).value = String(r);
+        (document.getElementById('o-pad') as HTMLOutputElement).value = String(p);
+        (document.getElementById('o-hue') as HTMLOutputElement).value = String(h);
+        (document.getElementById('o-shadow') as HTMLOutputElement).value = String(s);
+        const surface = dark ? 'oklch(24% 0.02 ' + h + ')' : '#ffffff';
+        (document.getElementById('css-out') as HTMLElement).textContent =
+`:root {
+  --brand: oklch(58% 0.19 ${h});
+  --surface: ${surface};
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: ${p}px;
+  border-radius: ${r}px;
+  background: var(--surface);
+  box-shadow: ${shadows[s]};
+}
+
+.card button {
+  background: var(--brand);
+  border-radius: ${Math.max(r - 6, 0)}px;
+}`;
+        (document.getElementById('tw-out') as HTMLElement).textContent =
+`<div class="flex flex-col gap-4
+            p-[${p}px] ${twRadius(r)} ${twShadow[s]}
+            bg-white dark:bg-zinc-900">
+  …
+  <button class="bg-[oklch(58%_0.19_${h})]
+                 ${twRadius(Math.max(r - 6, 0))}">
+    Ship it
+  </button>
+</div>`;
+      }
+      ['radius', 'pad', 'hue', 'shadow', 'dark'].forEach((id) => $(id).addEventListener('input', render));
+      render();
+
+      document.querySelectorAll<HTMLButtonElement>('.tabs [role=tab]').forEach((b) =>
+        b.addEventListener('click', () => {
+          document.querySelectorAll('.tabs [role=tab]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+          (document.getElementById('code-css') as HTMLElement).hidden = b.dataset.tab !== 'css';
+          (document.getElementById('code-tw') as HTMLElement).hidden = b.dataset.tab !== 'tw';
+        }),
+      );
+    </script>
+
+    <style is:global>
+      :root {
+        --canvas: #f3f2ee;
+        --canvas-2: #e9e7e1;
+        --paper: #ffffff;
+        --ink: #14151a;
+        --ink-2: #3c3f48;
+        --ink-3: #6b6f7a;
+        --line: rgba(20, 21, 26, 0.1);
+        --line-2: rgba(20, 21, 26, 0.18);
+        --sel: #2f6bff;      /* the selection blue */
+        --violet: #7b5cff;   /* designer cursor */
+        --red: #d42f26;      /* PJ red, engineer cursor */
+        --yellow: #f6d64a;   /* PJ yellow */
+        --green: #1fa86a;
+        --night: #121318;
+        --night-2: #1b1d24;
+        --display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+        --sans: "Inter", ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+        --r: 14px;
+        color-scheme: light;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+      body { margin: 0; background: var(--canvas); color: var(--ink); font: 400 17px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+      img { max-width: 100%; display: block; }
+      a { color: inherit; }
+      h1, h2, h3, h4, p, ul, ol, dl, dd, pre { margin: 0; }
+      .wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
+      .skip { position: absolute; left: -999px; top: 8px; background: var(--ink); color: #fff; padding: 8px 12px; border-radius: 8px; z-index: 200; }
+      .skip:focus { left: 8px; }
+      :focus-visible { outline: 2px solid var(--sel); outline-offset: 3px; }
+
+      .canvas {
+        background-color: var(--canvas);
+        background-image: radial-gradient(rgba(20, 21, 26, 0.13) 1px, transparent 1.2px);
+        background-size: 22px 22px;
+      }
+
+      /* ---------- buttons ---------- */
+      .btn { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.85em 1.35em; border-radius: 999px; font: 600 0.95rem/1 var(--sans); text-decoration: none; transition: transform 0.2s cubic-bezier(.2,.8,.2,1), box-shadow 0.2s, background 0.2s; }
+      .btn:active { transform: scale(0.97); }
+      .btn-ink { background: var(--ink); color: #fff; box-shadow: 0 1px 0 rgba(255,255,255,.15) inset, 0 8px 20px -10px rgba(20,21,26,.6); }
+      .btn-ink:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,.15) inset, 0 14px 28px -12px rgba(20,21,26,.7); }
+      .btn-ghost { border: 1px solid var(--line-2); background: rgba(255,255,255,.6); }
+      .btn-ghost:hover { background: #fff; }
+      .btn-sm { padding: 0.6em 1.1em; font-size: 0.88rem; }
+
+      /* ---------- header ---------- */
+      .top { position: sticky; top: 0; z-index: 100; background: rgba(243, 242, 238, 0.82); backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid var(--line); }
+      .top-in { display: flex; align-items: center; gap: 1.5rem; height: 60px; }
+      .brand { display: flex; align-items: center; gap: 0.6rem; font: 700 1.02rem var(--display); letter-spacing: -0.01em; text-decoration: none; }
+      .top-nav { display: flex; gap: 1.6rem; margin-left: auto; font-size: 0.92rem; color: var(--ink-2); }
+      .top-nav a { text-decoration: none; }
+      .top-nav a:hover { color: var(--ink); }
+
+      /* ---------- hero ---------- */
+      .hero { position: relative; overflow: hidden; padding: 64px 0 88px; border-bottom: 1px solid var(--line); }
+      .hero-in { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 48px; align-items: center; }
+      .frame-label { position: absolute; top: -28px; left: 0; font: 500 0.75rem var(--sans); color: var(--ink-3); }
+      .frame-label .hash { opacity: 0.6; }
+      .fl-m { display: none; }
+      .hero-frame { background: rgba(255,255,255,.72); border: 1px solid var(--line); border-radius: 20px; padding: clamp(28px, 5vw, 56px); box-shadow: 0 30px 60px -40px rgba(20,21,26,.35); }
+      .chip { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.8rem; border-radius: 999px; background: var(--canvas); border: 1px solid var(--line); font-size: 0.82rem; font-weight: 500; color: var(--ink-2); }
+      .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(31,168,106,.18); }
+      .display { font: 700 clamp(2.6rem, 7vw, 5.4rem)/0.98 var(--display); letter-spacing: -0.045em; margin: 1.2rem 0 1.4rem; }
+      .sel { position: relative; display: inline-block; padding: 0 0.08em; outline: 1.5px solid var(--sel); outline-offset: 2px; color: var(--sel); }
+      .sel .h { position: absolute; width: 9px; height: 9px; background: #fff; border: 1.5px solid var(--sel); }
+      .sel .tl { top: -7px; left: -7px; } .sel .tr { top: -7px; right: -7px; } .sel .bl { bottom: -7px; left: -7px; } .sel .br { bottom: -7px; right: -7px; }
+      .sel .dim { position: absolute; left: 50%; bottom: -2.1rem; transform: translateX(-50%); background: var(--sel); color: #fff; font: 600 0.72rem/1 var(--sans); letter-spacing: 0; padding: 4px 7px; border-radius: 4px; white-space: nowrap; }
+      .lede { font-size: clamp(1.02rem, 1.6vw, 1.18rem); color: var(--ink-2); max-width: 40em; margin-top: 2.4rem; }
+      .lede strong { color: var(--ink); }
+      .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.8rem; }
+      .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px dashed var(--line-2); }
+      .facts dt { font: 700 1.7rem/1 var(--display); letter-spacing: -0.03em; }
+      .facts dd { font-size: 0.84rem; color: var(--ink-3); margin-top: 0.3rem; }
+
+      .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; font-size: 0.8rem; box-shadow: 0 20px 40px -24px rgba(20,21,26,.35); overflow: hidden; }
+      .panel-h { font-weight: 600; font-size: 0.78rem; padding: 0.7rem 0.9rem 0.4rem; color: var(--ink); }
+      .panel-row { display: flex; justify-content: space-between; padding: 0.35rem 0.9rem; color: var(--ink-3); }
+      .panel-row b { font-weight: 500; color: var(--ink); background: var(--canvas); padding: 0.1rem 0.45rem; border-radius: 5px; }
+      .panel-code-h { margin-top: 0.4rem; border-top: 1px solid var(--line); padding-top: 0.8rem; color: var(--sel); }
+      .panel-code { font: 400 0.76rem/1.65 var(--mono); padding: 0.4rem 0.9rem 1rem; color: var(--ink-2); font-variant-ligatures: none; }
+      .panel-code .k { color: var(--violet); }
+
+      .cursor { position: absolute; display: flex; align-items: flex-start; pointer-events: none; z-index: 5; }
+      .cursor svg path { stroke: #fff; stroke-width: 1.2; }
+      .cursor span { margin: 14px 0 0 -2px; padding: 3px 8px; border-radius: 4px 999px 999px 999px; color: #fff; font: 600 0.72rem var(--sans); white-space: nowrap; }
+      .c-design svg path { fill: var(--violet); } .c-design span { background: var(--violet); }
+      .c-eng svg path { fill: var(--red); } .c-eng span { background: var(--red); }
+      .c-design { left: 50%; top: 66%; animation: drift-a 9s ease-in-out infinite; }
+      .c-eng { left: 70%; top: 72%; animation: drift-b 11s ease-in-out infinite; }
+      @keyframes drift-a { 0%,100% { transform: translate(0,0); } 30% { transform: translate(-60px, 90px); } 60% { transform: translate(40px, 140px); } }
+      @keyframes drift-b { 0%,100% { transform: translate(0,0); } 40% { transform: translate(-120px, -60px); } 70% { transform: translate(30px, -150px); } }
+
+      /* ---------- marquee ---------- */
+      .marquee { overflow: hidden; background: var(--ink); color: #fff; padding: 14px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+      .marquee-track { display: flex; gap: 2.4rem; width: max-content; animation: marquee 40s linear infinite; font: 500 0.95rem var(--display); }
+      .marquee-track span::before { content: "✦"; color: var(--yellow); margin-right: 2.4rem; }
+      @keyframes marquee { to { transform: translateX(-50%); } }
+
+      /* ---------- sections ---------- */
+      .sec { padding: clamp(64px, 9vw, 112px) 0; }
+      .sec-tint { background: var(--canvas-2); }
+      .sec-dark { background: var(--night); color: #eceef3; }
+      .eyebrow { font: 600 0.78rem var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--sel); margin-bottom: 1rem; }
+      .sec-dark .eyebrow { color: var(--yellow); }
+      .h2 { font: 700 clamp(2rem, 4.4vw, 3.3rem)/1.04 var(--display); letter-spacing: -0.035em; max-width: 18em; }
+      .h2-sm { font-size: clamp(1.7rem, 3vw, 2.3rem); }
+      .sub { font-size: 1.1rem; color: var(--ink-2); max-width: 40em; margin-top: 1rem; }
+      .sec-dark .sub { color: #a9aebb; }
+      .sub a, .link { color: var(--sel); text-decoration: none; font-weight: 600; }
+
+      /* why */
+      .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; }
+      .stat { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 1.6rem; display: flex; flex-direction: column; gap: 0.8rem; }
+      .stat-n { font: 700 2rem/1.05 var(--display); letter-spacing: -0.03em; }
+      .stat:first-child .stat-n { color: var(--red); font-size: 3rem; }
+      .stat-t { color: var(--ink-2); font-size: 0.98rem; flex: 1; }
+      .src { font-size: 0.84rem; color: var(--ink-3); text-decoration: none; }
+      .src:hover { color: var(--sel); }
+      .role { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem; align-items: center; margin-top: 3rem; }
+      .role-col { border: 1px dashed var(--line-2); border-radius: var(--r); padding: 1.6rem; }
+      .role-new { border: 1.5px solid var(--sel); background: var(--paper); box-shadow: 0 0 0 4px rgba(47,107,255,.08); }
+      .role h3 { font: 600 1.1rem var(--display); margin-bottom: 0.8rem; }
+      .role-col:not(.role-new) { color: var(--ink-3); }
+      .role-arrow { font: 700 2rem var(--display); color: var(--sel); }
+      ul.ok, ul.x { list-style: none; padding: 0; display: grid; gap: 0.55rem; }
+      ul.ok li, ul.x li { padding-left: 1.7rem; position: relative; }
+      ul.ok li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+      ul.x li::before { content: "×"; position: absolute; left: 0.1rem; color: var(--ink-3); font-weight: 700; }
+      .role-col:not(.role-new) li { text-decoration: line-through; text-decoration-color: rgba(20,21,26,.25); }
+
+      /* playground */
+      .play { display: grid; grid-template-columns: 230px minmax(0, 1fr) minmax(0, 1.05fr); gap: 1rem; margin-top: 3rem; align-items: stretch; }
+      .play-controls { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding-bottom: 0.9rem; display: grid; gap: 0.2rem; align-content: start; }
+      .play-controls label { display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 0.5rem; padding: 0.5rem 0.9rem; font-size: 0.84rem; color: var(--ink-2); }
+      .play-controls output { font: 500 0.78rem var(--mono); background: var(--canvas); padding: 0.05rem 0.4rem; border-radius: 4px; color: var(--ink); }
+      .play-controls input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--sel); }
+      .play-controls .tog { display: flex; align-items: center; gap: 0.5rem; }
+      .play-controls .tog input { accent-color: var(--sel); width: 16px; height: 16px; }
+      .play-stage { border-radius: var(--r); border: 1px solid var(--line); display: grid; place-items: center; padding: 2rem 1.2rem; background-color: #fafaf8; background-image: radial-gradient(rgba(20,21,26,.12) 1px, transparent 1.2px); background-size: 18px 18px; transition: background-color 0.3s; }
+      .play-stage.is-dark { background-color: #0d0e12; background-image: radial-gradient(rgba(255,255,255,.1) 1px, transparent 1.2px); }
+      .pcard { --r: 16px; --p: 24px; --hue: 265; --sh: none; --brand: oklch(58% 0.19 var(--hue)); width: min(300px, 100%); display: flex; flex-direction: column; gap: 16px; padding: var(--p); border-radius: var(--r); background: #fff; color: var(--ink); box-shadow: var(--sh); transition: all 0.25s cubic-bezier(.2,.8,.2,1); }
+      .is-dark .pcard { background: oklch(24% 0.02 var(--hue)); color: #f1f2f6; border: 1px solid rgba(255,255,255,.08); }
+      .pcard-top { display: flex; gap: 0.75rem; align-items: center; }
+      .pcard-top b { display: block; font: 600 0.98rem var(--display); }
+      .pcard-top small { color: var(--ink-3); font-size: 0.8rem; }
+      .is-dark .pcard-top small, .is-dark .pcard p { color: #a9aebb; }
+      .pav { width: 40px; height: 40px; flex: none; border-radius: calc(var(--r) * 0.6 + 4px); background: oklch(93% 0.05 var(--hue)); color: var(--brand); display: grid; place-items: center; font: 700 0.85rem var(--display); }
+      .is-dark .pav { background: oklch(34% 0.08 var(--hue)); color: oklch(85% 0.1 var(--hue)); }
+      .pcard p { font-size: 0.9rem; color: var(--ink-2); line-height: 1.5; }
+      .pbtn { align-self: flex-start; border: 0; background: var(--brand); color: #fff; font: 600 0.88rem var(--sans); padding: 0.7em 1.2em; border-radius: max(calc(var(--r) - 6px), 0px); cursor: pointer; transition: transform 0.15s, filter 0.15s; }
+      .pbtn:hover { filter: brightness(1.08); } .pbtn:active { transform: scale(0.96); }
+      .play-code { background: var(--night); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+      .tabs { display: flex; gap: 0.2rem; padding: 0.6rem 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+      .tabs button { background: none; border: 0; color: #8b90a0; font: 500 0.8rem var(--mono); padding: 0.45rem 0.8rem; border-radius: 6px 6px 0 0; cursor: pointer; }
+      .tabs button[aria-selected=true] { color: #fff; background: rgba(255,255,255,.07); }
+      .play-code pre { padding: 1rem 1.1rem; overflow: auto; font: 400 0.8rem/1.6 var(--mono); color: #d7dbe6; font-variant-ligatures: none; flex: 1; }
+
+      /* dictionary */
+      .dict { list-style: none; padding: 0; margin-top: 3rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+      .dict li { display: flex; align-items: center; gap: 0.7rem; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 0.85rem 1rem; transition: border-color .2s, transform .2s; }
+      .dict li:hover { border-color: var(--sel); transform: translateY(-2px); }
+      .dict-f { font-weight: 600; font-size: 0.92rem; }
+      .dict-arrow { color: var(--sel); }
+      .dict code { font: 500 0.8rem var(--mono); color: var(--violet); background: rgba(123,92,255,.08); padding: 0.15rem 0.45rem; border-radius: 5px; margin-left: auto; text-align: right; }
+
+      /* syllabus */
+      .phase { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 2rem; margin-top: 3.4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,.1); }
+      .phase-weeks { font: 600 0.75rem var(--mono); color: var(--yellow); letter-spacing: 0.06em; text-transform: uppercase; }
+      .phase-h h3 { font: 700 1.45rem/1.15 var(--display); letter-spacing: -0.02em; margin: 0.5rem 0; }
+      .phase-h p { color: #a9aebb; font-size: 0.95rem; }
+      .layers { display: grid; gap: 0.5rem; }
+      .layer { background: var(--night-2); border: 1px solid rgba(255,255,255,.07); border-radius: 12px; transition: border-color .2s, background .2s; }
+      .layer:hover { border-color: rgba(255,255,255,.18); }
+      .layer[open] { border-color: var(--sel); background: #1d2030; }
+      .layer summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 2.4rem minmax(0, 1fr) auto 1rem; gap: 1rem; align-items: center; padding: 1.05rem 1.2rem; }
+      .layer summary::-webkit-details-marker { display: none; }
+      .ln { font: 600 0.82rem var(--mono); color: #6c7183; }
+      .lt { font: 600 1.08rem var(--display); letter-spacing: -0.01em; }
+      .lmap { display: flex; gap: 0.5rem; align-items: center; font-size: 0.78rem; color: #8b90a0; white-space: nowrap; }
+      .lmap .arr { color: var(--sel); } .lmap .lc { color: #c7cbff; font-family: var(--mono); }
+      .lchev { width: 8px; height: 8px; border-right: 1.5px solid #8b90a0; border-bottom: 1.5px solid #8b90a0; transform: rotate(45deg); transition: transform .2s; justify-self: end; margin-top: -4px; }
+      .layer[open] .lchev { transform: rotate(225deg); margin-top: 4px; }
+      .layer-body { padding: 0 1.2rem 1.4rem 4.6rem; }
+      .lsum { color: #c4c8d3; max-width: 46em; }
+      .lgrid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.6rem; margin-top: 1.2rem; }
+      .lgrid h4 { font: 600 0.72rem var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: #8b90a0; margin-bottom: 0.5rem; }
+      .lgrid h4:not(:first-child) { margin-top: 1rem; }
+      .lgrid ul { padding-left: 1.1rem; display: grid; gap: 0.3rem; color: #d7dbe6; font-size: 0.94rem; }
+      .lgrid p { color: #d7dbe6; font-size: 0.94rem; }
+      .lgrid .ship { color: var(--yellow); font-weight: 500; }
+
+      /* ships */
+      .ships { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; }
+      .shipcard { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 1.2rem 1.2rem 1.6rem; display: flex; flex-direction: column; gap: 0.6rem; transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s; }
+      .shipcard:hover { transform: translateY(-4px); box-shadow: 0 24px 40px -24px rgba(20,21,26,.35); }
+      .shipcard h3 { font: 700 1.3rem var(--display); letter-spacing: -0.02em; margin-top: 0.6rem; }
+      .shipcard p { color: var(--ink-2); font-size: 0.96rem; flex: 1; }
+      .tag { align-self: flex-start; font: 600 0.72rem var(--mono); padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--canvas); color: var(--ink-2); }
+      .shipart { height: 150px; border-radius: 12px; display: grid; gap: 8px; padding: 18px; }
+      .art-1 { background: #ece8ff; grid-template-columns: repeat(3, 1fr); }
+      .art-1 i { border-radius: 8px; background: #fff; box-shadow: 0 2px 6px rgba(123,92,255,.15); }
+      .art-1 i:nth-child(2) { background: var(--violet); } .art-1 i:nth-child(6) { background: var(--yellow); }
+      .art-2 { background: #ffe9e6; grid-template-columns: 1fr 2fr; grid-template-rows: 1fr 2fr; }
+      .art-2 i { border-radius: 8px; background: #fff; } .art-2 i:first-child { grid-row: 1 / 3; background: var(--red); opacity: .85; }
+      .art-3 { background: #fff5c7; grid-template-rows: auto 1fr; }
+      .art-3 i:first-child { height: 14px; width: 55%; border-radius: 6px; background: var(--ink); }
+      .art-3 i:last-child { border-radius: 8px; background: #fff; box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+      /* how + fit */
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+      .steps { list-style: none; padding: 0; counter-reset: s; display: grid; gap: 1rem; margin-top: 2rem; }
+      .steps li { counter-increment: s; position: relative; padding-left: 3rem; color: var(--ink-2); }
+      .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font: 600 0.85rem var(--display); }
+      .steps b { color: var(--ink); }
+      .fit { display: grid; gap: 1rem; }
+      .fit-col { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 1.5rem; }
+      .fit-col h3 { font: 600 1.05rem var(--display); margin-bottom: 0.9rem; }
+
+      /* mentor */
+      .mentor { display: flex; gap: 2rem; align-items: center; }
+      .mentor img { border-radius: 50%; width: 120px; height: 120px; object-fit: cover; flex: none; box-shadow: 0 0 0 4px #fff, 0 0 0 5.5px var(--sel); }
+      .mentor .link { display: inline-block; margin-top: 1rem; }
+
+      /* faq */
+      .faq-wrap { max-width: 860px; }
+      .faq { margin-top: 2.4rem; display: grid; gap: 0.6rem; }
+      .faq details { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 0 1.3rem; }
+      .faq summary { cursor: pointer; list-style: none; padding: 1.1rem 0; font-weight: 600; display: flex; justify-content: space-between; gap: 1rem; }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::after { content: "+"; font: 400 1.4rem/1 var(--display); color: var(--sel); transition: transform .2s; }
+      .faq details[open] summary::after { transform: rotate(45deg); }
+      .faq details p { padding-bottom: 1.2rem; color: var(--ink-2); }
+
+      /* final */
+      .final { padding: clamp(80px, 12vw, 140px) 0; text-align: center; border-top: 1px solid var(--line); }
+      .final-in { display: flex; flex-direction: column; align-items: center; }
+      .final-h { margin: 0 0 0.5rem; }
+      .final .hl { background: var(--yellow); padding: 0 0.12em; border-radius: 6px; }
+      .final .lede { margin: 1.2rem auto 2rem; text-align: center; }
+
+      .foot { background: var(--ink); color: #a9aebb; font-size: 0.88rem; padding: 1.6rem 0; }
+      .foot-in { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+      .foot nav { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+      .foot a { text-decoration: none; } .foot a:hover { color: #fff; }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 1000px) {
+        .hero-in { grid-template-columns: 1fr; }
+        .panel { display: none; }
+        .play { grid-template-columns: 1fr 1fr; }
+        .play-code { grid-column: 1 / -1; }
+        .phase { grid-template-columns: 1fr; gap: 1.2rem; }
+        .dict { grid-template-columns: 1fr 1fr; }
+      }
+      @media (max-width: 760px) {
+        body { font-size: 16px; }
+        .top-nav { display: none; }
+        .top-in .btn { margin-left: auto; }
+        .hero { padding: 48px 0 64px; }
+        .facts { grid-template-columns: repeat(2, 1fr); }
+        .c-eng { display: none; }
+        .c-design { left: auto; right: 10%; top: 84%; }
+        .fl-d { display: none; } .fl-m { display: inline; }
+        .stats, .ships, .two, .dict { grid-template-columns: 1fr; }
+        .role { grid-template-columns: 1fr; }
+        .role-arrow { transform: rotate(90deg); justify-self: center; }
+        .play { grid-template-columns: 1fr; }
+        .layer summary { grid-template-columns: 2rem minmax(0, 1fr) 1rem; }
+        .lmap { grid-column: 2 / 3; grid-row: 2; white-space: normal; flex-wrap: wrap; }
+        .lchev { grid-row: 1; grid-column: 3; }
+        .layer-body { padding: 0 1.1rem 1.3rem; }
+        .lgrid { grid-template-columns: 1fr; }
+        .mentor { flex-direction: column; align-items: flex-start; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+      }
+    </style>
+  </body>
+</html>
