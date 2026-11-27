@@ -39,6 +39,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
+      customPages: ['https://pjsofts.github.io/webinar/ai-agent-workflows/demo/'],
       serialize(item) {
         const slug = item.url.match(/\/blog\/([^/]+)\/?$/)?.[1];
         item.lastmod = slug && blogDates[slug] ? new Date(blogDates[slug]).toISOString() : buildDate;

@@ -1,9 +1,9 @@
 export const SITE = {
   name: 'AI Engineering',
-  tagline: 'Build a Claude Code clone from scratch',
+  tagline: 'Build an AI agent from scratch',
   url: 'https://pjsofts.github.io',
   description:
-    'A 12-week hands-on AI engineering mentorship. Build a real AI coding agent from scratch — agent loops, tool calling, evals, RAG, context engineering, sandboxing, memory and multi-agent orchestration. No frameworks.',
+    'Learn AI engineering by building and evaluating an agent from scratch. Start with a free Python lab, then explore the 12-week curriculum and live mentorship.',
   instructor: {
     name: 'Pouria Jahandideh',
     role: 'AI Engineer · Engineering Team Lead',
@@ -23,7 +23,7 @@ export const SITE = {
     handle: '@pjmentoring',
     href: 'https://t.me/pjmentoring',
   },
-  // The single call-to-action used across the site.
+  // Contact for the live mentorship.
   cta: {
     label: 'Message me on LinkedIn',
     href: 'https://www.linkedin.com/in/pouria-jahandideh/',
@@ -34,7 +34,7 @@ export const NAV = [
   { label: 'Course', href: '/#course' },
   { label: 'Curriculum', href: '/curriculum' },
   { label: 'Certification', href: '/certification' },
-  { label: 'Webinar', href: '/webinar/job-hunting-ai' },
+  { label: 'Teach', href: '/teach' },
   { label: 'Blog', href: '/blog' },
   { label: 'Instructor', href: '/resume' },
 ] as const;

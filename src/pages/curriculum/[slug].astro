@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE } from '../../data/site';
+import { WEEK_RESOURCES } from '../../data/course-resources';
 import { WEEKS, weekLabel } from '../../data/weeks';
 
 export function getStaticPaths() {
@@ -12,6 +13,7 @@ const idx = WEEKS.findIndex((w) => w.n === week.n);
 const prev = WEEKS[idx - 1];
 const next = WEEKS[idx + 1];
 const label = weekLabel(week);
+const [featured, ...materials] = WEEK_RESOURCES[week.n] ?? [];
 
 const schema = {
   '@context': 'https://schema.org',
@@ -61,8 +63,11 @@ const breadcrumb = {
         <span>{week.stack ?? '🐍 Python / 🔷 TypeScript'}</span>
         <span class="ship">🛠 You ship: {week.ship}</span>
       </div>
-      {week.slides && (
-        <a class="btn btn-primary slides-btn" href={week.slides}>▶ Open the slides</a>
+      {(featured || week.slides) && (
+        <div class="week-actions">
+          {featured && <a class="b b-ink" href={featured.href}>{featured.label} →</a>}
+          {week.slides && <a class="b b-plain" href={week.slides}>Open the slides</a>}
+        </div>
       )}
     </div>
   </section>
@@ -101,12 +106,18 @@ const breadcrumb = {
               {week.topics.map((t) => <span class="tag">{t}</span>)}
             </div>
           </div>
+          {materials.length > 0 && (
+            <div class="side-box">
+              <h3>Workshop code</h3>
+              <ul class="resources">
+                {materials.map((material) => <li><a href={material.href}>{material.label}</a></li>)}
+              </ul>
+            </div>
+          )}
           <div class="side-box cta-box">
             <h3>Join the mentorship</h3>
             <p>Build this — and eleven other weeks — with direct review and unblocking.</p>
-            <a class="btn btn-primary full" href={SITE.cta.href} target="_blank" rel="noopener">
-              Message me on LinkedIn →
-            </a>
+            <a class="btn btn-primary full" href="/#mentorship">See how it works →</a>
           </div>
         </aside>
       </div>
@@ -130,7 +141,8 @@ const breadcrumb = {
 </BaseLayout>
 
 <style>
-  .slides-btn { margin-top: 1.4rem; display: inline-block; }
+  .week-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.4rem; }
+  .resources { margin: 0; padding-left: 1.2rem; }
   .pg-hero {
     padding: 2.4rem 0 2.8rem;
     background:

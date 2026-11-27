@@ -1,8 +1,33 @@
-# AI Engineering — course site
+# AI Engineering
 
-Marketing + content site for the 12-week **AI Engineering** mentorship by Pouria Jahandideh.
-Built with [Astro](https://astro.build), deployed to GitHub Pages at
-**https://pjsofts.github.io**.
+Build an AI agent from scratch and learn to prove it works. This course is for software developers who want to implement tools, workflows, and evals in code. The [free public materials](https://pjsofts.github.io/) can be used alongside the [12-week curriculum](https://pjsofts.github.io/curriculum/) and the optional [live mentorship](https://pjsofts.github.io/#mentorship).
+
+## Start here
+
+1. Open the [browser replay](https://pjsofts.github.io/webinar/ai-agent-workflows/demo/) and run a recorded workflow. It needs no install or key.
+2. Work through the [first-agent lab](https://pjsofts.github.io/labs/first-agent/). It needs Python 3 and a text editor. Run the starter, fix the lookup, and rerun the five checks.
+3. Continue with [Week 1](https://pjsofts.github.io/curriculum/week-1-your-first-agent/) and [Week 2](https://pjsofts.github.io/curriculum/week-2-agent-workflows/). If you're running a group session, use the [75-minute facilitator kit](https://pjsofts.github.io/teach/).
+
+## Public workshops by current week
+
+The curriculum is the full course outline. This table lists standalone materials that are public. Pinned repository links refer to the workshop as it was mapped here. Some folder names use the earlier week numbers.
+
+| Week | Public materials | What to run |
+| --- | --- | --- |
+| 1 · First agent | [Python starter v1](public/labs/first-agent/v1/first_agent.py) · [Minimal chat agent](https://github.com/pjsofts/ai-engineering2/tree/082361bd1a3199d61982f3c87f1e410207339da7) | Run `python3 first_agent.py --check`. The [lab](https://pjsofts.github.io/labs/first-agent/) includes a reference fix. |
+| 2 · Workflows | [Browser demo](https://pjsofts.github.io/webinar/ai-agent-workflows/demo/) · [Python source](https://github.com/pjsofts/ai-agent-workflows/tree/e36c82f6a23ac0a6db9a8d7f583d511b6a5) | Replay recorded runs online or follow the source project's Replay setup. |
+| 3 · Harness | [Harness workshop](https://github.com/pjsofts/ai-engineering-1/tree/4c529544ac92511501e8e0d904dbcf9fc7a31c5d/week3-workshop) | Follow its README for the checkpoints and checks. |
+| 4 · Background agents | [Slide deck](https://pjsofts.github.io/curriculum/week-4-background-agents/slides/) | Read the slides with the [week outline](https://pjsofts.github.io/curriculum/week-4-background-agents/). |
+| 5 · Evals | [Diagram-agent workshop](https://github.com/pjsofts/ai-engineering2/tree/082361bd1a3199d61982f3c87f1e410207339da7/week2-diagram-workshop) | Use the [case study](https://pjsofts.github.io/blog/diagram-agent-eval-baseline/) to check saved scores offline or run the original suite with a provider key. |
+| 6 · Chat and tools | [Streaming chat](https://github.com/pjsofts/ai-engineering-1/tree/4c529544ac92511501e8e0d904dbcf9fc7a31c5d/week4-workshop) · [Tool calls](https://github.com/pjsofts/ai-engineering-1/tree/4c529544ac92511501e8e0d904dbcf9fc7a31c5d/week5-workshop) | Follow each workshop's setup and checkpoints. |
+| 8 · Retrieval | [RAG workshop](https://github.com/pjsofts/ai-engineering-1/tree/4c529544ac92511501e8e0d904dbcf9fc7a31c5d/week7-rag) | Follow the Python walkthrough or run the visualizer in Replay mode. |
+| 9 · Planning and memory | [Planning and memory workshop](https://github.com/pjsofts/ai-engineering-1/tree/4c529544ac92511501e8e0d904dbcf9fc7a31c5d/week9-planning-memory) | Follow the workshop README for its checkpoints and supported languages. |
+
+[Share a lab result or blocker](https://github.com/pjsofts/pjsofts.github.io/issues/new?template=lab-result.yml) or [tell us where you taught the kit](https://github.com/pjsofts/pjsofts.github.io/issues/new?template=teaching-use.yml). Reports are optional. The facilitator page gives reuse terms and a private contact option.
+
+## About the site
+
+The site is built with [Astro](https://astro.build) and deployed to GitHub Pages.
 
 ## Local development
 

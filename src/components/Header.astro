@@ -1,5 +1,6 @@
 ---
 import { SITE, NAV } from '../data/site';
+import { COURSE } from '../data/course-resources';
 import Mark from './Mark.astro';
 const path = Astro.url.pathname;
 const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
@@ -21,9 +22,7 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
       {NAV.map((n) => (
         <a href={n.href} class={isActive(n.href) ? 'on' : ''}>{n.label}</a>
       ))}
-      <a class="btn btn-primary nav-cta" href={SITE.cta.href} target="_blank" rel="noopener">
-        Join the course
-      </a>
+      <a class="btn btn-primary nav-cta" href={COURSE.lab}>Start the free lab</a>
     </nav>
   </div>
 </header>
@@ -53,7 +52,7 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
   .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .4rem; }
   .burger span { display: block; width: 22px; height: 2px; background: var(--fg); border-radius: 2px; }
 
-  @media (max-width: 780px) {
+  @media (max-width: 900px) {
     .burger { display: flex; }
     .nav {
       position: absolute; top: 66px; left: 0; right: 0;
@@ -102,7 +101,7 @@ const isActive = (href: string) => href !== '/#course' && path.startsWith(href);
   :global(html[data-theme='paper']) .burger span { background: var(--ink); }
   /* Only the mobile dropdown needs its own ground; on desktop the links sit
      straight on the bar. */
-  @media (max-width: 780px) {
+  @media (max-width: 900px) {
     :global(html[data-theme='paper']) .nav {
       background: var(--paper);
       border-bottom: 1px solid var(--rule);

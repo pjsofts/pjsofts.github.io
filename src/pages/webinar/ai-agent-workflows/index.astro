@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Mark from '../../../components/Mark.astro';
 import Topology from '../../../components/Topology.astro';
 import { SITE } from '../../../data/site';
+import { COURSE } from '../../../data/course-resources';
 import { WEBINAR, MODULES, TOPIC_COUNT, webinarDay } from '../../../data/webinar';
 
 const day = webinarDay();
@@ -22,13 +23,7 @@ const eventSchema = {
   location: { '@type': 'VirtualLocation', url: `${SITE.url}/webinar/${WEBINAR.slug}` },
   organizer: { '@type': 'Person', name: SITE.instructor.name, url: SITE.url },
   performer: { '@type': 'Person', name: SITE.instructor.name },
-  offers: {
-    '@type': 'Offer',
-    price: 0,
-    priceCurrency: 'USD',
-    availability: 'https://schema.org/InStock',
-    url: `${SITE.url}/webinar/${WEBINAR.slug}`,
-  },
+
 };
 
 const marquee = MODULES.flatMap((m) => m.topics.map((t) => t.title));
@@ -47,8 +42,8 @@ const faqs = [
     a: 'Yes. No card, no upsell inside the session. If you like it, the 12-week AI Engineering course is linked at the bottom of this page, and that is the only pitch.',
   },
   {
-    q: 'How do I get the link?',
-    a: 'Message me on LinkedIn or by email. I add you to the Telegram group, and the live link, reminders and slides all go out there.',
+    q: 'How can I try the workflows?',
+    a: 'Open the browser demo, pick a workflow, and select Run. It replays a recorded example without an account or API key.',
   },
   {
     q: 'Do I need to know a framework?',
@@ -62,8 +57,8 @@ const faqs = [
 ---
 
 <BaseLayout
-  title={`${WEBINAR.title} — Free ${WEBINAR.hours}-Hour Webinar`}
-  description={`A free live webinar by ${SITE.instructor.name}: agent fundamentals, non-agent workflows, single-agent and multi-agent patterns, and how to evaluate them. ${day}, ${WEBINAR.start}–${WEBINAR.end} ${WEBINAR.tz}.`}
+  title={`${WEBINAR.title} — Browser Demo and Slides`}
+  description="Replay 13 AI agent workflows in your browser and follow the slides from the AI Engineering webinar."
   canonical={`/webinar/${WEBINAR.slug}`}
   theme="paper"
   schema={[eventSchema]}
@@ -75,7 +70,7 @@ const faqs = [
 
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <span class="lbl lbl-gold">Free webinar · {WEBINAR.where} · {WEBINAR.hours} hours</span>
+        <span class="lbl lbl-gold">Free workshop materials</span>
 
         <h1 class="display-1">
           AI agent workflows,<br />
@@ -83,15 +78,12 @@ const faqs = [
         </h1>
 
         <p class="hero-sub">
-          A free live session on how agents are put together. We cover the parts every
-          agent shares, the workflows that need no agent at all, single-agent loops,
-          multi-agent systems, and how to tell whether any of it works.
+          Replay 13 recorded runs and follow each decision from prompt to tool call. The
+          slides cover fixed workflows, single-agent loops, multi-agent systems and evals.
         </p>
 
         <div class="hero-cta">
-          <a class="b b-ink" href={WEBINAR.join.href} target="_blank" rel="noopener">
-            {WEBINAR.join.label} →
-          </a>
+          <a class="b b-ink" href={COURSE.demo}>Try the workflow demo →</a>
           <a class="b b-plain" href={slidesHref}>See the slides</a>
         </div>
 
@@ -119,8 +111,8 @@ const faqs = [
             <span class="l"><span class="d">price  </span> <span class="g">{WEBINAR.price}</span></span>
             <span class="l"><span class="d">host   </span> {SITE.instructor.name}</span>
             <span class="l"></span>
-            <span class="l"><span class="u">›</span> webinar --join</span>
-            <span class="l"><span class="g">✔</span> message me → added to the Telegram group</span>
+            <span class="l"><span class="u">›</span> webinar --replay</span>
+            <span class="l"><span class="g">✔</span> select a workflow → run the recording</span>
             <span class="l"><span class="u">›</span> <span class="cursor">▋</span></span>
           </div>
         </div>
@@ -228,37 +220,6 @@ const faqs = [
     </div>
   </section>
 
-  <!-- ===================== HOW TO JOIN ===================== -->
-  <section>
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="lbl">How to join</span>
-        <h2 class="display-2">Three steps, all of them short</h2>
-      </div>
-      <ol class="steps">
-        <li class="k k-flat">
-          <span class="step-n">01</span>
-          <h3>Message me</h3>
-          <p>
-            On <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn</a> or
-            at <a href={`mailto:${SITE.instructor.email}?subject=${encodeURIComponent(WEBINAR.title + ' webinar')}`}>{SITE.instructor.email}</a>.
-            One line is enough.
-          </p>
-        </li>
-        <li class="k k-flat">
-          <span class="step-n">02</span>
-          <h3>Join the Telegram group</h3>
-          <p>I add you to the webinar group. The live link and reminders go out there.</p>
-        </li>
-        <li class="k k-flat">
-          <span class="step-n">03</span>
-          <h3>Show up {dayShort}</h3>
-          <p>{WEBINAR.start}–{WEBINAR.end} {WEBINAR.tz}, live. Bring questions, especially about agents you are already building.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
   <!-- ===================== INSTRUCTOR ===================== -->
   <section class="s-paper2">
     <div class="wrap inst">
@@ -314,10 +275,8 @@ const faqs = [
     <div class="wrap ctr">
       <span class="lbl lbl-gold">{day} · {WEBINAR.start}–{WEBINAR.end} {WEBINAR.tz}</span>
       <h2 class="display-2">Four hours, every pattern,<br />no cost.</h2>
-      <p>Send me one line and I will add you to the group.</p>
-      <a class="b b-primary" href={WEBINAR.join.href} target="_blank" rel="noopener">
-        {WEBINAR.join.label} →
-      </a>
+      <p>Pick a workflow to see which decisions the code owns and which the model makes.</p>
+      <a class="b b-primary" href={COURSE.demo}>Open the browser replay →</a>
       <p class="fine">
         Want to build all of this yourself? <a href="/">The 12-week AI Engineering course</a>.
       </p>
@@ -487,12 +446,6 @@ const faqs = [
     color: var(--ink-soft);
   }
 
-  /* ---------------- join ---------------- */
-  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; }
-  .step-n { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.16em; color: var(--gold-deep); }
-  .steps h3 { font-size: 1.15rem; margin: 0.6rem 0 0.45rem; }
-  .steps p { font-size: 0.95rem; margin: 0; }
-
   /* ---------------- host ---------------- */
   .inst { display: grid; grid-template-columns: 300px 1fr; gap: 3rem; align-items: start; }
   .inst-photo { position: relative; }
@@ -574,7 +527,7 @@ const faqs = [
     .inst { max-width: 520px; }
   }
   @media (max-width: 760px) {
-    .dial, .steps, .mod { grid-template-columns: 1fr; }
+    .dial, .mod { grid-template-columns: 1fr; }
     .mod { gap: 1.2rem; padding: 1.3rem; }
   }
   @media (max-width: 640px) {

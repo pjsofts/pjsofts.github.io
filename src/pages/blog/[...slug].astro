@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE } from '../../data/site';
+import { COURSE } from '../../data/course-resources';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -107,15 +108,10 @@ const breadcrumb = {
         </div>
 
         <div class="post-cta">
-          <h3>Build it, don't just read about it</h3>
-          <p>
-            The 12-week AI Engineering mentorship takes you from an empty file to a complete
-            AI coding agent — every subsystem, real code, no frameworks.
-          </p>
+          <h3>Build and test your first tool call</h3>
+          <p>Run a free Python lab, fix a failing check, and see where it fits in the 12-week curriculum.</p>
           <div class="pc-btns">
-            <a class="btn btn-primary" href={SITE.cta.href} target="_blank" rel="noopener">
-              {SITE.cta.label} →
-            </a>
+            <a class="btn btn-primary" href={COURSE.lab}>Start the free lab →</a>
             <a class="btn btn-ghost" href="/curriculum">See the curriculum</a>
           </div>
         </div>

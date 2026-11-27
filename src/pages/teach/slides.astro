@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { COURSE } from '../../data/course-resources';
+
+const slides = [
+  {
+    title: 'Build and test your first tool call',
+    points: ['Follow a model’s request into application code.', 'Fix one failure and show what the regression suite proves.'],
+  },
+  {
+    title: 'Who decides the next step?',
+    points: ['Routing assigns an input to a path the application already defines.', 'In a ReAct loop, the model selects an action and the application runs it within its rules.'],
+    link: { href: COURSE.demo, label: 'Compare both in the recorded replay' },
+  },
+  {
+    title: 'Follow one request',
+    points: ['A fixed model response requests lookup_stock with the argument " Notebook ".', 'The Python program calls the tool and returns its result.'],
+  },
+  {
+    title: 'Run the baseline',
+    points: ['Keep the first output where you can compare it.', 'Find the single failing case and predict which function owns it.'],
+    command: 'python3 first_agent.py --check',
+    link: { href: COURSE.lab, label: 'Open the lab and download the starter' },
+  },
+  {
+    title: 'Fix the behavior and rerun the suite',
+    points: ['Change lookup_stock so formatting differences do not change a valid lookup.', 'Confirm that zero stock, missing items, and direct replies still behave as expected.'],
+    command: 'python3 first_agent.py --check',
+  },
+  {
+    title: 'Add one case worth keeping',
+    points: ['Choose a failure you would want to catch if the code changed again.', 'Specify the expected tool calls and result.', 'Explain what your fixed replay can verify and what would need a real model run.'],
+    link: { href: '/curriculum/week-2-agent-workflows/', label: 'Continue to Week 2' },
+  },
+];
+---
+
+<BaseLayout
+  title="First-agent workshop slides"
+  description="The slide sequence for the first-agent facilitator kit."
+  theme="paper"
+>
+  <div class="wrap narrow deck">
+    <p><a href={COURSE.teach}>← Facilitator notes</a></p>
+    {slides.map((slide, i) => (
+      <section class="k slide" id={`slide-${i + 1}`} aria-labelledby={`heading-${i + 1}`}>
+        {i === 0
+          ? <h1 id={`heading-${i + 1}`} class="display-2">{slide.title}</h1>
+          : <h2 id={`heading-${i + 1}`} class="display-2">{slide.title}</h2>}
+        <ul>{slide.points.map((point) => <li>{point}</li>)}</ul>
+        {slide.command && <pre><code>{slide.command}</code></pre>}
+        {slide.link && <p><a href={slide.link.href}>{slide.link.label}</a></p>}
+        <nav aria-label={`Slide ${i + 1} navigation`}>
+          {i > 0 && <a href={`#slide-${i}`}>← Previous</a>}
+          {i + 1 < slides.length && <a href={`#slide-${i + 2}`}>Next →</a>}
+        </nav>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .deck { padding-block: 2rem; }
+  .slide { min-height: min(32rem, 80vh); margin-bottom: 1.6rem; padding: clamp(1.2rem, 5vw, 3rem); scroll-margin-top: 5rem; }
+  h1, h2 { margin: 0 0 1rem; }
+  ul { padding-left: 1.3em; font-size: 1.13rem; }
+  li { margin-bottom: .65rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.4rem; }
+  @media print {
+    .slide { break-after: page; min-height: 0; margin: 0; box-shadow: none; }
+    .slide:last-child { break-after: auto; }
+    nav, .deck > p, :global(.site-header), :global(.ftr) { display: none; }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../data/site';
+import { COURSE } from '../data/course-resources';
 import Mark from './Mark.astro';
 const year = new Date().getFullYear();
 ---
@@ -12,21 +13,22 @@ const year = new Date().getFullYear();
           <Mark size={38} />
           <div>
             <div class="fb-name">AI ENGINEERING</div>
-            <div class="fb-sub">Build a Claude Code clone from scratch</div>
+            <div class="fb-sub">{SITE.tagline}</div>
           </div>
         </div>
         <p class="fdesc">
-          A 12-week hands-on mentorship for engineers who are serious about AI.
-          Real code, no frameworks, a portfolio project at the end.
+          Hands-on AI engineering for software developers. Start with a free lab or
+          build a coding agent in the 12-week live mentorship.
         </p>
       </div>
 
       <div>
         <h4>Course</h4>
-        <a href="/curriculum">Full curriculum</a>
-        <a href="/curriculum/week-1-your-first-agent">Week 1 — Your first agent</a>
-        <a href="/#outcomes">What you build</a>
-        <a href="/#faq">FAQ</a>
+        <a href={COURSE.lab}>Free starter lab</a>
+        <a href="/curriculum/">Full curriculum</a>
+        <a href={COURSE.demo}>Workflow demo</a>
+        <a href={COURSE.teach}>Facilitator kit</a>
+        <a href="/#mentorship">Live mentorship</a>
       </div>
 
       <div>
@@ -38,9 +40,10 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <h4>Open source</h4>
+        <h4>Resources</h4>
         <a href="https://pjsofts.github.io/pj-voice/">PJ Voice: AI phone agent</a>
-        <a href="https://github.com/pjsofts/ai-agent-workflows" target="_blank" rel="noopener">AI Agent Workflows ↗</a>
+        <a href={COURSE.repo}>Course materials on GitHub ↗</a>
+        <a href="/webinar/job-hunting-ai/">Job-hunting webinar slides</a>
         <a href="https://bioliams.github.io/" target="_blank" rel="noopener">BioLIMS ↗</a>
         <a href="https://pouriajahandideh.com/">All my work ↗</a>
       </div>

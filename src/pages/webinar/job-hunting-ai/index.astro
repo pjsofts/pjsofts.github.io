@@ -18,15 +18,14 @@ const faqs = [
   { q: 'Is it really free?', a: 'Yes. No card, no upsell inside the session. The 12-week Job Search Group is linked at the bottom of this page, and that’s the only pitch.' },
   { q: 'Who is it for?', a: 'Developers who can already build and ship in at least one stack: new grads, career changers, and anyone laid off or stuck after a pile of applications with no replies.' },
   { q: 'What do I need?', a: 'Your current resume, a GitHub account and your LinkedIn profile. To follow along with the toolkit: Claude Code (or any AI assistant), Python 3.10+ and the GitHub CLI.' },
-  { q: 'How do I get the link?', a: 'Message me on LinkedIn or by email. I add you to the Telegram group, and the live link and reminders go out there.' },
-  { q: 'Will there be a recording?', a: 'Anything shared after the session goes out in the Telegram group.' },
+  { q: 'Where are the materials?', a: 'The slides are public and linked at the top of the page.' },
   { q: 'Where does this material come from?', a: 'It is based on Jerome Hardaway’s “Getting the job in the era of AI” workshop and the open-source ai-era-job-kit from Vets Who Code, adapted from my own experience leading a team and mentoring engineers.' },
 ];
 
 const eventSchema = {
   '@context': 'https://schema.org',
   '@type': 'Event',
-  name: `${W.title} — free webinar`,
+  name: W.title,
   description: 'Resume and ATS, portfolios and GitHub, LinkedIn, and AI job search tools, with the Claude Code Job Tool Kit.',
   startDate: `${W.date}T${W.start}:00${W.tzOffset}`,
   endDate: `${W.date}T${W.end}:00${W.tzOffset}`,
@@ -36,13 +35,12 @@ const eventSchema = {
   location: { '@type': 'VirtualLocation', url: `${SITE.url}/webinar/${W.slug}` },
   organizer: { '@type': 'Person', name: SITE.instructor.name, url: SITE.url },
   performer: { '@type': 'Person', name: SITE.instructor.name },
-  offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE.url}/webinar/${W.slug}` },
 };
 ---
 
 <BaseLayout
-  title={`${W.title} — Free Webinar`}
-  description={`A free live webinar by ${SITE.instructor.name}: resume and ATS, portfolios and GitHub, LinkedIn, and AI job search tools, with the Claude Code Job Tool Kit. ${day}, ${W.start}–${W.end} ${W.tz}.`}
+  title={`${W.title} — Webinar Slides`}
+  description={`Slides from the webinar by ${SITE.instructor.name}: resume and ATS, portfolios and GitHub, LinkedIn, and AI job search tools, with the Claude Code Job Tool Kit. ${day}, ${W.start}–${W.end} ${W.tz}.`}
   canonical={`/webinar/${W.slug}`}
   image="/og/job-hunting-ai.png"
   theme="paper"
@@ -52,7 +50,7 @@ const eventSchema = {
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <span class="lbl lbl-gold">Free webinar · {W.where} · {W.hours} hours</span>
+        <span class="lbl lbl-gold">Webinar materials · {dayShort}</span>
 
         <h1 class="display-1">
           Job hunting in the age of AI,<br />
@@ -60,15 +58,13 @@ const eventSchema = {
         </h1>
 
         <p class="hero-sub">
-          Machines read your application first and people read it second. In this free live
-          session we score your resume, portfolio, GitHub and LinkedIn the way screeners do,
+          Machines read your application first and people read it second. In these slides we score your resume, portfolio, GitHub and LinkedIn the way screeners do,
           fix what they flag, and run the search as a funnel you measure, with an
           open-source Claude Code toolkit you keep using afterwards.
         </p>
 
         <div class="hero-cta">
-          <a class="b b-ink" href={W.join.href} target="_blank" rel="noopener">{W.join.label} →</a>
-          <a class="b b-plain" href={slidesHref}>See the slides</a>
+          <a class="b b-ink" href={slidesHref}>Open the slides →</a>
         </div>
 
         <dl class="stats">
@@ -92,8 +88,8 @@ const eventSchema = {
             <span class="l"><span class="d">price  </span> <span class="g">{W.price}</span></span>
             <span class="l"><span class="d">host   </span> {SITE.instructor.name}</span>
             <span class="l"></span>
-            <span class="l"><span class="u">›</span> webinar --join</span>
-            <span class="l"><span class="g">✔</span> message me → added to the Telegram group</span>
+            <span class="l"><span class="u">›</span> webinar --slides</span>
+            <span class="l"><span class="g">✔</span> open the slide deck</span>
             <span class="l"><span class="u">›</span> <span class="cursor">▋</span></span>
           </div>
         </div>
@@ -142,7 +138,7 @@ const eventSchema = {
           stage only sees what the one before it passed, so we write for all three, in order.
         </p>
         <div class="hero-cta">
-          <a class="b b-ink" href={W.join.href} target="_blank" rel="noopener">{W.join.label} →</a>
+          <a class="b b-ink" href={slidesHref}>Open the slides →</a>
         </div>
       </div>
       <div class="term term-nowrap">
@@ -243,37 +239,6 @@ const eventSchema = {
     </div>
   </section>
 
-  <!-- ===================== HOW TO JOIN ===================== -->
-  <section>
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="lbl">How to join</span>
-        <h2 class="display-2">Three steps, all of them short</h2>
-      </div>
-      <ol class="rules">
-        <li class="k k-flat">
-          <span class="rule-n">01</span>
-          <h3>Message me</h3>
-          <p>
-            On <a href={SITE.instructor.linkedin} target="_blank" rel="noopener">LinkedIn</a> or
-            at <a href={`mailto:${SITE.instructor.email}?subject=${encodeURIComponent(W.title + ' webinar')}`}>{SITE.instructor.email}</a>.
-            One line is enough.
-          </p>
-        </li>
-        <li class="k k-flat">
-          <span class="rule-n">02</span>
-          <h3>Join the Telegram group</h3>
-          <p>I add you to the webinar group. The live link and reminders go out there.</p>
-        </li>
-        <li class="k k-flat">
-          <span class="rule-n">03</span>
-          <h3>Show up {dayShort}</h3>
-          <p>{W.start}–{W.end} {W.tz}, live. Bring your resume and the job you actually want.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
   <!-- ===================== HOST ===================== -->
   <section class="s-paper2">
     <div class="wrap inst">
@@ -341,8 +306,7 @@ const eventSchema = {
     <div class="wrap ctr">
       <span class="lbl lbl-gold">{day} · {W.start}–{W.end} {W.tz}</span>
       <h2 class="display-2">Score it. Build the record.<br />Run it every week.</h2>
-      <p>Send me one line and I will add you to the group.</p>
-      <a class="b b-primary" href={W.join.href} target="_blank" rel="noopener">{W.join.label} →</a>
+      <a class="b b-primary" href={slidesHref}>Open the slides →</a>
       <p class="fine">
         Want to keep going after the webinar? <a href="/job-search-group/">Join the 12-week Job Search Group</a>.
       </p>

@@ -1,0 +1,19 @@
+name: Teaching feedback
+description: Tell us how you used the first-agent workshop.
+title: "Teaching feedback — "
+body:
+  - type: markdown
+    attributes:
+      value: This report is optional and public. Use the private email link on the teaching page if you prefer.
+  - type: textarea
+    id: session
+    attributes:
+      label: Where and when did you use the workshop?
+      description: Include the material version, session date and approximate group size. A syllabus or event link is welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: changes
+    attributes:
+      label: What would you change for the next session?
+      description: Note any setup friction, instructions that needed clarification or exercise changes.

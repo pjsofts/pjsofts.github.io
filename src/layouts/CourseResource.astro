@@ -1,0 +1,36 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  context: string;
+}
+
+const { title, description, context } = Astro.props;
+---
+
+<BaseLayout {title} {description} theme="paper">
+  <article>
+    <header class="resource-head">
+      <div class="wrap narrow">
+        <nav aria-label="Breadcrumb"><a href="/curriculum/">Curriculum</a> / {context}</nav>
+        <h1 class="display-2">{title}</h1>
+        <p>{description}</p>
+        <div class="actions"><slot name="actions" /></div>
+      </div>
+    </header>
+    <div class="wrap narrow prose resource-body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .resource-head { padding: 3.5rem 0 2.4rem; background: var(--paper-2); border-bottom: 1px solid var(--rule); }
+  nav { font-size: .9rem; color: var(--ink-soft); }
+  h1 { margin: .8rem 0; }
+  .resource-head p { max-width: 62ch; font-size: 1.1rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.3rem; }
+  .resource-body { padding-bottom: 4rem; }
+</style>

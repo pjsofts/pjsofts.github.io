@@ -1,0 +1,44 @@
+---
+import CourseResource from '../../../layouts/CourseResource.astro';
+import { COURSE } from '../../../data/course-resources';
+import { SITE } from '../../../data/site';
+
+const feedback = `mailto:${SITE.instructor.email}?subject=${encodeURIComponent('First-agent lab v1 result')}`;
+---
+
+<CourseResource
+  title="Build and test your first tool call"
+  description="Replay a model’s tool request, fix a bug in the Python tool, and verify the change with five regression checks. Free, with no API key or packages to install."
+  context="Week 1 lab"
+>
+  <a slot="actions" class="b b-ink" href={COURSE.starter} download="first_agent.py">Download the Python starter</a>
+  <a slot="actions" class="b b-plain" href="#run">Run the checks</a>
+
+  <h2 id="run">Run the baseline</h2>
+  <p>Open a terminal in the folder where you saved <code>first_agent.py</code>. You need Python 3. On Windows, try <code>py -3</code> in place of <code>python3</code>.</p>
+  <pre><code>python3 first_agent.py --check</code></pre>
+  <p>Expect <strong>4/5 passed</strong> and exit code 1. The notebook lookup fails even though it exists in the built-in inventory.</p>
+
+  <h2>Read the trace</h2>
+  <pre><code>python3 first_agent.py --prompt "How many notebooks are in stock?"</code></pre>
+  <p>In the starter, find the corresponding entry in <code>RESPONSES</code>. The simulated model calls <code>lookup_stock</code> with <code>" Notebook "</code>. Compare that argument with the key in <code>INVENTORY</code>. The trace confirms the model picked the correct tool. The bug is in how the tool handles its argument.</p>
+
+  <h2>Fix the tool</h2>
+  <p>Edit <code>lookup_stock</code> so it removes surrounding spaces and accepts the same item regardless of letter case. Keep the unknown-item response, zero stock, and direct replies working.</p>
+  <p>Run <code>python3 first_agent.py --check</code> again. You’re done when it prints <strong>5/5 passed</strong> and exits with code 0.</p>
+  <details>
+    <summary>Show a reference solution</summary>
+    <pre><code>{'def lookup_stock(item):\n    return INVENTORY.get(item.strip().casefold(), NOT_FOUND)'}</code></pre>
+  </details>
+
+  <h2>Extend the check</h2>
+  <p>Add a recorded response with a different casing for <code>pen</code>, then add an eval expecting zero stock. A real provider can produce many variants, so the next step is to grow your fixture with failures you actually observe.</p>
+  <p>The starter uses fixed model responses and a read-only fixture. It measures how the program handles a tool call, a result, and a turn without tools.</p>
+
+  <h2>Keep building</h2>
+  <ul>
+    <li><a href="/curriculum/week-1-your-first-agent/">Week 1 walkthrough</a> for the full agent loop and multi-turn evals.</li>
+    <li><a href="/curriculum/week-2-agent-workflows/">Week 2</a> to compare workflow and agent patterns.</li>
+  </ul>
+  <p>You can <a href={COURSE.reportPass}>share a passing result or blocker on GitHub</a> or <a href={feedback}>send it privately by email</a>. Reporting is optional, and the local checks send no data.</p>
+</CourseResource>

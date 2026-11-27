@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Mark from '../components/Mark.astro';
 import { SITE } from '../data/site';
+import { COURSE } from '../data/course-resources';
 import { WEEKS } from '../data/weeks';
 
 const foundations = WEEKS.filter((w) => w.part === 'Foundations');
@@ -10,7 +11,7 @@ const clone = WEEKS.filter((w) => w.part === 'Build the Clone');
 const courseSchema = {
   '@context': 'https://schema.org',
   '@type': 'Course',
-  name: 'AI Engineering — Build a Claude Code Clone From Scratch',
+  name: SITE.name,
   description: SITE.description,
   provider: { '@id': `${SITE.url}/#org` },
   url: `${SITE.url}/`,
@@ -18,7 +19,7 @@ const courseSchema = {
   inLanguage: 'en',
   educationalLevel: 'Intermediate',
   coursePrerequisites: 'Working knowledge of Python or TypeScript and experience calling an HTTP API.',
-  offers: { '@type': 'Offer', category: 'Paid', url: SITE.cta.href },
+  offers: { '@type': 'Offer', category: 'Paid', url: `${SITE.url}/#mentorship` },
   teaches: [
     'Agent loops and tool calling',
     'Evals and golden datasets',
@@ -43,7 +44,7 @@ const faqs = [
   },
   {
     q: 'Which language do I write in?',
-    a: 'Either. Every week ships in Python and TypeScript, and the handouts carry both. Most people pick the one they already work in and read the other for contrast.',
+    a: 'The starter lab uses Python. The live mentorship supports Python and TypeScript. Public exercises list their language where you open them.',
   },
   {
     q: 'Why no frameworks?',
@@ -59,7 +60,7 @@ const faqs = [
   },
   {
     q: 'Is this cohort-based or self-paced?',
-    a: 'Cohort-based, with live sessions and a group. The handouts stay yours afterwards, so the material is self-paced but the accountability is not.',
+    a: 'Start on your own with the free Python lab, workflow replay, and public course materials. The 12-week mentorship adds live sessions, feedback, and a group for the full build.',
   },
 ];
 
@@ -107,17 +108,15 @@ const marquee = [
 ---
 
 <BaseLayout
-  title="AI Engineering Course — Build an AI Agent From Scratch | 12 Weeks Online"
+  title="AI Engineering Course — Build and Evaluate AI Agents From Scratch"
   description={SITE.description}
   canonical="/"
   theme="paper"
   schema={[courseSchema, faqSchema]}
 >
   <!-- ===================== ANNOUNCEMENT ===================== -->
-  <a class="announce" href="/webinar/job-hunting-ai/">
-    <span class="announce-tag">Free webinar</span>
-    <span class="announce-txt"><b>Job Hunting in the Age of AI</b> · Thu 26 Nov · 10:00 Tehran time</span>
-    <span class="announce-go">Save your seat →</span>
+  <a class="announce" href={COURSE.demo}>
+    <span><b>Try the workflow demo</b> · 13 browser replays <span class="announce-go" aria-hidden="true">→</span></span>
   </a>
 
   <!-- ===================== HERO ===================== -->
@@ -127,32 +126,23 @@ const marquee = [
 
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <span class="lbl lbl-gold">12-week mentorship · Python / TypeScript</span>
+        <span class="lbl lbl-gold">AI engineering for software developers</span>
 
         <h1 class="display-1">
-          Build the AI coding agent<br />
-          <span class="mark-gold">everyone else just&nbsp;uses.</span>
+          Build an AI agent from&nbsp;scratch.{' '}
+          <span class="mark-gold">Learn to prove it&nbsp;works.</span>
         </h1>
 
         <p class="hero-sub">
-          A hands-on mentorship for engineers who are serious about AI. We start at the
-          agent loop and finish with a real coding tool you built yourself — every
-          subsystem, real code, no frameworks, no hand-waving.
+          Write your first tool call, debug a failure, and verify your fix. Then build toward
+          a coding agent you can trace, evaluate, and improve.
         </p>
 
         <div class="hero-cta">
-          <a class="b b-ink" href={SITE.cta.href} target="_blank" rel="noopener">
-            {SITE.cta.label} →
-          </a>
-          <a class="b b-plain" href="/curriculum">See the 12 weeks</a>
+          <a class="b b-ink" href={COURSE.lab}>Start the free lab →</a>
+          <a class="b b-plain" href="/curriculum/">See the 12-week curriculum</a>
         </div>
-
-        <dl class="stats">
-          <div><dt>12</dt><dd>weeks</dd></div>
-          <div><dt>2</dt><dd>tracks · py / ts</dd></div>
-          <div><dt>1</dt><dd>real product</dd></div>
-          <div><dt>0</dt><dd>frameworks</dd></div>
-        </dl>
+        <p class="hero-note">The starter uses Python and needs no API key. <a href="#mentorship">Live mentorship</a> is also available.</p>
       </div>
 
       <!-- The motif: what you are actually building, in the place a stock
@@ -189,6 +179,21 @@ const marquee = [
       <span aria-hidden="true">{marquee.map((m) => (<><b>{m}</b><i>✳</i></>))}</span>
     </div>
   </div>
+
+  <section class="s-paper2 starts" aria-label="Free course resources">
+    <div class="wrap grid g2">
+      <article class="k">
+        <h2 class="display-3">How an eval caught a broken diagram</h2>
+        <p>A stricter rubric exposed disconnected arrows. Inspect the recorded cases and rerun the scoring.</p>
+        <a href={COURSE.evalArticle}>Read the eval walkthrough →</a>
+      </article>
+      <article class="k">
+        <h2 class="display-3">Run the lab with a group</h2>
+        <p>A 75-minute session with slides, an exercise, a rubric, and an answer key.</p>
+        <a href={COURSE.teach}>Open the facilitator kit →</a>
+      </article>
+    </div>
+  </section>
 
   <!-- ===================== STUDIO ===================== -->
   <!-- The room the site's colours come from: brick, pinboard, red chair, low sun. -->
@@ -443,17 +448,14 @@ const marquee = [
   </section>
 
   <!-- ===================== FINAL ===================== -->
-  <section class="s-ink final">
+  <section id="mentorship" class="s-ink final">
     <div class="wrap ctr">
-      <h2 class="display-2">Ready to build the thing<br />everyone else just uses?</h2>
-      <p>
-        By Friday of Week 12 you do not have notes. You have a tool — and the understanding
-        to explain every line of it.
-      </p>
+      <h2 class="display-2">Build the full agent with a mentor</h2>
+      <p>The 12-week online cohort adds live sessions, code review and feedback. Plan for about six hours a week in Python or TypeScript.</p>
       <a class="b b-primary" href={SITE.cta.href} target="_blank" rel="noopener">
-        {SITE.cta.label} →
+        Ask about the next cohort →
       </a>
-      <p class="fine">Message me about timing, fit and pricing. I reply to everyone.</p>
+      <p class="fine">For dates, language, and pricing, message me or <a href={`mailto:${SITE.instructor.email}`}>send an email</a>.</p>
     </div>
   </section>
 </BaseLayout>
@@ -466,10 +468,6 @@ const marquee = [
   }
   .announce:hover { text-decoration: none; }
   .announce b { color: #fff; font-weight: 600; }
-  .announce-tag {
-    background: var(--gold); color: var(--ink); font-family: var(--mono); font-size: .7rem;
-    letter-spacing: .14em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 4px; font-weight: 700;
-  }
   .announce-go { color: var(--gold); font-weight: 600; }
   .announce:hover .announce-go { text-decoration: underline; }
   /* ---------------- hero ---------------- */
@@ -513,29 +511,10 @@ const marquee = [
   }
   .hero-cta { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2rem; }
 
-  .stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2.2rem;
-    margin: 2.8rem 0 0;
-    padding-top: 1.6rem;
-    border-top: 1px solid var(--rule);
-  }
-  .stats dt {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 2.4rem;
-    line-height: 1;
-    color: var(--violet-deep);
-  }
-  .stats dd {
-    margin: 0.35rem 0 0;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-  }
+  .hero-note { margin: .9rem 0 0; font-size: .92rem; }
+  .starts { padding-block: 2rem; }
+  .starts h2 { margin: 0 0 .55rem; }
+  .starts p { margin-bottom: .7rem; }
 
   .hero-term { transform: rotate(1.1deg); }
   .term .del { color: #ff9a9a; }
@@ -804,10 +783,9 @@ const marquee = [
     .inst { max-width: 520px; }
   }
   @media (max-width: 640px) {
+    .hero { padding: 3rem 0; }
     .bento, .steps, .fit { grid-template-columns: 1fr; }
     .cap-wide { grid-column: span 1; grid-row: span 1; }
-    .stats { gap: 1.4rem 2rem; }
-    .stats dt { font-size: 1.9rem; }
     .hero-term { transform: none; }
     .blob-violet { width: 320px; height: 320px; right: -140px; top: -120px; }
   }

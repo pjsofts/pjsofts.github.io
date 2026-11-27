@@ -1,0 +1,32 @@
+name: First-agent lab result
+description: Share a passing result or a blocker from the first-agent lab.
+title: "First-agent lab — "
+body:
+  - type: markdown
+    attributes:
+      value: This report is optional and public. Share only information you are comfortable publishing.
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Outcome
+      options:
+        - Passed all five checks
+        - Got stuck
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Result and evidence
+      description: Paste the output of python3 first_agent.py --check. Include your Python version and a short explanation of the change or blocker.
+    validations:
+      required: true
+  - type: input
+    id: discovery
+    attributes:
+      label: How did you find the lab?
+      description: Add the site, post, or group if you remember it.
+  - type: input
+    id: timing
+    attributes:
+      label: About how many minutes did you spend?

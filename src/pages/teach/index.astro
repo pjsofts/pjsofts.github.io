@@ -1,0 +1,52 @@
+---
+import CourseResource from '../../layouts/CourseResource.astro';
+import { COURSE } from '../../data/course-resources';
+import { SITE } from '../../data/site';
+
+const feedback = `mailto:${SITE.instructor.email}?subject=${encodeURIComponent('AI Engineering teaching kit v1')}`;
+---
+
+<CourseResource
+  title="Teach an agent to use a tool"
+  description="A 75-minute facilitator kit for developer meetups, teams, and classrooms. Learners debug a tool call and prove the fix with a regression check."
+  context="Facilitator kit"
+>
+  <a slot="actions" class="b b-ink" href={COURSE.slides}>Open the slides</a>
+  <a slot="actions" class="b b-plain" href={COURSE.lab}>Learner instructions</a>
+
+  <h2>Before the session</h2>
+  <ul>
+    <li>Ask learners to bring a laptop, a text editor, and Python 3. Familiarity with functions and dictionaries is enough.</li>
+    <li>Download the <a href={COURSE.starter} download="first_agent.py">v1 starter</a> and run <code>python3 first_agent.py --check</code>. The fresh starter passes four of five checks and exits with code 1.</li>
+    <li>Open the <a href={COURSE.demo}>browser replay</a> and pick one routing example and one ReAct example. Use the default input for each recording. If internet access is limited, stage the starter locally and use slides 2–3 to explain the flow.</li>
+  </ul>
+
+  <h2>Session plan</h2>
+  <ol>
+    <li><strong>0–10 min · Read a trace.</strong> Replay routing and ReAct. Ask where the application decides the next step and where the model does. Point out that both demo runs are recorded.</li>
+    <li><strong>10–25 min · Establish a baseline.</strong> Have learners run the starter before editing it. Ask each pair to say what passed, which case failed, and where they would look next.</li>
+    <li><strong>25–45 min · Follow the argument.</strong> Have learners replay the failing notebook prompt and inspect its entry in <code>RESPONSES</code>. Ask whether they can explain the failure with the model output held fixed.</li>
+    <li><strong>45–60 min · Run the regression suite.</strong> Have learners normalize the lookup input and rerun all five cases. Ask why a quantity of zero still counts as a successful lookup.</li>
+    <li><strong>60–75 min · Compare fixes.</strong> Ask each pair to add one fixture and case. Discuss what the replay can verify, and what needs measurement against a real model. End with an invitation to Week 2.</li>
+  </ol>
+
+  <h2>Assessment</h2>
+  <ul>
+    <li><strong>Explain:</strong> identify the tool name, the recorded argument and the reason the lookup failed.</li>
+    <li><strong>Verify:</strong> show <code>5/5 passed</code> and explain what the zero-stock, unknown-item and no-tool cases protect.</li>
+    <li><strong>Extend:</strong> write one useful new case and justify its expected result.</li>
+  </ul>
+
+  <h2>Answer key and reset</h2>
+  <details>
+    <summary>Reveal the answer key</summary>
+    <p>Normalize at the boundary of the tool. A call with <code>" Notebook "</code> should return <code>5</code>. A missing key should return the existing error message. A greeting should return an empty tool trace.</p>
+    <pre><code>{'def lookup_stock(item):\n    return INVENTORY.get(item.strip().casefold(), NOT_FOUND)'}</code></pre>
+    <p>Example extension: add a replay returning <code>" PeN "</code> as the tool argument, with an expected result of <code>0</code> and exactly one <code>lookup_stock</code> call.</p>
+  </details>
+  <p>Reset by downloading the v1 starter to a new folder. If a learner sees five passes before editing, check which copy they are running.</p>
+
+  <h2>Share the workshop and its results</h2>
+  <p>Link to these pages or present the hosted slides and exercises in a session. The separate diagram-agent and harness repositories carry MIT licenses. For redistribution or adaptation of the site’s teaching materials, <a href={feedback}>contact the instructor</a>. [<a href="https://github.com/pjsofts/ai-engineering2">Diagram workshop</a>] [<a href="https://github.com/pjsofts/ai-engineering-1">Harness workshop</a>]</p>
+  <p>If your team or class runs the workshop, <a href={COURSE.reportTeaching}>share an optional teaching report on GitHub</a> or <a href={feedback}>send feedback privately</a>. The version, group size, and first point where learners needed help are enough.</p>
+</CourseResource>
